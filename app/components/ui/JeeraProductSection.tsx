@@ -90,7 +90,7 @@ const FALLBACK_COPY: Record<LangCode, CopyShape> = {
   },
 };
 
-export default function JeeraProductSection() {
+export default function JeeraProductSection({ forcedLang }: { forcedLang?: LangCode } = {}) {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const [lang, setLang] = useState<LangCode>("en");
   const [copy, setCopy] = useState<CopyShape>(EN_COPY);
@@ -108,11 +108,16 @@ export default function JeeraProductSection() {
   }, []);
 
   useEffect(() => {
+    if (forcedLang) {
+      setLang(forcedLang);
+      return;
+    }
+
     const saved = window.localStorage.getItem("site_lang") as LangCode | null;
     if (saved && ["en", "hi", "es", "ar", "fr-CA", "de", "nl-BE"].includes(saved)) {
       setLang(saved as LangCode);
     }
-  }, []);
+  }, [forcedLang]);
 
   useEffect(() => {
     let cancelled = false;
@@ -157,23 +162,9 @@ export default function JeeraProductSection() {
 
   return (
     <section className="relative mt-0 overflow-visible bg-white px-3 py-1 md:-mt-32 md:overflow-hidden md:px-16 md:py-10">
-      <div className="absolute right-6 top-4 z-30 flex items-center gap-2 rounded-lg border border-neutral-300 bg-white/90 p-2 text-xs md:right-16">
-        <span className="font-semibold text-neutral-700">Language</span>
-        <select
-          value={lang}
-          onChange={(e) => setLang(e.target.value as LangCode)}
-          className="rounded border border-neutral-300 px-2 py-1 text-neutral-800"
-        >
-          <option value="en">English</option>
-          <option value="hi">Hindi</option>
-          <option value="es">Spanish</option>
-          <option value="ar">Arabic</option>
-          <option value="fr-CA">Canada (French)</option>
-          <option value="de">German</option>
-          <option value="nl-BE">Belgium (Dutch)</option>
-        </select>
-        {isTranslating ? <span className="text-neutral-500">…</span> : null}
-      </div>
+      {isTranslating ? (
+        <div className="absolute right-6 top-4 z-30 rounded bg-white/80 px-2 py-1 text-xs text-neutral-500 md:right-16">Translating…</div>
+      ) : null}
 
       {Array.from({ length: 22 }).map((_, i) => {
         const left = 2 + ((i * 17) % 95);
@@ -271,10 +262,10 @@ export default function JeeraProductSection() {
             <Image
               src={PRODUCT_IMAGE}
               alt="Jeera product"
-              width={341}
-              height={504}
+              width={324}
+              height={479}
               priority
-              className="h-auto w-[50vw] md:w-[50vw] lg:w-[341px] max-w-[341px] drop-shadow-[0_26px_62px_rgba(159,190,47,0.42)]"
+              className="h-auto w-[50vw] md:w-[50vw] lg:w-[324px] max-w-[324px] drop-shadow-[0_26px_62px_rgba(159,190,47,0.42)]"
             />
 
             <Image

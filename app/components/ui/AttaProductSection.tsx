@@ -20,9 +20,18 @@ const EN_COPY = {
   desc2: "har bite mein full desi punch!",
 };
 
+const FALLBACK_COPY = {
+  hi: { line1: "देसी गुडनेस, ओवन-फ्रेश खुशियाँ", line2: "ओवन-फ्रेश स्वाद, परफेक्ट क्रंच", heroSub: "डिलाइट" },
+  es: { line1: "Bondad desi, felicidad recién horneada", line2: "Recién horneada y perfectamente crujiente", heroSub: "Delicia" },
+  ar: { line1: "جودة ديسي وسعادة طازجة من الفرن", line2: "طازجة ومقرمشة بشكل مثالي", heroSub: "متعة" },
+  "fr-CA": { line1: "Bonté desi, bonheur tout juste sorti du four", line2: "Fraîche du four, parfaitement croustillante", heroSub: "Délice" },
+  de: { line1: "Desi-Genuss, ofenfrische Freude", line2: "Ofenfrisch und perfekt knusprig", heroSub: "Delight" },
+  "nl-BE": { line1: "Desi goodness, ovenverse blijheid", line2: "Ovenvers en perfect krokant", heroSub: "Delight" },
+} as const;
+
 export default function AttaProductSection({ forcedLang }: { forcedLang?: LangCode } = {}) {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
-  const { copy } = useSectionTranslation(EN_COPY, forcedLang);
+  const { copy } = useSectionTranslation(EN_COPY, forcedLang, FALLBACK_COPY);
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {

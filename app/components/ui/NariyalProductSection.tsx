@@ -14,8 +14,23 @@ const EN_COPY = {
   line2: "unique flavourful & so much fun at times. thoda khatta thoda meetha, yaaron ke yaar, bohot mazedaar!",
 };
 
+const FALLBACK_COPY = {
+  hi: {
+    starMain: "स्टार",
+    starSub: "परफ़ॉर्मर",
+    demand: "पॉपुलर डिमांड पर",
+    line1: "Delight और Coco Crunch का अंदाज़ है बड़ा धमाकेदार",
+    line2: "यूनिक फ्लेवर, फुल फन — थोड़ा खट्टा थोड़ा मीठा, बहुत मज़ेदार!",
+  },
+  es: { starMain: "Estrella", starSub: "Artista", demand: "por demanda popular" },
+  ar: { starMain: "النجم", starSub: "المؤدي", demand: "بطلب جماهيري" },
+  "fr-CA": { starMain: "Vedette", starSub: "Interprète", demand: "sur demande populaire" },
+  de: { starMain: "Star", starSub: "Performer", demand: "auf beliebte Nachfrage" },
+  "nl-BE": { starMain: "Ster", starSub: "Performer", demand: "op populaire vraag" },
+} as const;
+
 export default function NariyalProductSection({ forcedLang }: { forcedLang?: LangCode } = {}) {
-  const { copy } = useSectionTranslation(EN_COPY, forcedLang);
+  const { copy } = useSectionTranslation(EN_COPY, forcedLang, FALLBACK_COPY);
 
   return (
     <section className="relative overflow-visible bg-white px-3 pb-0 pt-1 md:overflow-hidden md:px-16 md:pb-10 md:pt-14">

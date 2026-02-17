@@ -19,9 +19,18 @@ const EN_COPY = {
   desc2: "har bite mein full desi punch!",
 };
 
+const FALLBACK_COPY = {
+  hi: { line1: "मसालेदार तड़का, क्रिस्पी स्वैग और मज़ा", line2: "चटपटा फ़ेवरिट, हर स्नैक लवर की पसंद", heroMain: "क्रंच", heroSub: "नं." },
+  es: { line1: "Toque sabroso, crujiente y divertido", line2: "Favorito picante para todos", heroMain: "Crunch", heroSub: "N.º" },
+  ar: { line1: "نكهة قوية وقرمشة ممتعة", line2: "المفضل لدى كل محبي السناك", heroMain: "قرمشة", heroSub: "رقم" },
+  "fr-CA": { line1: "Touche savoureuse, croustillante et fun", line2: "Favori de tous les amateurs de snack", heroSub: "No." },
+  de: { line1: "Würziger Kick, knusprig und voller Spaß", line2: "Favorit für jeden Snack-Fan" },
+  "nl-BE": { line1: "Pittige kick, crispy en fun", line2: "Favoriet voor elke snackfan" },
+} as const;
+
 export default function MaskaProductSection({ forcedLang }: { forcedLang?: LangCode } = {}) {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
-  const { copy } = useSectionTranslation(EN_COPY, forcedLang);
+  const { copy } = useSectionTranslation(EN_COPY, forcedLang, FALLBACK_COPY);
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {

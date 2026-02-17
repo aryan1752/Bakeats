@@ -9,6 +9,7 @@ const ALLOWED: LangCode[] = ["en", "hi", "es", "ar", "fr-CA", "de", "nl-BE"];
 export function useSectionTranslation<T extends Record<string, string>>(
   enCopy: T,
   forcedLang?: LangCode,
+  fallbackMap?: Partial<Record<LangCode, Partial<T>>>,
 ) {
   const [lang, setLang] = useState<LangCode>(forcedLang ?? "en");
   const [copy, setCopy] = useState<T>(enCopy);
@@ -31,6 +32,10 @@ export function useSectionTranslation<T extends Record<string, string>>(
       if (lang === "en") {
         setCopy(enCopy);
         return;
+      }
+
+      if (fallbackMap?.[lang]) {
+        setCopy({ ...enCopy, ...(fallbackMap[lang] as Partial<T>) });
       }
 
       try {

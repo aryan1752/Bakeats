@@ -18,9 +18,18 @@ const EN_COPY = {
   desc2: "har bite mein full desi punch!",
 };
 
+const FALLBACK_COPY = {
+  hi: { line1: "चोको डिलाइट, हर कुकी लवर की पसंद", line2: "हर बाइट में चॉकलेट की अच्छाई", heroMain: "चोको", heroSub: "पंच" },
+  es: { line1: "Delicia choco, amada por todos", line2: "Cada bocado lleno de chocolate", heroSub: "toque" },
+  ar: { line1: "متعة شوكو يحبها عشاق الكوكي", line2: "كل قضمة مليئة بخير الشوكولاتة", heroSub: "نكهة" },
+  "fr-CA": { line1: "Délice choco, aimé de tous", line2: "Chaque bouchée pleine de chocolat", heroSub: "punch" },
+  de: { line1: "Schoko-Delight, von allen geliebt", line2: "Jeder Biss voller Schoko-Genuss", heroSub: "Punch" },
+  "nl-BE": { line1: "Choco delight, geliefd door iedereen", line2: "Elke hap vol chocoladegoedheid", heroSub: "punch" },
+} as const;
+
 export default function ChocolateProductSection({ forcedLang }: { forcedLang?: LangCode } = {}) {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
-  const { copy } = useSectionTranslation(EN_COPY, forcedLang);
+  const { copy } = useSectionTranslation(EN_COPY, forcedLang, FALLBACK_COPY);
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {

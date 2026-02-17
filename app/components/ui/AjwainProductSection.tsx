@@ -19,9 +19,18 @@ const EN_COPY = {
   desc2: "har bite mein full desi punch!",
 };
 
+const FALLBACK_COPY = {
+  hi: { line1: "तीखा तड़का, क्रिस्पी स्वैग और फुल ऑन मज़ा", line2: "चटपटा फ़ेवरिट, हर क्रंची स्नैक लवर का पसंदीदा", heroMain: "क्रंच" },
+  es: { line1: "Toque intenso, crujiente y súper divertido", line2: "Favorito picante, amado por todos", heroMain: "Crujiente", heroSub: "N.º" },
+  ar: { line1: "نكهة قوية وقرمشة ممتعة", line2: "المفضل لعشاق السناكات المقرمشة", heroMain: "قرمشة", heroSub: "رقم" },
+  "fr-CA": { line1: "Touche épicée, croustillante et pleine de fun", line2: "Le préféré des amateurs de croquant", heroMain: "Croquant" },
+  de: { line1: "Würziger Kick, knuspriger Style, voller Spaß", line2: "Der Favorit für alle Crunch-Fans", heroMain: "Crunch" },
+  "nl-BE": { line1: "Pittige kick, crispy swag en volle fun", line2: "Favoriet van elke crunchy-snack fan", heroMain: "Crunch" },
+} as const;
+
 export default function AjwainProductSection({ forcedLang }: { forcedLang?: LangCode } = {}) {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
-  const { copy } = useSectionTranslation(EN_COPY, forcedLang);
+  const { copy } = useSectionTranslation(EN_COPY, forcedLang, FALLBACK_COPY);
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {

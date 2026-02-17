@@ -18,9 +18,18 @@ const EN_COPY = {
   desc2: "har bite mein full desi punch!",
 };
 
+const FALLBACK_COPY = {
+  hi: { line1: "हर बाइट में बादाम की अच्छाई", line2: "नट्टी डिलाइट, हर कुकी लवर की पसंद", heroMain: "बदामी", heroSub: "पंच" },
+  es: { line1: "Cada bocado lleno de bondad de almendra", line2: "Delicia de nuez, amada por todos", heroSub: "toque" },
+  ar: { line1: "كل قضمة مليئة بخير اللوز", line2: "متعة بالمكسرات يحبها الجميع", heroSub: "نكهة" },
+  "fr-CA": { line1: "Chaque bouchée pleine de bonté d'amande", line2: "Délice aux noix, aimé de tous", heroSub: "punch" },
+  de: { line1: "Jeder Biss voller Mandel-Genuss", line2: "Nussige Freude, von allen geliebt", heroSub: "Punch" },
+  "nl-BE": { line1: "Elke hap vol amandelgoedheid", line2: "Nootachtige delight, geliefd door iedereen", heroSub: "punch" },
+} as const;
+
 export default function BadamProductSection({ forcedLang }: { forcedLang?: LangCode } = {}) {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
-  const { copy } = useSectionTranslation(EN_COPY, forcedLang);
+  const { copy } = useSectionTranslation(EN_COPY, forcedLang, FALLBACK_COPY);
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {

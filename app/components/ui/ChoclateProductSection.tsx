@@ -2,14 +2,25 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { LangCode, useSectionTranslation } from "@/lib/useSectionTranslation";
 
 const PRODUCT_IMAGE =
   "https://res.cloudinary.com/ddtifclgr/image/upload/v1770817215/chocolate_ahb4q3.png";
 const AJWAIN_BOWL_IMAGE =
   "https://res.cloudinary.com/ddtifclgr/image/upload/v1770817558/milk-chocolate-bar-isolated-on-white-background-dessert-free-photo-Photoroom_xnavwt.png";
 
-export default function ChocolateProductSection() {
+const EN_COPY = {
+  line1: "Choco delight, loved by every cookie lover",
+  line2: "Every bite full of chocolate goodness",
+  heroMain: "choco",
+  heroSub: "punch",
+  desc1: "Hamara choco cookie tasty, rich cocoa, crispy & aromatic —",
+  desc2: "har bite mein full desi punch!",
+};
+
+export default function ChocolateProductSection({ forcedLang }: { forcedLang?: LangCode } = {}) {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const { copy } = useSectionTranslation(EN_COPY, forcedLang);
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {
@@ -89,7 +100,7 @@ export default function ChocolateProductSection() {
               fontWeight: 700,
             }}
           >
-          Choco delight, loved by every cookie lover
+          {copy.line1}
           </p>
 
           <p
@@ -100,7 +111,7 @@ export default function ChocolateProductSection() {
               fontWeight: 700,
             }}
           >
-            Every bite full of chocolate goodness
+            {copy.line2}
           </p>
 
           <h2
@@ -114,9 +125,9 @@ export default function ChocolateProductSection() {
             }}
           >
             <span className="hero-no1-ajwain block text-[64px] md:text-[118px]">
-              <span className="hero-chunk-aj hero-main-aj">choco</span>
+              <span className="hero-chunk-aj hero-main-aj">{copy.heroMain}</span>
               <span className="hero-gap-aj">&nbsp;</span>
-              <span className="hero-chunk-aj hero-sub-aj">punch</span>
+              <span className="hero-chunk-aj hero-sub-aj">{copy.heroSub}</span>
               <span className="hero-chunk-aj hero-one-aj hero-digit-aj"></span>
             </span>
           </h2>
@@ -129,9 +140,9 @@ export default function ChocolateProductSection() {
               fontWeight: 700,
             }}
           >
-          Hamara choco cookie tasty, rich cocoa, crispy & aromatic —
+          {copy.desc1}
             <br />
-            har bite mein full desi punch!
+            {copy.desc2}
           </p>
         </div>
       </div>

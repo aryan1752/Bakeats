@@ -2,14 +2,25 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { LangCode, useSectionTranslation } from "@/lib/useSectionTranslation";
 
 const PRODUCT_IMAGE =
   "https://res.cloudinary.com/ddtifclgr/image/upload/v1770304489/baadam_jd8ykx.png";
 const AJWAIN_BOWL_IMAGE =
   "https://res.cloudinary.com/ddtifclgr/image/upload/v1770737939/organic-almond-nut-isolated-white-background_299651-2983-Photoroom_pll7hs.png";
 
-export default function BadamProductSection() {
+const EN_COPY = {
+  line1: "Every bite full of almond goodness",
+  line2: "Nutty delight, loved by every cookie lover",
+  heroMain: "badami",
+  heroSub: "punch",
+  desc1: "Hamara badam cookie tasty,real badam,crispy & aromatic —",
+  desc2: "har bite mein full desi punch!",
+};
+
+export default function BadamProductSection({ forcedLang }: { forcedLang?: LangCode } = {}) {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const { copy } = useSectionTranslation(EN_COPY, forcedLang);
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {
@@ -89,7 +100,7 @@ export default function BadamProductSection() {
               fontWeight: 700,
             }}
           >
-           Every bite full of almond goodness
+           {copy.line1}
           </p>
 
           <p
@@ -100,7 +111,7 @@ export default function BadamProductSection() {
               fontWeight: 700,
             }}
           >
-            Nutty delight, loved by every cookie lover
+            {copy.line2}
           </p>
 
           <h2
@@ -114,9 +125,9 @@ export default function BadamProductSection() {
             }}
           >
             <span className="hero-no1-ajwain block text-[64px] md:text-[118px]">
-              <span className="hero-chunk-aj hero-main-aj">badami</span>
+              <span className="hero-chunk-aj hero-main-aj">{copy.heroMain}</span>
               <span className="hero-gap-aj">&nbsp;</span>
-              <span className="hero-chunk-aj hero-sub-aj">punch</span>
+              <span className="hero-chunk-aj hero-sub-aj">{copy.heroSub}</span>
               <span className="hero-chunk-aj hero-one-aj hero-digit-aj"></span>
             </span>
           </h2>
@@ -129,9 +140,9 @@ export default function BadamProductSection() {
               fontWeight: 700,
             }}
           >
-            Hamara badam cookie tasty,real badam,crispy & aromatic —
+            {copy.desc1}
             <br />
-            har bite mein full desi punch!
+            {copy.desc2}
           </p>
         </div>
       </div>

@@ -138,13 +138,13 @@ export default function Home() {
         isTransitioning={isTransitioning}
       />
 
-      <NariyalProductSection />
-      <ChocolateProductSection />
-      <MaskaProductSection />
+      <NariyalProductSection forcedLang={lang} />
+      <ChocolateProductSection forcedLang={lang} />
+      <MaskaProductSection forcedLang={lang} />
+      <AjwainProductSection forcedLang={lang} />
+      <AttaProductSection forcedLang={lang} />
       <JeeraProductSection forcedLang={lang} />
-      <AjwainProductSection />
-      <AttaProductSection />
-      <BadamProductSection />
+      <BadamProductSection forcedLang={lang} />
       <section className="relative">
         <DraggableCardDemo />
       </section>

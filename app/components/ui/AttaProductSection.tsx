@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { LangCode, useSectionTranslation } from "@/lib/useSectionTranslation";
 
 const PRODUCT_IMAGE =
   "https://res.cloudinary.com/ddtifclgr/image/upload/v1770304441/atta_nto4fr.png";
@@ -10,8 +11,18 @@ const ATTA_BOWL_IMAGE =
 const WHEAT_IMAGE =
   "https://res.cloudinary.com/ddtifclgr/image/upload/v1770722962/ripe-wheat-15736603-Photoroom_upfwqg.png";
 
-export default function AttaProductSection() {
+const EN_COPY = {
+  line1: "Desi goodness, oven-fresh happiness.",
+  line2: "Oven-fresh goodness, perfectly crunchy.",
+  heroMain: "Atta",
+  heroSub: "Delight",
+  desc1: "Hamara atta cookie,tasty, crispy & aromatic —",
+  desc2: "har bite mein full desi punch!",
+};
+
+export default function AttaProductSection({ forcedLang }: { forcedLang?: LangCode } = {}) {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const { copy } = useSectionTranslation(EN_COPY, forcedLang);
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {
@@ -58,7 +69,7 @@ export default function AttaProductSection() {
               fontWeight: 700,
             }}
           >
-            Desi goodness, oven-fresh happiness.
+            {copy.line1}
           </p>
 
           <p
@@ -69,7 +80,7 @@ export default function AttaProductSection() {
               fontWeight: 700,
             }}
           >
-           Oven-fresh goodness, perfectly crunchy.
+           {copy.line2}
           </p>
 
           <h2
@@ -83,9 +94,9 @@ export default function AttaProductSection() {
             }}
           >
             <span className="hero-no1-atta block text-[64px] md:text-[118px]">
-              <span className="hero-chunk-at hero-main-at">Atta</span>
+              <span className="hero-chunk-at hero-main-at">{copy.heroMain}</span>
               <span className="hero-gap-at">&nbsp;</span>
-              <span className="hero-chunk-at hero-sub-at">Delight</span>
+              <span className="hero-chunk-at hero-sub-at">{copy.heroSub}</span>
               <span className="hero-chunk-at hero-one-at hero-digit-at"></span>
             </span>
           </h2>
@@ -98,9 +109,9 @@ export default function AttaProductSection() {
               fontWeight: 700,
             }}
           >
-            Hamara atta cookie,tasty, crispy & aromatic —
+            {copy.desc1}
             <br />
-            har bite mein full desi punch!
+            {copy.desc2}
           </p>
         </div>
 

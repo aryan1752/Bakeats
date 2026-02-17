@@ -2,14 +2,26 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { LangCode, useSectionTranslation } from "@/lib/useSectionTranslation";
 
 const PRODUCT_IMAGE =
   "https://res.cloudinary.com/ddtifclgr/image/upload/v1770304421/ajwain_xfcbnq.png";
 const AJWAIN_BOWL_IMAGE =
   "https://res.cloudinary.com/ddtifclgr/image/upload/v1770718735/shutterstock_424228717-1-Photoroom_ajbayl.png";
 
-export default function AjwainProductSection() {
+const EN_COPY = {
+  line1: "Teekha tadka, crispy swag and full-on mazza",
+  line2: "Chatpata favorite, loved by every crunchy-snack fan",
+  heroMain: "Crunch",
+  heroSub: "No.",
+  heroOne: "1",
+  desc1: "Hamara ajwain cookie tasty, crispy & aromatic —",
+  desc2: "har bite mein full desi punch!",
+};
+
+export default function AjwainProductSection({ forcedLang }: { forcedLang?: LangCode } = {}) {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const { copy } = useSectionTranslation(EN_COPY, forcedLang);
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {
@@ -63,10 +75,10 @@ export default function AjwainProductSection() {
             <Image
               src={PRODUCT_IMAGE}
               alt="Ajwain product"
-              width={341}
-              height={504}
+              width={324}
+              height={479}
               priority
-              className="h-auto w-[50vw] md:w-[50vw] lg:w-[341px] max-w-[341px] drop-shadow-[0_24px_58px_rgba(140,170,60,0.4)]"
+              className="h-auto w-[50vw] md:w-[50vw] lg:w-[324px] max-w-[324px] drop-shadow-[0_24px_58px_rgba(140,170,60,0.4)]"
             />
 
             <Image
@@ -89,7 +101,7 @@ export default function AjwainProductSection() {
               fontWeight: 700,
             }}
           >
-            Teekha tadka, crispy swag and full-on mazza
+            {copy.line1}
           </p>
 
           <p
@@ -100,7 +112,7 @@ export default function AjwainProductSection() {
               fontWeight: 700,
             }}
           >
-            Chatpata favorite, loved by every crunchy-snack fan
+            {copy.line2}
           </p>
 
           <h2
@@ -114,10 +126,10 @@ export default function AjwainProductSection() {
             }}
           >
             <span className="hero-no1-ajwain block text-[64px] md:text-[118px]">
-              <span className="hero-chunk-aj hero-main-aj">Crunch</span>
+              <span className="hero-chunk-aj hero-main-aj">{copy.heroMain}</span>
               <span className="hero-gap-aj">&nbsp;</span>
-              <span className="hero-chunk-aj hero-sub-aj">No.</span>
-              <span className="hero-chunk-aj hero-one-aj hero-digit-aj">1</span>
+              <span className="hero-chunk-aj hero-sub-aj">{copy.heroSub}</span>
+              <span className="hero-chunk-aj hero-one-aj hero-digit-aj">{copy.heroOne}</span>
             </span>
           </h2>
 
@@ -129,9 +141,9 @@ export default function AjwainProductSection() {
               fontWeight: 700,
             }}
           >
-            Hamara ajwain cookie tasty, crispy & aromatic —
+            {copy.desc1}
             <br />
-            har bite mein full desi punch!
+            {copy.desc2}
           </p>
         </div>
       </div>

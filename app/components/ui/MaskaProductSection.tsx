@@ -2,14 +2,26 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { LangCode, useSectionTranslation } from "@/lib/useSectionTranslation";
 
 const PRODUCT_IMAGE =
   "https://res.cloudinary.com/ddtifclgr/image/upload/v1770304510/maska_ht9ri9.png";
 const ATTA_BOWL_IMAGE =
   "https://res.cloudinary.com/ddtifclgr/image/upload/v1770739279/stock-photo-butter-curls-Photoroom_klkwdt.png";
 
-export default function MaskaProductSection() {
+const EN_COPY = {
+  line1: "Teekha tadka, crispy swag and full-on mazza",
+  line2: "Chatpata favorite, loved by every crunchy-snack fan",
+  heroMain: "Crunch",
+  heroSub: "No.",
+  heroOne: "1",
+  desc1: "Hamara Maska cookie flavourful, tasty, crispy & aromatic —",
+  desc2: "har bite mein full desi punch!",
+};
+
+export default function MaskaProductSection({ forcedLang }: { forcedLang?: LangCode } = {}) {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const { copy } = useSectionTranslation(EN_COPY, forcedLang);
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {
@@ -56,7 +68,7 @@ export default function MaskaProductSection() {
               fontWeight: 700,
             }}
           >
-            Teekha tadka, crispy swag and full-on mazza
+            {copy.line1}
           </p>
 
           <p
@@ -67,7 +79,7 @@ export default function MaskaProductSection() {
               fontWeight: 700,
             }}
           >
-            Chatpata favorite, loved by every crunchy-snack fan
+            {copy.line2}
           </p>
 
           <h2
@@ -81,10 +93,10 @@ export default function MaskaProductSection() {
             }}
           >
             <span className="hero-no1-atta block text-[64px] md:text-[118px]">
-              <span className="hero-chunk-at hero-main-at">Crunch</span>
+              <span className="hero-chunk-at hero-main-at">{copy.heroMain}</span>
               <span className="hero-gap-at">&nbsp;</span>
-              <span className="hero-chunk-at hero-sub-at">No.</span>
-              <span className="hero-chunk-at hero-one-at hero-digit-at">1</span>
+              <span className="hero-chunk-at hero-sub-at">{copy.heroSub}</span>
+              <span className="hero-chunk-at hero-one-at hero-digit-at">{copy.heroOne}</span>
             </span>
           </h2>
 
@@ -96,9 +108,9 @@ export default function MaskaProductSection() {
               fontWeight: 700,
             }}
           >
-            Hamara Maska cookie flavourful, tasty, crispy & aromatic —
+            {copy.desc1}
             <br />
-            har bite mein full desi punch!
+            {copy.desc2}
           </p>
         </div>
 

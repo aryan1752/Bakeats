@@ -1,11 +1,22 @@
 "use client";
 
 import Image from "next/image";
+import { LangCode, useSectionTranslation } from "@/lib/useSectionTranslation";
 
 const PRODUCT_IMAGE =
   "https://res.cloudinary.com/ddtifclgr/image/upload/v1770304473/nariyal_m4bdko.png";
 
-export default function NariyalProductSection() {
+const EN_COPY = {
+  starMain: "Star",
+  starSub: "Performer",
+  demand: "on Popular Demand",
+  line1: "Delight & Coco Crunch are all about that snazzy punch",
+  line2: "unique flavourful & so much fun at times. thoda khatta thoda meetha, yaaron ke yaar, bohot mazedaar!",
+};
+
+export default function NariyalProductSection({ forcedLang }: { forcedLang?: LangCode } = {}) {
+  const { copy } = useSectionTranslation(EN_COPY, forcedLang);
+
   return (
     <section className="relative overflow-visible bg-white px-3 pb-0 pt-1 md:overflow-hidden md:px-16 md:pb-10 md:pt-14">
       <div className="mx-auto max-w-7xl text-center">
@@ -33,7 +44,7 @@ export default function NariyalProductSection() {
               style={{ fontFamily: '"Playfair Display", "Times New Roman", serif' }}
             >
               <textPath href="#nariyalArcTop" startOffset="32%" textAnchor="middle">
-                Star
+                {copy.starMain}
               </textPath>
             </text>
 
@@ -47,7 +58,7 @@ export default function NariyalProductSection() {
               style={{ fontFamily: '"Playfair Display", "Times New Roman", serif' }}
             >
               <textPath href="#nariyalArcTop" startOffset="68%" textAnchor="middle">
-                Performer
+                {copy.starSub}
               </textPath>
             </text>
 
@@ -59,7 +70,7 @@ export default function NariyalProductSection() {
               style={{ fontFamily: '"Playfair Display", "Times New Roman", serif' }}
             >
               <textPath href="#nariyalArcMid" startOffset="50%" textAnchor="middle">
-                on Popular Demand
+                {copy.demand}
               </textPath>
             </text>
 
@@ -71,7 +82,7 @@ export default function NariyalProductSection() {
               style={{ fontFamily: '"Playfair Display", "Times New Roman", serif' }}
             >
               <textPath href="#nariyalArcBody1" startOffset="50%" textAnchor="middle">
-                 ! Delight & Coco Crunch are all about that snazzy punch
+                {copy.line1}
               </textPath>
             </text>
 
@@ -83,7 +94,7 @@ export default function NariyalProductSection() {
               style={{ fontFamily: '"Playfair Display", "Times New Roman", serif' }}
             >
               <textPath href="#nariyalArcBody2" startOffset="50%" textAnchor="middle">
-                unique flavourful &amp; so much fun at times. thoda khatta thoda meetha, yaaron ke yaar, bohot mazedaar!
+                {copy.line2}
               </textPath>
             </text>
           </svg>
@@ -94,10 +105,10 @@ export default function NariyalProductSection() {
           <Image
             src={PRODUCT_IMAGE}
             alt="Nariyal product"
-            width={341}
-            height={504}
+            width={324}
+            height={479}
             priority
-            className="nariyal-packet-auto-hover relative z-10 h-auto w-[50vw] md:w-[50vw] lg:w-[341px] max-w-[341px] drop-shadow-[0_26px_60px_rgba(28,144,168,0.35)]"
+            className="nariyal-packet-auto-hover relative z-10 h-auto w-[50vw] md:w-[50vw] lg:w-[324px] max-w-[324px] drop-shadow-[0_26px_60px_rgba(28,144,168,0.35)]"
           />
         </div>
       </div>

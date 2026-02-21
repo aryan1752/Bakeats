@@ -87,7 +87,7 @@ export default function AjwainProductSection({ forcedLang }: { forcedLang?: Lang
               width={324}
               height={479}
               priority
-              className="h-auto w-[50vw] md:w-[50vw] lg:w-[324px] max-w-[324px] drop-shadow-[0_24px_58px_rgba(140,170,60,0.4)]"
+              className="h-auto w-[70vw] md:w-[50vw] lg:w-[324px] max-w-[324px] drop-shadow-[0_24px_58px_rgba(140,170,60,0.4)]"
             />
 
             <Image

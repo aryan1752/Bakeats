@@ -11,6 +11,7 @@ import BadamProductSection from "./components/ui/BadamProductSection";
 import MaskaProductSection from "./components/ui/MaskaProductSection";
 import ChocolateProductSection from "./components/ui/ChoclateProductSection";
 import { cookieVariants } from "@/data/cookies";
+import { InfiniteMovingCardsDemo } from "./components/InfiniteMovingCardsDemo";
 
 type LangCode = "en" | "hi" | "es" | "ar" | "fr-CA" | "de" | "nl-BE";
 
@@ -112,7 +113,7 @@ export default function Home() {
   };
 
   return (
-    <main className="relative overflow-x-hidden bg-white">
+    <main className="relative overflow-x-hidden bg-black">
       <div className="fixed right-4 top-4 z-50 flex items-center gap-2 rounded-lg border border-neutral-300 bg-white/90 p-2 text-xs shadow-sm md:right-8 md:top-6">
         <span className="font-semibold text-neutral-700">Language</span>
         <select
@@ -137,17 +138,19 @@ export default function Home() {
         scrollProgress={scrollProgress}
         isTransitioning={isTransitioning}
       />
-
+      <InfiniteMovingCardsDemo />
       <NariyalProductSection forcedLang={lang} />
       <ChocolateProductSection forcedLang={lang} />
       <MaskaProductSection forcedLang={lang} />
       <AjwainProductSection forcedLang={lang} />
       <AttaProductSection forcedLang={lang} />
-      <JeeraProductSection forcedLang={lang} />
+     
       <BadamProductSection forcedLang={lang} />
+       <JeeraProductSection forcedLang={lang} />
       <section className="relative">
         <DraggableCardDemo />
       </section>
+      
     </main>
   );
 }

@@ -143,7 +143,7 @@ export default function MaskaProductSection({ forcedLang }: { forcedLang?: LangC
               width={340}
               height={500}
               priority
-              className="h-auto w-[50vw] md:w-[50vw] lg:w-[378px] max-w-[378px] drop-shadow-[0_24px_58px_rgba(140,106,47,0.35)]"
+              className="h-auto w-[70vw] md:w-[50vw] lg:w-[378px] max-w-[378px] drop-shadow-[0_24px_58px_rgba(140,106,47,0.35)]"
             />
 
             <Image

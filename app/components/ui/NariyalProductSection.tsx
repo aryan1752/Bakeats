@@ -123,7 +123,7 @@ export default function NariyalProductSection({ forcedLang }: { forcedLang?: Lan
             width={324}
             height={479}
             priority
-            className="nariyal-packet-auto-hover relative z-10 h-auto w-[50vw] md:w-[50vw] lg:w-[324px] max-w-[324px] drop-shadow-[0_26px_60px_rgba(28,144,168,0.35)]"
+            className="nariyal-packet-auto-hover relative z-10 h-auto w-[70vw] md:w-[50vw] lg:w-[324px] max-w-[324px] drop-shadow-[0_26px_60px_rgba(28,144,168,0.35)]"
           />
         </div>
       </div>

@@ -265,7 +265,7 @@ export default function JeeraProductSection({ forcedLang }: { forcedLang?: LangC
               width={324}
               height={479}
               priority
-              className="h-auto w-[50vw] md:w-[50vw] lg:w-[324px] max-w-[324px] drop-shadow-[0_26px_62px_rgba(159,190,47,0.42)]"
+              className="h-auto w-[70vw] md:w-[50vw] lg:w-[324px] max-w-[324px] drop-shadow-[0_26px_62px_rgba(159,190,47,0.42)]"
             />
 
             <Image

@@ -234,10 +234,13 @@ export const NavbarLogo = () => {
   return (
     <a
       href="/"
-      className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-semibold text-white"
+      className="relative z-20 mr-4 flex items-center px-2 py-1"
     >
-      <span className="inline-block h-2 w-2 rounded-full bg-orange-500" />
-      <span className="font-medium text-white">Bakeats</span>
+      <img
+        src="https://res.cloudinary.com/ddtifclgr/image/upload/v1770035808/logo.5586e616d663e63711b3-Photoroom_ksprww.png"
+        alt="Bakeats logo"
+        className="h-8 w-auto"
+      />
     </a>
   );
 };

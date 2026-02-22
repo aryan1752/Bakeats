@@ -140,13 +140,26 @@ export default function Home() {
       />
       <InfiniteMovingCardsDemo />
       <NariyalProductSection forcedLang={lang} />
+      <div className="h-[50px] bg-white md:hidden" />
+
       <ChocolateProductSection forcedLang={lang} />
+      <div className="h-[50px] bg-white md:hidden" />
+
       <MaskaProductSection forcedLang={lang} />
+      <div className="h-[50px] bg-white md:hidden" />
+
       <AjwainProductSection forcedLang={lang} />
+      <div className="h-[50px] bg-white md:hidden" />
+
       <AttaProductSection forcedLang={lang} />
-     
+      <div className="h-[50px] bg-white md:hidden" />
+
       <BadamProductSection forcedLang={lang} />
-       <JeeraProductSection forcedLang={lang} />
+      <div className="h-[50px] bg-white md:hidden" />
+
+      <JeeraProductSection forcedLang={lang} />
+      <div className="h-[50px] bg-white md:hidden" />
+
       <section className="relative">
         <DraggableCardDemo />
       </section>

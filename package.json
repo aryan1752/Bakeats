@@ -16,7 +16,7 @@
     "clsx": "^2.1.1",
     "framer-motion": "^12.33.0",
     "lucide-react": "^0.563.0",
-    "motion": "^12.34.0",
+    "motion": "^12.34.3",
     "next": "16.1.6",
     "next-cloudinary": "^6.17.5",
     "react": "19.2.3",

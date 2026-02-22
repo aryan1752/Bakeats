@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import Footer from "@/components/ui/Footer";
+import BakeatsNavbar from "@/components/ui/BakeatsNavbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,8 +32,10 @@ export default function RootLayout({
        >
         
 
+        <BakeatsNavbar />
+
         {/* MAIN CONTENT */}
-        <main className="flex-1 w-full">
+        <main className="flex-1 w-full pt-16 md:pt-20">
           {children}
         </main>
 

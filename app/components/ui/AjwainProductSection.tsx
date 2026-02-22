@@ -68,7 +68,7 @@ export default function AjwainProductSection({ forcedLang }: { forcedLang?: Lang
 
       <div className="relative z-10 mx-auto grid min-h-0 max-w-7xl items-start gap-2 md:min-h-[620px] md:items-center md:gap-8 md:grid-cols-2">
         {/* packet left */}
-        <div className="relative flex justify-center md:order-1">
+        <div className="order-2 relative flex justify-center md:order-1">
           <div
             className="absolute h-[420px] w-[420px] rounded-full bg-gradient-to-b from-[#e6d84a]/55 via-[#d4c23a]/45 to-transparent blur-3xl"
             style={{ transform: `translate(${mouse.x * 14}px, ${mouse.y * 7}px)` }}
@@ -101,7 +101,7 @@ export default function AjwainProductSection({ forcedLang }: { forcedLang?: Lang
         </div>
 
         {/* text right - same format as jeera */}
-        <div className="space-y-2 text-center md:order-2 md:space-y-6 md:text-left md:[transform:rotate(-4deg)] md:[transform-origin:left_center]">
+        <div className="order-1 space-y-2 text-center md:order-2 md:space-y-6 md:text-left md:[transform:rotate(-4deg)] md:[transform-origin:left_center]">
           <p
             className="text-[20px] leading-tight text-[#1f1b1a] md:text-[32px]"
             style={{

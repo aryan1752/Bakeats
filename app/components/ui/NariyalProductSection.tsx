@@ -35,10 +35,10 @@ export default function NariyalProductSection({ forcedLang }: { forcedLang?: Lan
   return (
     <section className="relative overflow-visible bg-white px-3 pb-0 pt-1 md:overflow-hidden md:px-16 md:pb-10 md:pt-14">
       <div className="mx-auto max-w-7xl text-center">
-        <div className="relative mx-auto h-[190px] w-full max-w-[1100px] sm:h-[250px] md:h-[500px]">
+        <div className="relative mx-auto h-[270px] w-full max-w-[1100px] sm:h-[260px] md:h-[500px]">
           <svg
             viewBox="0 0 1200 620"
-            className="absolute left-1/2 top-0 h-full w-full -translate-x-1/2 origin-top scale-[0.62] sm:scale-[0.78] md:scale-100"
+            className="absolute left-1/2 top-0 h-full w-full -translate-x-1/2 origin-top scale-[0.98] sm:scale-[0.88] md:scale-100"
             fill="none"
             aria-hidden
           >
@@ -123,7 +123,7 @@ export default function NariyalProductSection({ forcedLang }: { forcedLang?: Lan
             width={324}
             height={479}
             priority
-            className="nariyal-packet-auto-hover relative z-10 h-auto w-[70vw] md:w-[50vw] lg:w-[324px] max-w-[324px] drop-shadow-[0_26px_60px_rgba(28,144,168,0.35)]"
+            className="nariyal-packet-auto-hover relative z-10 h-auto w-[80vw] md:w-[50vw] lg:w-[324px] max-w-[324px] drop-shadow-[0_26px_60px_rgba(28,144,168,0.35)]"
           />
         </div>
       </div>

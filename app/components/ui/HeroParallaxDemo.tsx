@@ -65,6 +65,7 @@ export const products = [
   },
   {
     title: "lokmat times",
+    link: "https://www.lokmattimes.com/",
     thumbnail:
       "https://res.cloudinary.com/ddtifclgr/image/upload/v1769968454/Screenshot_2026-02-01_232341_ppbeg6.png",
   },

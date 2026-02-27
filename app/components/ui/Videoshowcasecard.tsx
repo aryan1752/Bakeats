@@ -39,7 +39,7 @@ export default function VideoShowcaseCard({ videoUrl, channelName, description }
             href={youtubeLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative block w-full overflow-hidden rounded-2xl md:w-[460px] md:min-w-[460px]"
+            className="group relative block w-full overflow-hidden rounded-2xl md:w-[52%] md:min-w-0"
           >
             <img
               src={thumbnailUrl}
@@ -56,7 +56,7 @@ export default function VideoShowcaseCard({ videoUrl, channelName, description }
             </div>
           </a>
 
-          <p className="text-xl leading-[1.35] text-white/95 sm:text-2xl md:text-[48px] md:leading-[1.22]">
+          <p className="text-xl leading-[1.35] text-white/95 sm:text-2xl md:w-[48%] md:text-4xl md:leading-[1.22] lg:text-[48px]">
             {channelName ? <span className="font-semibold">{channelName} </span> : null}
             <span className="font-semibold text-white">{highlightedText}</span>
             {remainingText ? ` ${remainingText}` : ""}

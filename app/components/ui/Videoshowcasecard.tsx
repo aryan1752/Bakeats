@@ -2,7 +2,7 @@
 
 interface VideoCardProps {
   videoUrl: string;
-  channelName?: string;
+  channelName: string;
   description: string;
 }
 
@@ -20,9 +20,6 @@ export default function VideoShowcaseCard({ videoUrl, channelName, description }
   const videoId = extractVideoId(videoUrl);
   const youtubeLink = `https://www.youtube.com/watch?v=${videoId}`;
   const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
-  const words = description.trim().split(/\s+/);
-  const highlightedText = words.slice(0, 4).join(" ");
-  const remainingText = words.slice(4).join(" ");
 
   return (
     <section className="w-full bg-black py-5 md:py-10 px-4">
@@ -34,12 +31,12 @@ export default function VideoShowcaseCard({ videoUrl, channelName, description }
           </p>
         </div>
 
-        <div className="mx-auto flex w-full md:w-[70%] flex-col gap-6 rounded-[20px] bg-[linear-gradient(135deg,#5B5CEB_0%,#A8B6FF_100%)] p-4 shadow-[0_22px_70px_rgba(91,92,235,0.38)] sm:rounded-[24px] sm:p-6 md:flex-row md:items-center md:gap-10 md:p-9">
+        <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 rounded-[20px] bg-[linear-gradient(135deg,#5B5CEB_0%,#A8B6FF_100%)] p-4 shadow-[0_22px_70px_rgba(91,92,235,0.38)] sm:rounded-[24px] sm:p-6 md:flex-row md:items-center md:gap-10 md:p-9">
           <a
             href={youtubeLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative block w-full overflow-hidden rounded-2xl md:w-[52%] md:min-w-0"
+            className="group relative block w-full overflow-hidden rounded-2xl md:w-[460px] md:min-w-[460px]"
           >
             <img
               src={thumbnailUrl}
@@ -56,10 +53,8 @@ export default function VideoShowcaseCard({ videoUrl, channelName, description }
             </div>
           </a>
 
-          <p className="text-xl leading-[1.35] text-white/95 sm:text-2xl md:w-[48%] md:text-4xl md:leading-[1.22] lg:text-[48px]">
-            {channelName ? <span className="font-semibold">{channelName} </span> : null}
-            <span className="font-semibold text-white">{highlightedText}</span>
-            {remainingText ? ` ${remainingText}` : ""}
+          <p className="text-xl leading-[1.35] text-white/95 sm:text-2xl md:text-[48px] md:leading-[1.22]">
+            Jeff from <span className="font-semibold">{channelName}</span> {description}
           </p>
         </div>
       </div>

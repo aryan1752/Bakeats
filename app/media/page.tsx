@@ -15,8 +15,8 @@ export default function Media() {
       <section className="relative -mt-12 md:-mt-24">
         <VideoShowcaseCard
           videoUrl="https://youtu.be/02ACrF3vHas?si=Ws1dt2sB-iV68d7F"
-          channelName=""
-          description="Listen to our founder discuss the journey of building Bakeats and the strategy behind our products and growth."
+          channelName="Raj Talks Tech"
+          description="talks about how Aceternity UI can help you build awesome landing pages with speed"
         />
       </section>
     </main>

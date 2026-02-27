@@ -34,7 +34,7 @@ export default function VideoShowcaseCard({ videoUrl, channelName, description }
           </p>
         </div>
 
-        <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 rounded-[20px] bg-[linear-gradient(135deg,#5B5CEB_0%,#A8B6FF_100%)] p-4 shadow-[0_22px_70px_rgba(91,92,235,0.38)] sm:rounded-[24px] sm:p-6 md:flex-row md:items-center md:gap-10 md:p-9">
+        <div className="mx-auto flex w-full md:w-[70%] flex-col gap-6 rounded-[20px] bg-[linear-gradient(135deg,#5B5CEB_0%,#A8B6FF_100%)] p-4 shadow-[0_22px_70px_rgba(91,92,235,0.38)] sm:rounded-[24px] sm:p-6 md:flex-row md:items-center md:gap-10 md:p-9">
           <a
             href={youtubeLink}
             target="_blank"
@@ -58,7 +58,7 @@ export default function VideoShowcaseCard({ videoUrl, channelName, description }
 
           <p className="text-xl leading-[1.35] text-white/95 sm:text-2xl md:text-[48px] md:leading-[1.22]">
             {channelName ? <span className="font-semibold">{channelName} </span> : null}
-            <span className="font-semibold text-[#FFF08A]">{highlightedText}</span>
+            <span className="font-semibold text-white">{highlightedText}</span>
             {remainingText ? ` ${remainingText}` : ""}
           </p>
         </div>

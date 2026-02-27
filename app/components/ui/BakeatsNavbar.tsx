@@ -5,9 +5,6 @@ import AddReviewModal from "@/components/ui/AddReviewModal";
 import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import {
   MobileNav,
-  MobileNavHeader,
-  MobileNavMenu,
-  MobileNavToggle,
   NavBody,
   NavItems,
   Navbar,
@@ -23,7 +20,6 @@ const navItems = [
 ];
 
 export default function BakeatsNavbar() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const lastY = useRef(0);
@@ -67,41 +63,32 @@ export default function BakeatsNavbar() {
           </NavBody>
 
           <MobileNav className="bg-black/60">
-            <MobileNavHeader>
+            <div className="flex w-full items-center gap-3 overflow-x-auto px-2 py-1 [&::-webkit-scrollbar]:hidden">
               <NavbarLogo />
-              <MobileNavToggle
-                isOpen={isMobileMenuOpen}
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              />
-            </MobileNavHeader>
-
-            <MobileNavMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)}>
-              {navItems.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.link}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="relative text-neutral-700 dark:text-neutral-200"
-                >
-                  <span className="block">{item.name}</span>
-                </a>
-              ))}
-              <div className="flex w-full flex-col gap-3">
+              <div className="flex min-w-max items-center gap-1">
+                {navItems.map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.link}
+                    className="rounded-full px-2 py-1 text-xs font-medium text-white/90"
+                  >
+                    {item.name}
+                  </a>
+                ))}
+              </div>
+              <div className="ml-auto flex min-w-max items-center gap-2">
                 <NavbarButton
-                  variant="primary"
-                  className="w-full"
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    setIsReviewOpen(true);
-                  }}
+                  variant="secondary"
+                  className="px-2 py-1 text-xs text-white"
+                  onClick={() => setIsReviewOpen(true)}
                 >
                   Add Review
                 </NavbarButton>
-                <NavbarButton href="/" variant="dark" className="w-full" onClick={() => setIsMobileMenuOpen(false)}>
+                <NavbarButton href="/" variant="primary" className="px-3 py-1 text-xs">
                   Shop Now
                 </NavbarButton>
               </div>
-            </MobileNavMenu>
+            </div>
           </MobileNav>
         </Navbar>
       </motion.div>

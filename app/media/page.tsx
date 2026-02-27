@@ -15,7 +15,7 @@ export default function Media() {
       <section className="relative -mt-12 md:-mt-24">
         <VideoShowcaseCard
           videoUrl="https://youtu.be/02ACrF3vHas?si=Ws1dt2sB-iV68d7F"
-          channelName="Raj Talks Tech"
+          channelName=""
           description="Listen to our founder discuss the journey of building Bakeats and the strategy behind our products and growth."
         />
       </section>

@@ -2,7 +2,7 @@
 
 interface VideoCardProps {
   videoUrl: string;
-  channelName: string;
+  channelName?: string;
   description: string;
 }
 
@@ -20,6 +20,9 @@ export default function VideoShowcaseCard({ videoUrl, channelName, description }
   const videoId = extractVideoId(videoUrl);
   const youtubeLink = `https://www.youtube.com/watch?v=${videoId}`;
   const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+  const words = description.trim().split(/\s+/);
+  const highlightedText = words.slice(0, 4).join(" ");
+  const remainingText = words.slice(4).join(" ");
 
   return (
     <section className="w-full bg-black py-5 md:py-10 px-4">
@@ -54,7 +57,9 @@ export default function VideoShowcaseCard({ videoUrl, channelName, description }
           </a>
 
           <p className="text-xl leading-[1.35] text-white/95 sm:text-2xl md:text-[48px] md:leading-[1.22]">
-            Jeff from <span className="font-semibold">{channelName}</span> {description}
+            {channelName ? <span className="font-semibold">{channelName} </span> : null}
+            <span className="font-semibold text-[#FFF08A]">{highlightedText}</span>
+            {remainingText ? ` ${remainingText}` : ""}
           </p>
         </div>
       </div>

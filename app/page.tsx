@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { DraggableCardDemo } from "@/components/ui/DraggableCardDemo";
 import { HeroSection } from "@/components/ui/HeroSection";
 import JeeraProductSection from "@/components/ui/JeeraProductSection";
@@ -31,6 +31,8 @@ export default function Home() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [lang, setLang] = useState<LangCode>("en");
   const [translatedCookies, setTranslatedCookies] = useState(cookieVariants);
+  const [showLangSelector, setShowLangSelector] = useState(true);
+  const lastScrollYRef = useRef(0);
 
   useEffect(() => {
     const saved = window.localStorage.getItem("site_lang") as LangCode | null;
@@ -45,6 +47,16 @@ export default function Home() {
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = Math.min(scrollTop / (docHeight * 0.5), 1);
       setScrollProgress(progress);
+
+      const prev = lastScrollYRef.current;
+      if (scrollTop < 80) {
+        setShowLangSelector(true);
+      } else if (scrollTop < prev) {
+        setShowLangSelector(true); // scrolling up
+      } else {
+        setShowLangSelector(false); // scrolling down
+      }
+      lastScrollYRef.current = scrollTop;
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -114,7 +126,11 @@ export default function Home() {
 
   return (
     <main className="relative overflow-x-hidden bg-black">
-      <div className="fixed right-4 top-4 z-50 flex items-center gap-2 rounded-lg border border-neutral-300 bg-white/90 p-2 text-xs shadow-sm md:right-8 md:top-6">
+      <div
+        className={`fixed right-2 top-16 z-[80] flex items-center gap-2 rounded-lg border border-neutral-300 bg-white/90 p-2 text-xs shadow-sm transition-all duration-200 md:right-8 md:top-6 ${
+          showLangSelector ? "translate-y-0 opacity-100" : "-translate-y-8 opacity-0 pointer-events-none"
+        }`}
+      >
         <span className="font-semibold text-neutral-700">Language</span>
         <select
           value={lang}
@@ -138,7 +154,9 @@ export default function Home() {
         scrollProgress={scrollProgress}
         isTransitioning={isTransitioning}
       />
-      <InfiniteMovingCardsDemo />
+      <div className="relative -mt-16 md:-mt-24">
+        <InfiniteMovingCardsDemo />
+      </div>
       <NariyalProductSection forcedLang={lang} />
       <div className="h-[50px] bg-white md:hidden" />
 

@@ -9,10 +9,19 @@ export default function Media() {
         <SpotlightNewDemo />
       </section>
               
-      <section className="relative mt-10 -mb-48 md:-mb-24">
+      <section className="relative mt-10 md:hidden">
+        <VideoShowcaseCard
+          videoUrl="https://youtu.be/02ACrF3vHas?si=Ws1dt2sB-iV68d7F"
+          channelName=""
+          description="Listen to our founder discuss the journey of building Bakeats and the strategy behind our products and growth."
+        />
+      </section>
+
+      <section className="relative mt-10">
         <HeroParallaxDemo />
       </section>
-      <section className="relative">
+
+      <section className="relative hidden md:block -mt-24">
         <VideoShowcaseCard
           videoUrl="https://youtu.be/02ACrF3vHas?si=Ws1dt2sB-iV68d7F"
           channelName=""

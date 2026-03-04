@@ -50,8 +50,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const headingBase = currentCookie.name.replace(/\s*cookie\s*/i, '').trim();
 
   return (
-    <section className="relative min-h-[78vh] bg-black sm:min-h-[88vh] md:min-h-[130vh]">
-      <div className="sticky top-0 h-[78vh] w-full overflow-hidden bg-black sm:h-[88vh] md:h-screen">
+    <section className="relative min-h-[62vh] bg-black sm:min-h-[80vh] md:min-h-[130vh]">
+      <div className="sticky top-0 h-[62vh] w-full overflow-hidden bg-black sm:h-[80vh] md:h-screen">
         <div className="absolute right-0 top-0 z-10 h-full w-[10vw] bg-black" />
         <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08)_0%,rgba(0,0,0,0.45)_58%,rgba(0,0,0,0.7)_100%)]" />
         <div className="absolute inset-0 z-10 bg-[linear-gradient(90deg,rgba(0,0,0,0.62)_0%,rgba(0,0,0,0.25)_38%,rgba(0,0,0,0.55)_100%)]" />
@@ -105,13 +105,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             {currentCookie.description}
           </p>
 
+
           <div className="mt-4 flex flex-wrap gap-2 md:mt-11 md:gap-4">
-            <button className="rounded-full border border-white/60 px-4 py-2 text-[11px] tracking-wide text-white transition hover:bg-white/10 md:px-9 md:py-4 md:text-sm">
-              ADD TO CART
-            </button>
-            <button className="rounded-full bg-white px-4 py-2 text-[11px] tracking-wide text-black transition hover:bg-white/90 md:px-9 md:py-4 md:text-sm">
-              BUY NOW
-            </button>
+           <a href="https://wa.me/919266565336" target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/60 px-4 py-2 text-[11px] tracking-wide text-white transition hover:bg-white/10 md:px-9 md:py-4 md:text-sm inline-block">
+  WhatsApp
+</a>
+           <a href="https://blinkit.com/prn/x/prid/735252" target="_blank" rel="noopener noreferrer" className="rounded-full bg-white px-4 py-2 text-[11px] tracking-wide text-black transition hover:bg-yellow/90 md:px-9 md:py-4 md:text-sm inline-block">
+  BUY NOW
+</a>
           </div>
         </div>
 

@@ -12,7 +12,7 @@ export default function Media() {
       <section className="relative mt-10">
         <HeroParallaxDemo />
       </section>
-      <section className="relative -mt-12 md:-mt-24">
+      <section className="relative -mt-40 md:-mt-24">
         <VideoShowcaseCard
           videoUrl="https://youtu.be/02ACrF3vHas?si=Ws1dt2sB-iV68d7F"
           channelName=""

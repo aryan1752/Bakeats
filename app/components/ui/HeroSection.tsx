@@ -50,7 +50,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const headingBase = currentCookie.name.replace(/\s*cookie\s*/i, '').trim();
 
   return (
-    <section className="relative min-h-[62vh] bg-black sm:min-h-[80vh] md:min-h-[130vh]">
+    <section className="relative min-h-[62vh] bg-black sm:min-h-[80vh] md:min-h-[100vh]">
       <div className="sticky top-0 h-[62vh] w-full overflow-hidden bg-black sm:h-[80vh] md:h-screen">
         <div className="absolute right-0 top-0 z-10 h-full w-[10vw] bg-black" />
         <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08)_0%,rgba(0,0,0,0.45)_58%,rgba(0,0,0,0.7)_100%)]" />

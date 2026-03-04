@@ -54,7 +54,7 @@ export function InfiniteMovingCardsDemo() {
 
   return (
     <div className="relative flex w-full flex-col items-center justify-start overflow-hidden bg-black py-0 antialiased dark:bg-black dark:bg-grid-white/[0.05]">
-      <InfiniteMovingCards items={items} direction="right" speed="slow" />
+      <InfiniteMovingCards items={items} direction="right" speed="slow" durationSeconds={53.33} />
     </div>
   );
 }

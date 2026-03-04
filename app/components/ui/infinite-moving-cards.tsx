@@ -7,6 +7,7 @@ export const InfiniteMovingCards = ({
   items,
   direction = "left",
   speed = "fast",
+  durationSeconds,
   pauseOnHover = true,
   className,
 }: {
@@ -17,6 +18,7 @@ export const InfiniteMovingCards = ({
   }[];
   direction?: "left" | "right";
   speed?: "fast" | "normal" | "slow";
+  durationSeconds?: number;
   pauseOnHover?: boolean;
   className?: string;
 }) => {
@@ -60,7 +62,9 @@ export const InfiniteMovingCards = ({
   };
   const getSpeed = () => {
     if (containerRef.current) {
-      if (speed === "fast") {
+      if (durationSeconds && durationSeconds > 0) {
+        containerRef.current.style.setProperty("--animation-duration", `${durationSeconds}s`);
+      } else if (speed === "fast") {
         containerRef.current.style.setProperty("--animation-duration", "20s");
       } else if (speed === "normal") {
         containerRef.current.style.setProperty("--animation-duration", "40s");

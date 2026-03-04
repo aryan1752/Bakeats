@@ -9,10 +9,10 @@ export default function Media() {
         <SpotlightNewDemo />
       </section>
               
-      <section className="relative mt-10">
+      <section className="relative mt-10 -mb-48 md:-mb-24">
         <HeroParallaxDemo />
       </section>
-      <section className="relative -mt-40 md:-mt-24">
+      <section className="relative">
         <VideoShowcaseCard
           videoUrl="https://youtu.be/02ACrF3vHas?si=Ws1dt2sB-iV68d7F"
           channelName=""

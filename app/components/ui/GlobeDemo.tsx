@@ -61,11 +61,11 @@ export function GlobeDemo() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-          <h2 className="text-center text-xl md:text-4xl font-bold text-black dark:text-white">
+          <h2 className="text-center font-[cursive] text-xl md:text-4xl font-bold text-black dark:text-white">
             Connected from India
           </h2>
-          <p className="text-center text-base md:text-lg font-normal text-neutral-700 dark:text-neutral-200 max-w-md mt-2 mx-auto">
-            Real-time global reach visualized on the Bakeats network globe.
+          <p className="mx-auto mt-2 max-w-md text-center font-[cursive] text-base font-normal text-neutral-700 dark:text-neutral-200 md:text-lg">
+            Real-time global reach visualized on the PND global logistics network globe.
           </p>
         </motion.div>
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-40 h-24 select-none bg-gradient-to-b from-transparent to-white dark:to-black md:h-40" />

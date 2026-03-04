@@ -154,7 +154,7 @@ export default function Home() {
         scrollProgress={scrollProgress}
         isTransitioning={isTransitioning}
       />
-      <div className="relative -mt-28 md:-mt-36">
+      <div className="relative -mt-20 md:-mt-24">
         <InfiniteMovingCardsDemo />
       </div>
       <NariyalProductSection forcedLang={lang} />

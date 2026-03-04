@@ -35,7 +35,7 @@ export function DraggableCardDemo() {
   
   ];
   return (
-    <DraggableCardContainer className="relative flex min-h-screen w-full items-center justify-center overflow-clip">
+    <DraggableCardContainer className="relative flex min-h-screen w-full items-center justify-center overflow-clip bg-white">
       <p className="absolute top-1/2 mx-auto max-w-sm -translate-y-3/4 text-center text-2xl font-black text-neutral-400 md:text-4xl dark:text-neutral-800">
        If it’s your first chai, you need a rusk.No first sip without a crisp rusk
       </p>
@@ -46,7 +46,7 @@ export function DraggableCardDemo() {
             alt={item.title}
             className="pointer-events-none relative z-10 h-80 w-80 object-contain"
           />
-          <h3 className="mt-4 text-center text-2xl font-bold text-neutral-700 dark:text-neutral-700">
+          <h3 className="mt-4 text-center text-2xl font-bold text-neutral-700 dark:text-neutral-300">
             {item.title}
           </h3>
         </DraggableCardBody>

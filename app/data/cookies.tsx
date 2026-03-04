@@ -57,7 +57,7 @@ export const cookieVariants: CookieVariant[] = [
     description: "Delicious coconut cookies packed with tropical flavor and a light, crunchy texture in every bite.",
     accentColor: "hsl(40, 55%, 55%)",
     accentClass: "accent-butter-gold",
-    webpUrl: "https://sljnhwsjrelakssuvwie.supabase.co/storage/v1/object/public/coconut/ezgif-5e10889f76c581cf.webp",
+    webpUrl: "https://sljnhwsjrelakssuvwie.supabase.co/storage/v1/object/public/coconut/ezgif-454bc0a7e07298ad.webp",
     frameCount: 220,
   },
   {

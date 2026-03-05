@@ -56,9 +56,9 @@ export default function BakeatsNavbar() {
               <NavbarButton variant="secondary" className="text-white" onClick={() => setIsReviewOpen(true)}>
                 Add Review
               </NavbarButton>
-              <NavbarButton href="/" variant="primary">
-                Shop Now
-              </NavbarButton>
+             <NavbarButton href="https://blinkit.com/prn/x/prid/735252" variant="primary">
+  Shop Now
+</NavbarButton>
             </div>
           </NavBody>
 
@@ -84,9 +84,9 @@ export default function BakeatsNavbar() {
                 >
                   Add Review
                 </NavbarButton>
-                <NavbarButton href="/" variant="primary" className="px-3 py-1 text-xs">
-                  Shop Now
-                </NavbarButton>
+              <NavbarButton href="https://blinkit.com/prn/x/prid/735252" variant="primary" className="px-3 py-1 text-xs">
+  Shop Now
+</NavbarButton>
               </div>
             </div>
           </MobileNav>

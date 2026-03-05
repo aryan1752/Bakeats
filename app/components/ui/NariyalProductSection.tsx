@@ -10,7 +10,7 @@ const EN_COPY = {
   starMain: "Star",
   starSub: "Performer",
   demand: "on Popular Demand",
-  line1: "Delight & Coco Crunch are all about that snazzy punch",
+  line1: "DDelight & Coco Crunch are all about that snazzy punch",
   line2: "unique flavourful & so much fun at times. thoda khatta thoda meetha, yaaron ke yaar, bohot mazedaar!",
 };
 

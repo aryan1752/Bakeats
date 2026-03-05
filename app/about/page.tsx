@@ -1,6 +1,7 @@
 import { TimelineDemo } from "@/components/ui/TimelineDemo";
 import AboutSection from "@/components/ui/AboutSection";
 import TeamSection from "@/components/ui/TeamSection";
+import  FoundersSection  from "@/components/ui/Founderssection";  
 
 export default function about() {
   return (
@@ -11,6 +12,7 @@ export default function about() {
         <TimelineDemo />
       </section>
       <TeamSection />
+      <FoundersSection />
     </main>
   );
 }

@@ -27,7 +27,7 @@ export default function VideoShowcaseCard({ videoUrl, channelName, description }
         <div className="mb-10 text-center md:mb-14">
           <h2 className="text-2xl font-semibold text-white sm:text-3xl md:text-5xl">Featured by popular YouTubers</h2>
           <p className="mt-3 text-sm text-neutral-400 sm:text-base md:mt-4 md:text-xl">
-            See what the best YouTubers are saying about Aceternity UI.
+            See what the best YouTubers are saying about bakeats.
           </p>
         </div>
 
@@ -54,7 +54,7 @@ export default function VideoShowcaseCard({ videoUrl, channelName, description }
           </a>
 
           <p className="text-xl leading-[1.35] text-white/95 sm:text-2xl md:text-[48px] md:leading-[1.22]">
-            Jeff from <span className="font-semibold">{channelName}</span> {description}
+           <span className="font-semibold">{channelName}</span> {description}
           </p>
         </div>
       </div>

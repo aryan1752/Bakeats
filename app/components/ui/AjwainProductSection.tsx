@@ -12,20 +12,73 @@ const AJWAIN_BOWL_IMAGE =
 const EN_COPY = {
   line1: "Teekha tadka, crispy swag and full-on mazza",
   line2: "Chatpata favorite, loved by every crunchy-snack fan",
-  heroMain: "Crunch",
-  heroSub: "No.",
-  heroOne: "1",
+  heroMain: "The",
+  heroSub: "OG",
+  heroOne: "Ajwain",
   desc1: "Hamara ajwain cookie tasty, crispy & aromatic —",
   desc2: "har bite mein full desi punch!",
 };
 
 const FALLBACK_COPY = {
-  hi: { line1: "तीखा तड़का, क्रिस्पी स्वैग और फुल ऑन मज़ा", line2: "चटपटा फ़ेवरिट, हर क्रंची स्नैक लवर का पसंदीदा", heroMain: "क्रंच" },
-  es: { line1: "Toque intenso, crujiente y súper divertido", line2: "Favorito picante, amado por todos", heroMain: "Crujiente", heroSub: "N.º" },
-  ar: { line1: "نكهة قوية وقرمشة ممتعة", line2: "المفضل لعشاق السناكات المقرمشة", heroMain: "قرمشة", heroSub: "رقم" },
-  "fr-CA": { line1: "Touche épicée, croustillante et pleine de fun", line2: "Le préféré des amateurs de croquant", heroMain: "Croquant" },
-  de: { line1: "Würziger Kick, knuspriger Style, voller Spaß", line2: "Der Favorit für alle Crunch-Fans", heroMain: "Crunch" },
-  "nl-BE": { line1: "Pittige kick, crispy swag en volle fun", line2: "Favoriet van elke crunchy-snack fan", heroMain: "Crunch" },
+  hi: {
+    line1: "तीखा तड़का, क्रिस्पी स्वैग और फुल ऑन मज़ा",
+    line2: "चटपटा फ़ेवरिट, हर क्रंची स्नैक लवर का पसंदीदा",
+    heroMain: "द",
+    heroSub: "ओजी",
+    heroOne: "अजवाइन",
+    desc1: "हमारी अजवाइन कुकी टेस्टी, क्रिस्पी और खुशबूदार —",
+    desc2: "हर बाइट में फुल देसी पंच!",
+  },
+
+  es: {
+    line1: "Toque intenso, crujiente y súper divertido",
+    line2: "Favorito picante, amado por todos",
+    heroMain: "El",
+    heroSub: "OG",
+    heroOne: "Ajwain",
+    desc1: "Nuestra galleta de ajwain es sabrosa, crujiente y aromática —",
+    desc2: "¡cada bocado con un toque desi!",
+  },
+
+  ar: {
+    line1: "نكهة قوية وقرمشة ممتعة",
+    line2: "المفضل لعشاق السناكات المقرمشة",
+    heroMain: "الأصلي",
+    heroSub: "رقم",
+    heroOne: "أجوين",
+    desc1: "بسكويت الأجوين لدينا لذيذ ومقرمش وعطري —",
+    desc2: "كل قضمة بنكهة مميزة!",
+  },
+
+  "fr-CA": {
+    line1: "Touche épicée, croustillante et pleine de fun",
+    line2: "Le préféré des amateurs de croquant",
+    heroMain: "Le",
+    heroSub: "OG",
+    heroOne: "Ajwain",
+    desc1: "Notre biscuit à l’ajwain est savoureux, croustillant et aromatique —",
+    desc2: "chaque bouchée avec une touche desi!",
+  },
+
+  de: {
+    line1: "Würziger Kick, knuspriger Style, voller Spaß",
+    line2: "Der Favorit für alle Crunch-Fans",
+    heroMain: "Der",
+    heroSub: "OG",
+    heroOne: "Ajwain",
+    desc1: "Unser Ajwain-Keks ist lecker, knusprig und aromatisch —",
+    desc2: "jeder Bissen mit desi Punch!",
+  },
+
+  "nl-BE": {
+    line1: "Pittige kick, crispy swag en volle fun",
+    line2: "Favoriet van elke crunchy-snack fan",
+    heroMain: "De",
+    heroSub: "OG",
+    heroOne: "Ajwain",
+    desc1: "Onze ajwain koek is smakelijk, knapperig en aromatisch —",
+    desc2: "elke hap met desi punch!",
+  },
 } as const;
 
 export default function AjwainProductSection({ forcedLang }: { forcedLang?: LangCode } = {}) {

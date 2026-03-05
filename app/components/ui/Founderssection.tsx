@@ -316,11 +316,11 @@ export default function FoundersSection() {
     <section className="bg-black min-h-screen py-24 px-6">
       <div className="text-center mb-16">
         <h2 className="text-5xl md:text-6xl font-light text-white tracking-tight mb-4">
-          The Leaders Behind the Code
+          The Leaders Behind the Bakeats
         </h2>
         <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
-          Meet the leaders of Sheryians — passionate creators who turned their vision of accessible,
-          high-impact coding education into reality.
+          Meet the founder of bakeats — passionate creators who turned their vision 
+           into reality.
         </p>
       </div>
 

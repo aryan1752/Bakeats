@@ -29,8 +29,7 @@ export default function TeamSection() {
                 <br />
                 Us A Team
               </h2>
-              <p className="mt-5 max-w-5xl text-[40px] leading-8 text-white/65 lg:text-[38px]">
-                Behind every Bakeats pack is a passionate team that crafts, checks, and delivers with care.
+              <p className="italic font-serif mt-5 max-w-5xl text-[40px] leading-8 text-white/65 lg:text-[38px]">
                 We believe great products come from people who move together with one purpose.
               </p>
             </div>
@@ -56,10 +55,9 @@ export default function TeamSection() {
           <br />
           Us A Team
         </h2>
-        <p className="mx-auto mt-6 max-w-xl text-center text-lg leading-9 text-white/70">
-          Behind every Bakeats pack is a passionate team that crafts, checks, and delivers with care.
-          We believe great products come from people who move together with one purpose.
-        </p>
+       <p className="italic font-serif mx-auto mt-6 max-w-xl text-center text-lg leading-9 text-white/80">
+  Behind every Bakeats pack is a passionate team that crafts, checks, and delivers with care.
+</p>
 
         <div className="mt-10 rounded-2xl border border-white/10 bg-black p-1">
           <img

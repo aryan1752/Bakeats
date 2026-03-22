@@ -256,7 +256,7 @@ export function TimelineDemo() {
           <div className="grid grid-cols-2 gap-4">
            
             <img
-              src="https://res.cloudinary.com/ddtifclgr/image/upload/v1770284505/WhatsApp_Image_2026-02-05_at_3.11.11_PM_vhn6tf.jpg"
+              src="https://res.cloudinary.com/ddtifclgr/image/upload/v1774032474/WhatsApp_Image_2026-03-21_at_12.13.23_AM_jb7chi.jpg"
               alt="cards template"
               width={1000}
               height={1000}

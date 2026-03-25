@@ -126,24 +126,25 @@ export default function Home() {
 
   return (
     <main className="relative overflow-x-hidden bg-black">
-      <div
-        className={`fixed right-2 top-16 z-[80] flex items-center gap-2 rounded-lg border border-neutral-300 bg-white/90 p-2 text-xs shadow-sm transition-all duration-200 md:right-8 md:top-6 ${
-          showLangSelector ? "translate-y-0 opacity-100" : "-translate-y-8 opacity-0 pointer-events-none"
-        }`}
-      >
-        <span className="font-semibold text-neutral-700">Language</span>
-        <select
-          value={lang}
-          onChange={(e) => setLang(e.target.value as LangCode)}
-          className="rounded border border-neutral-300 px-2 py-1 text-neutral-800"
-        >
-          {LANG_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-      </div>
+     <div
+  className={`fixed right-2 top-16 z-[80] flex items-center gap-1.5 rounded-md border border-neutral-300 bg-white/90 p-1 text-[10px] shadow-sm transition-all duration-200 md:right-8 md:top-8 ${
+    showLangSelector ? "translate-y-0 opacity-100" : "-translate-y-6 opacity-0 pointer-events-none"
+  }`}
+>
+  <span className="font-medium text-neutral-700">ln</span>
+
+  <select
+    value={lang}
+    onChange={(e) => setLang(e.target.value as LangCode)}
+    className="rounded border border-neutral-300 px-1 py-0.5 text-[8px] text-neutral-800 appearance-none"
+  >
+    {LANG_OPTIONS.map((opt) => (
+      <option key={opt.value} value={opt.value}>
+        {opt.label}
+      </option>
+    ))}
+  </select>
+</div>
 
       <HeroSection
         currentCookie={translatedCookies[currentIndex]}

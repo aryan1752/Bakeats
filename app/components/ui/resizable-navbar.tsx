@@ -68,7 +68,6 @@ export const Navbar = ({ children, className }: NavbarProps) => {
   return (
     <motion.div
       ref={ref}
-      // IMPORTANT: Change this to class of `fixed` if you want the navbar to be fixed
       className={cn("fixed inset-x-0 top-0 z-50 w-full", className)}
     >
       {React.Children.map(children, (child) =>
@@ -99,11 +98,12 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
         stiffness: 200,
         damping: 50,
       }}
-      style={{
-        minWidth: "800px",
-      }}
+      // FIX 1: Removed hardcoded minWidth: "800px" — this was forcing the navbar
+      // to be wider than the viewport at lower zoom levels, pushing into the language selector.
       className={cn(
-        "relative z-[60] mx-auto hidden w-full max-w-7xl flex-row items-center justify-between self-start rounded-full bg-transparent px-4 py-2 lg:flex dark:bg-transparent",
+        // FIX 2: Changed from justify-between with absolute NavItems to a proper
+        // flex layout. Added `overflow-hidden` so items never spill outside the bar.
+        "relative z-[60] mx-auto hidden w-full max-w-7xl flex-row items-center justify-between self-start rounded-full bg-transparent px-4 py-2 lg:flex dark:bg-transparent overflow-hidden",
         visible && "bg-white/80 dark:bg-neutral-950/80",
         className,
       )}
@@ -120,7 +120,12 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
     <motion.div
       onMouseLeave={() => setHovered(null)}
       className={cn(
-        "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-zinc-600 transition duration-200 hover:text-zinc-800 lg:flex lg:space-x-2",
+        // FIX 3: THE KEY FIX — removed `absolute inset-0` positioning.
+        // `absolute inset-0` made NavItems stretch across the ENTIRE navbar width,
+        // overlapping the logo on the left AND the buttons/language selector on the right.
+        // Now it's a normal flex child that only takes the space it needs,
+        // sitting naturally between the logo and the right-side buttons.
+        "hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-zinc-600 transition duration-200 hover:text-zinc-800 lg:flex lg:space-x-2",
         className,
       )}
     >
@@ -128,7 +133,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
         <a
           onMouseEnter={() => setHovered(idx)}
           onClick={onItemClick}
-          className="relative px-4 py-2 text-neutral-600 dark:text-neutral-300"
+          className="relative px-4 py-2 text-neutral-600 dark:text-neutral-300 whitespace-nowrap"
           key={`link-${idx}`}
           href={item.link}
         >
@@ -234,7 +239,7 @@ export const NavbarLogo = () => {
   return (
     <a
       href="/"
-      className="relative z-20 mr-4 flex items-center px-2 py-1"
+      className="relative z-20 mr-4 flex items-center px-2 py-1 shrink-0"
     >
       <img
         src="https://res.cloudinary.com/ddtifclgr/image/upload/v1770035808/logo.5586e616d663e63711b3-Photoroom_ksprww.png"
@@ -259,7 +264,7 @@ export const NavbarButton = ({
   [key: string]: any;
 }) => {
   const baseStyles =
-    "px-4 py-2 rounded-md bg-white button bg-white text-black text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
+    "px-4 py-2 rounded-md bg-white button bg-white text-black text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center shrink-0";
 
   const variantStyles = {
     primary:

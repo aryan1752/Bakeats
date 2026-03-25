@@ -69,7 +69,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               playsInline
               preload="auto"
               onLoadedMetadata={handleLoadedMetadata}
-              className={`absolute left-1/2 top-1/2 z-0 w-[125vw] h-auto -translate-x-1/2 -translate-y-1/2 object-contain transition-opacity duration-500 md:h-[95vh] md:w-auto ${
+              className={`absolute left-1/2 top-1/2 z-0 w-[180vw] h-auto -translate-x-1/2 -translate-y-1/2 object-contain transition-opacity duration-500 md:h-[95vh] md:w-auto ${
                 mediaLoaded ? 'opacity-100' : 'opacity-0'
               }`}
               style={{ pointerEvents: 'none' }}
@@ -78,7 +78,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <img
                 src={currentCookie.webpUrl}
                 alt={currentCookie.name}
-                className="absolute left-1/2 top-1/2 z-0 w-[125vw] h-auto -translate-x-1/2 -translate-y-1/2 object-contain md:h-[95vh] md:w-auto"
+                className="absolute left-1/2 top-1/2 z-0 w-[180vw] h-auto -translate-x-1/2 -translate-y-1/2 object-contain md:h-[95vh] md:w-auto"
               />
             )}
           </div>

@@ -67,7 +67,7 @@ export default function AddReviewModal({ isOpen, onClose }: Props) {
     <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/70 px-4">
       <div className="w-full max-w-lg rounded-xl border border-white/10 bg-black p-5 text-white shadow-2xl">
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-xl font-semibold">Add Review</h3>
+          <h3 className="text-xl font-semibold">Feedback</h3>
           <button onClick={onClose} className="rounded bg-white/10 px-2 py-1 text-sm">✕</button>
         </div>
 

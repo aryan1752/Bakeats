@@ -33,14 +33,14 @@ export function GlobeDemo() {
 
   const colors = ["#06b6d4", "#3b82f6", "#6366f1"];
   const ends = [
-    { lat: 40.7128, lng: -74.006 },
-    { lat: 51.5072, lng: -0.1276 },
-    { lat: 35.6762, lng: 139.6503 },
+    { lat: 40.7128,  lng: -74.006  },
+    { lat: 51.5072,  lng: -0.1276  },
+    { lat: 35.6762,  lng: 139.6503 },
     { lat: -33.8688, lng: 151.2093 },
-    { lat: 1.3521, lng: 103.8198 },
-    { lat: 48.8566, lng: 2.3522 },
-    { lat: 52.52, lng: 13.405 },
-    { lat: 22.3193, lng: 114.1694 },
+    { lat: 1.3521,   lng: 103.8198 },
+    { lat: 48.8566,  lng: 2.3522   },
+    { lat: 52.52,    lng: 13.405   },
+    { lat: 22.3193,  lng: 114.1694 },
   ];
 
   const sampleArcs = ends.map((end, i) => ({
@@ -54,21 +54,21 @@ export function GlobeDemo() {
   }));
 
   return (
-    <div className="relative w-full bg-white py-4 dark:bg-black md:flex md:h-[40rem] md:flex-row md:items-center md:justify-center md:py-12">
+    <div className="relative w-full bg-black py-4 md:flex md:h-[40rem] md:flex-row md:items-center md:justify-center md:py-12">
       <div className="relative mx-auto h-[28rem] w-full max-w-7xl overflow-hidden px-4 md:h-[40rem]">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-          <h2 className="text-center font-[cursive] text-xl md:text-4xl font-bold text-black dark:text-white">
+          <h2 className="text-center font-[cursive] text-xl md:text-4xl font-bold text-white">
             Connected from India
           </h2>
-          <p className="mx-auto mt-2 max-w-md text-center font-[cursive] text-base font-normal text-neutral-700 dark:text-neutral-200 md:text-lg">
+          <p className="mx-auto mt-2 max-w-md text-center font-[cursive] text-base font-normal text-neutral-300 md:text-lg">
             Real-time global reach visualized on the PND global logistics network globe.
           </p>
         </motion.div>
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-40 h-24 select-none bg-gradient-to-b from-transparent to-white dark:to-black md:h-40" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-40 h-24 select-none bg-gradient-to-b from-transparent to-black md:h-40" />
         <div className="relative mt-2 h-[19rem] w-full md:absolute md:-bottom-20 md:mt-0 md:h-full z-10">
           <World data={sampleArcs} globeConfig={globeConfig} />
         </div>

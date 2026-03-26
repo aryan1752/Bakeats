@@ -13,7 +13,7 @@ const EN_COPY = {
   line1: "Choco delight, loved by every cookie lover",
   line2: "Every bite full of chocolate goodness",
   heroMain: "choco",
-  heroSub: "punch",
+  heroSub: "chaskaaa",
   desc1: "Hamara choco cookie tasty, rich cocoa, crispy & aromatic —",
   desc2: "har bite mein full desi punch!",
 };

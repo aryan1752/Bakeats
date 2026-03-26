@@ -13,8 +13,8 @@ const EN_COPY = {
   line1: "Teekha tadka, crispy swag and full-on mazza",
   line2: "Chatpata favorite, loved by every crunchy-snack fan",
   heroMain: "The",
-  heroSub: "OG",
-  heroOne: "Ajwain",
+  heroSub: "",
+  heroOne: "aaajwain",
   desc1: "Hamara ajwain cookie tasty, crispy & aromatic —",
   desc2: "har bite mein full desi punch!",
 };

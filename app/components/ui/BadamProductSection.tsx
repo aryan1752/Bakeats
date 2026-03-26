@@ -12,8 +12,8 @@ const AJWAIN_BOWL_IMAGE =
 const EN_COPY = {
   line1: "Every bite full of almond goodness",
   line2: "Nutty delight, loved by every cookie lover",
-  heroMain: "badami",
-  heroSub: "punch",
+  heroMain: "baaadam",
+  heroSub: "",
   desc1: "Hamara badam cookie tasty,real badam,crispy & aromatic —",
   desc2: "har bite mein full desi punch!",
 };

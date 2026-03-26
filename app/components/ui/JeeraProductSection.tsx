@@ -26,8 +26,8 @@ const EN_COPY: CopyShape = {
   tagline1: "Dumdaar, mazedaar and sabka yaar",
   tagline2: "Most popular, loved & has a crazy fan following",
   heroMain: "",
-  heroSub: "Classic",
-  heroOne: "Jeera",
+  heroSub: "",
+  heroOne: "Jeeraaa",
   descLine1: "Hamara jeera cookie crunchy baked & tangy —",
   descLine2: "ye apna jalwa dikhata hai har jagah!",
 };

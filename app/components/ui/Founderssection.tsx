@@ -103,23 +103,7 @@ function ProfilePage({ founder, onClose }: ProfilePageProps) {
   return (
     <div className="fixed inset-0 z-50 bg-white overflow-y-auto" style={{ fontFamily: wikiSerif }}>
 
-      {/* ── Nav Bar ── */}
-      <div
-        className="sticky top-0 z-10 border-b px-3 py-2 flex items-center"
-        style={{ backgroundColor: "#f8f9fa", borderColor: "#a2a9b1", fontFamily: wikiSans }}
-      >
-        <button
-          onClick={onClose}
-          className="flex items-center gap-1 text-sm hover:underline"
-          style={{ color: "#3366cc" }}
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
-          Back to Team
-        </button>
-      </div>
-
+     
       {/* ── Page body ── */}
       <div style={{ maxWidth: "960px", margin: "0 auto", padding: "16px 16px 80px", boxSizing: "border-box" }}>
 

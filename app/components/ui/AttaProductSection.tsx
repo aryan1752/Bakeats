@@ -14,8 +14,8 @@ const WHEAT_IMAGE =
 const EN_COPY = {
   line1: "Desi goodness, oven-fresh happiness.",
   line2: "Oven-fresh goodness, perfectly crunchy.",
-  heroMain: "Atta",
-  heroSub: "Delight",
+  heroMain: "AAATTA",
+  heroSub: "",
   desc1: "Hamara atta cookie,tasty, crispy & aromatic —",
   desc2: "har bite mein full desi punch!",
 };

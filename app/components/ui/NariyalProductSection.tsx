@@ -10,8 +10,8 @@ const EN_COPY = {
   starMain: "Star",
   starSub: "Performer",
   demand: "on Popular Demand",
-  line1: "DDelight & Coco Crunch are all about that snazzy punch",
-  line2: "unique flavourful & so much fun at times. thoda khatta thoda meetha, yaaron ke yaar, bohot mazedaar!",
+  line1: "Delight & Coco Crunch are all about that snazzy punch",
+  line2: "unique flavourful & so much fun at times. thoda khatta thoda meetha, yaaron",
 };
 
 const FALLBACK_COPY = {
@@ -43,11 +43,11 @@ export default function NariyalProductSection({ forcedLang }: { forcedLang?: Lan
             aria-hidden
           >
             <defs>
-              <path id="nariyalArcTop" d="M 210 236 Q 600 30 990 236" />
-              <path id="nariyalArcMid" d="M 250 290 Q 600 150 950 290" />
-              <path id="nariyalArcBody1" d="M 190 360 Q 600 245 1010 360" />
-              <path id="nariyalArcBody2" d="M 170 425 Q 600 300 1030 425" />
-            </defs>
+  <path id="nariyalArcTop"   d="M 150 236 Q 600 30  1050 236" />
+  <path id="nariyalArcMid"   d="M 180 290 Q 600 150  1020 290" />
+  <path id="nariyalArcBody1" d="M 80  360 Q 600 245  1120 360" />
+  <path id="nariyalArcBody2" d="M 60  425 Q 600 300  1140 425" />
+</defs>
 
             <text
               className="nariyal-star-chunk nariyal-star-main"

@@ -13,7 +13,7 @@ export const cookieVariants: CookieVariant[] = [
   
   {
     id: 1,
-    name: "COCONUT COOKIE",
+    name: "NAAARIYAL COOKIE",
     subtitle: "Coconut Crunch",
     description: "Delicious coconut cookies packed with tropical flavor and a light, crunchy texture in every bite.",
     accentColor: "hsl(40, 55%, 55%)",
@@ -53,7 +53,7 @@ export const cookieVariants: CookieVariant[] = [
   },
   {
     id: 5,
-    name: "BAADAM COOKIE",
+    name: "BAAADAM COOKIE",
     subtitle: "Nutty & Rich",
     description: "Premium badam cookies packed with roasted almond goodness for a smooth texture and satisfying nutty crunch.",
     accentColor: "hsl(20, 40%, 25%)",

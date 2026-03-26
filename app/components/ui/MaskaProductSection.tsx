@@ -13,7 +13,7 @@ const EN_COPY = {
   line1: "Teekha tadka, crispy swag and full-on mazza",
   line2: "Chatpata favorite, loved by every crunchy-snack fan",
   heroMain: "Maskaaa",
-  heroSub: "Magic",
+  heroSub: "",
   heroOne: "",
   desc1: "Hamara Maska cookie flavourful, tasty, crispy & aromatic —",
   desc2: "har bite mein full desi punch!",

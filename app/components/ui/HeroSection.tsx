@@ -108,21 +108,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
           <div className="mt-4 flex flex-wrap gap-2 md:mt-11 md:gap-4">
             <a
-              href="https://wa.me/919266565336"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block rounded-full border border-black/60 px-4 py-2 text-[11px] tracking-wide text-black transition hover:bg-black/10 md:px-9 md:py-4 md:text-sm"
-            >
-              WhatsApp
-            </a>
-            <a
-              href="https://blinkit.com/prn/x/prid/735252"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block rounded-full bg-black px-4 py-2 text-[11px] tracking-wide text-white transition hover:bg-black/80 md:px-9 md:py-4 md:text-sm"
-            >
-              BUY NOW
-            </a>
+  href="https://wa.me/919266565336"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="inline-block rounded-full bg-black px-4 py-2 text-[11px] tracking-wide text-white transition hover:bg-black/80 md:px-9 md:py-4 md:text-sm"
+>
+  WhatsApp
+</a>
+            
           </div>
         </div>
 

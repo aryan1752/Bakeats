@@ -89,7 +89,7 @@ interface ProfilePageProps {
   onClose: () => void;
 }
 
-function ProfilePage({ founder, onClose }: ProfilePageProps) {
+function ProfilePage({ founder }: ProfilePageProps) {
   const [tocOpen, setTocOpen] = useState(true);
 
   const scrollTo = (heading: string) => {

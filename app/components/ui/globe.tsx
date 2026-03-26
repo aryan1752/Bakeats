@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import { Color, Fog, PerspectiveCamera, Scene, Vector3 } from "three";
 import ThreeGlobe from "three-globe";
 import { Canvas, extend, useThree } from "@react-three/fiber";
@@ -64,9 +64,10 @@ interface WorldProps {
 
 export function Globe({ globeConfig, data }: WorldProps) {
   const globeRef = useRef<ThreeGlobe | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const groupRef = useRef<any>(null);
 
-  const defaultProps = {
+  const defaultProps = useMemo(() => ({
     pointSize: 1,
     atmosphereColor: "#ffffff",
     showAtmosphere: true,
@@ -81,7 +82,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
     rings: 1,
     maxRings: 3,
     ...globeConfig,
-  };
+  }), [globeConfig]);
 
   useEffect(() => {
     if (!globeRef.current && groupRef.current) {
@@ -131,7 +132,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
     );
 
     globeRef.current
-      .polygonsData((countries as any).features)
+      .polygonsData((countries as Record<string, unknown>).features)
       .polygonCapColor(() => defaultProps.polygonColor)
       .polygonSideColor(() => "rgba(255,255,255,0.08)")
       .polygonStrokeColor(() => "rgba(255,255,255,0.28)")
@@ -142,21 +143,22 @@ export function Globe({ globeConfig, data }: WorldProps) {
 
     globeRef.current
       .arcsData(data)
-      .arcStartLat((d: any) => (d as Position).startLat)
-      .arcStartLng((d: any) => (d as Position).startLng)
-      .arcEndLat((d: any) => (d as Position).endLat)
-      .arcEndLng((d: any) => (d as Position).endLng)
-      .arcColor((d: any) => (d as Position).color)
-      .arcAltitude((d: any) => (d as Position).arcAlt)
+      .arcStartLat((d: Position) => d.startLat)
+      .arcStartLng((d: Position) => d.startLng)
+      .arcEndLat((d: Position) => d.endLat)
+      .arcEndLng((d: Position) => d.endLng)
+      .arcColor((d: Position) => d.color)
+      .arcAltitude((d: Position) => d.arcAlt)
       .arcStroke(() => [0.32, 0.28, 0.3][Math.round(Math.random() * 2)])
       .arcDashLength(defaultProps.arcLength)
-      .arcDashInitialGap((d: any) => (d as Position).order)
+      .arcDashInitialGap((d: Position) => d.order)
       .arcDashGap(15)
       .arcDashAnimateTime(() => defaultProps.arcTime);
 
     globeRef.current
       .pointsData(filteredPoints)
-      .pointColor((d) => (d as any).color)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .pointColor((d: Record<string, any>) => d.color)
       .pointsMerge(true)
       .pointAltitude(0)
       .pointRadius(2);

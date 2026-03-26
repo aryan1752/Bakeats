@@ -34,10 +34,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     }
   }, [scrollProgress]);
 
-  useEffect(() => {
-    setMediaLoaded(false);
-  }, [currentCookie.webpUrl]);
-
   const handleLoadedMetadata = () => {
     const video = videoRef.current;
     if (video) {

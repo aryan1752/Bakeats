@@ -14,6 +14,7 @@ import { cookieVariants } from "@/data/cookies";
 import { InfiniteMovingCardsDemo } from "./components/InfiniteMovingCardsDemo";
 import { ImagesSlider } from "@/components/ui/images-slider";
 import { motion } from "motion/react";
+import BakeatsNavbar from "@/components/ui/BakeatsNavbar";
 
 type LangCode = "en" | "hi" | "es" | "ar" | "fr-CA" | "de" | "nl-BE";
 
@@ -128,6 +129,7 @@ export default function Home() {
 
   return (
     <main className="relative overflow-x-hidden bg-black">
+      <BakeatsNavbar />
 
       {/* Lang selector */}
       <div

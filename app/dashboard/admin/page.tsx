@@ -120,7 +120,11 @@ export default async function AdminDashboard() {
       phone: s.phone,
       grade: s.grade,
       score: s.score,
-      status: s.status
+      status: s.status,
+      age: s.age || null,
+      academic_achievements: s.academic_achievements || null,
+      why_join: s.why_join || null,
+      preferred_stream: s.preferred_stream || null
     }));
 
   } catch (err: any) {

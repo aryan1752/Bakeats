@@ -40,6 +40,7 @@ export default function AdminDashboardClient({
   const [activeTab, setActiveTab] = useState<"foundations" | "commerce" | "arts">("foundations");
   const [uploadedPdfUrl, setUploadedPdfUrl] = useState("");
   const [markedRecords, setMarkedRecords] = useState<{ [key: string]: string }>({});
+  const [expandedScholarship, setExpandedScholarship] = useState<number | null>(null);
 
   // Forms state messages
   const [materialMsg, setMaterialMsg] = useState("");
@@ -422,15 +423,44 @@ export default function AdminDashboardClient({
               </thead>
               <tbody className="divide-y divide-gray-50 text-gray-700">
                 {scholarships.map((app, idx) => (
-                  <tr key={idx} className="hover:bg-gray-50/50">
+                  <tr key={idx} className="hover:bg-gray-50/50 cursor-pointer border-b border-gray-50" onClick={() => setExpandedScholarship(expandedScholarship === idx ? null : idx)}>
                     <td className="py-2.5">
-                      <span className="font-bold text-[#0D2847] block">{app.student_name}</span>
+                      <span className="font-bold text-[#0D2847] block hover:underline">{app.student_name}</span>
                       <span className="text-[10px] text-gray-400 block">{app.email}</span>
+                      {/* Expanded Details Panel */}
+                      {expandedScholarship === idx && (
+                        <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px] text-gray-600 bg-amber-50/40 dark:bg-slate-900/10 p-3 rounded-lg border border-amber-200/30">
+                          {app.age && (
+                            <div>
+                              <span className="font-extrabold text-gray-400 block uppercase text-[9px] tracking-wider">Age</span>
+                              <span className="font-bold text-gray-800">{app.age} Years</span>
+                            </div>
+                          )}
+                          {app.preferred_stream && (
+                            <div>
+                              <span className="font-extrabold text-gray-400 block uppercase text-[9px] tracking-wider">Preferred Stream</span>
+                              <span className="font-bold text-[#0D2847] uppercase">{app.preferred_stream}</span>
+                            </div>
+                          )}
+                          {app.academic_achievements && (
+                            <div className="md:col-span-2">
+                              <span className="font-extrabold text-gray-400 block uppercase text-[9px] tracking-wider">Academic Achievements</span>
+                              <span className="text-gray-700 block font-semibold leading-relaxed mt-0.5">{app.academic_achievements}</span>
+                            </div>
+                          )}
+                          {app.why_join && (
+                            <div className="md:col-span-2 border-t border-gray-100/50 pt-2">
+                              <span className="font-extrabold text-gray-400 block uppercase text-[9px] tracking-wider">Why join KVI?</span>
+                              <span className="text-gray-700 block font-semibold leading-relaxed mt-0.5 italic">"{app.why_join}"</span>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </td>
-                    <td className="py-2.5 font-semibold">{app.grade}</td>
-                    <td className="py-2.5 font-black text-green-600">{app.score}%</td>
-                    <td className="py-2.5">{app.phone}</td>
-                    <td className="py-2.5">
+                    <td className="py-2.5 font-semibold align-top">{app.grade}</td>
+                    <td className="py-2.5 font-black text-green-600 align-top">{app.score}%</td>
+                    <td className="py-2.5 align-top">{app.phone}</td>
+                    <td className="py-2.5 align-top">
                       <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-amber-50 text-amber-700">
                         {app.status || "pending"}
                       </span>

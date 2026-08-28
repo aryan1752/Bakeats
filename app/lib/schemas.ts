@@ -37,6 +37,10 @@ const ScholarshipSchema = new Schema({
   phone: { type: String, required: true },
   grade: { type: String, required: true },
   score: { type: Number, required: true },
+  age: { type: Number },
+  academic_achievements: { type: String },
+  why_join: { type: String },
+  preferred_stream: { type: String },
   status: { type: String, enum: ["pending", "approved", "rejected"], default: "pending" },
   created_at: { type: Date, default: Date.now }
 });

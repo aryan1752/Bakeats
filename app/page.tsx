@@ -564,53 +564,83 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
           
-          <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm flex flex-col">
-            <div className="relative aspect-video bg-black flex items-center justify-center">
-              <iframe 
-                src="https://www.youtube.com/embed/CtMkfZMHUuM" 
-                className="w-full h-full"
-                title="KVI Chemistry Lecture Video"
-                allowFullScreen
+          {/* Card 1: Money & Banking */}
+          <a 
+            href="https://www.youtube.com/watch?v=CtMkfZMHUuM"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm flex flex-col hover:shadow-md transition-shadow"
+          >
+            <div className="relative aspect-video bg-gray-900 overflow-hidden flex items-center justify-center">
+              <img 
+                src="https://img.youtube.com/vi/CtMkfZMHUuM/hqdefault.jpg"
+                alt="Money & Banking Lecture"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 select-none"
               />
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                <div className="h-12 w-12 rounded-full bg-[#0D2847] group-hover:bg-[#F5BE18] text-white group-hover:text-[#0D2847] flex items-center justify-center shadow-lg transition-colors duration-300">
+                  <Play className="h-5 w-5 fill-current ml-0.5" />
+                </div>
+              </div>
             </div>
             <div className="p-4 text-left">
-              <span className="text-xs font-bold text-[#F5BE18] uppercase">Class 10 Science</span>
-              <h4 className="font-extrabold text-[#0D2847] text-sm mt-1">Chemical Reactions & Equations</h4>
-              <p className="text-xs text-gray-500 mt-1">By Er. Saurabh Singh (Aerospace Engineer)</p>
-            </div>
-          </div>
-
-          <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm flex flex-col">
-            <div className="relative aspect-video bg-black flex items-center justify-center">
-              <iframe 
-                src="https://www.youtube.com/embed/A1C-Q2sydxM" 
-                className="w-full h-full"
-                title="KVI Economics Lecture Video"
-                allowFullScreen
-              />
-            </div>
-            <div className="p-4 text-left">
-              <span className="text-xs font-bold text-[#F5BE18] uppercase">Class 12 Commerce</span>
-              <h4 className="font-extrabold text-[#0D2847] text-sm mt-1">Introduction to Microeconomics</h4>
+              <span className="text-xs font-bold text-[#F5BE18] uppercase">Class 12 Economics</span>
+              <h4 className="font-extrabold text-[#0D2847] text-sm mt-1">Money & Banking: CDR, VCR, CRR & SLR</h4>
               <p className="text-xs text-gray-500 mt-1">By CS Sanjay Arya (Company Secretary)</p>
             </div>
-          </div>
+          </a>
 
-          <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm flex flex-col">
-            <div className="relative aspect-video bg-black flex items-center justify-center">
-              <iframe 
-                src="https://www.youtube.com/embed/bt8HaQctuAk" 
-                className="w-full h-full"
-                title="KVI Foundation Lecture Video"
-                allowFullScreen
+          {/* Card 2: Management as a Profession */}
+          <a 
+            href="https://www.youtube.com/watch?v=A1C-Q2sydxM"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm flex flex-col hover:shadow-md transition-shadow"
+          >
+            <div className="relative aspect-video bg-gray-900 overflow-hidden flex items-center justify-center">
+              <img 
+                src="https://img.youtube.com/vi/A1C-Q2sydxM/hqdefault.jpg"
+                alt="Management as a Profession Lecture"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 select-none"
               />
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                <div className="h-12 w-12 rounded-full bg-[#0D2847] group-hover:bg-[#F5BE18] text-white group-hover:text-[#0D2847] flex items-center justify-center shadow-lg transition-colors duration-300">
+                  <Play className="h-5 w-5 fill-current ml-0.5" />
+                </div>
+              </div>
             </div>
             <div className="p-4 text-left">
-              <span className="text-xs font-bold text-[#F5BE18] uppercase">Class 7 Maths</span>
-              <h4 className="font-extrabold text-[#0D2847] text-sm mt-1">Fractions and Decimals Core</h4>
-              <p className="text-xs text-gray-500 mt-1">By Vineet Verma (Foundation Expert)</p>
+              <span className="text-xs font-bold text-[#F5BE18] uppercase">Class 12 Business Studies</span>
+              <h4 className="font-extrabold text-[#0D2847] text-sm mt-1">Management as a Profession & Professionalism</h4>
+              <p className="text-xs text-gray-500 mt-1">By CS Sanjay Arya (Company Secretary)</p>
             </div>
-          </div>
+          </a>
+
+          {/* Card 3: National Income */}
+          <a 
+            href="https://www.youtube.com/watch?v=bt8HaQctuAk"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm flex flex-col hover:shadow-md transition-shadow"
+          >
+            <div className="relative aspect-video bg-gray-900 overflow-hidden flex items-center justify-center">
+              <img 
+                src="https://img.youtube.com/vi/bt8HaQctuAk/hqdefault.jpg"
+                alt="National Income Lecture"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 select-none"
+              />
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                <div className="h-12 w-12 rounded-full bg-[#0D2847] group-hover:bg-[#F5BE18] text-white group-hover:text-[#0D2847] flex items-center justify-center shadow-lg transition-colors duration-300">
+                  <Play className="h-5 w-5 fill-current ml-0.5" />
+                </div>
+              </div>
+            </div>
+            <div className="p-4 text-left">
+              <span className="text-xs font-bold text-[#F5BE18] uppercase">Class 12 Economics</span>
+              <h4 className="font-extrabold text-[#0D2847] text-sm mt-1">National Income: Normal Resident Concept</h4>
+              <p className="text-xs text-gray-500 mt-1">By CS Sanjay Arya (Company Secretary)</p>
+            </div>
+          </a>
 
         </div>
       </section>

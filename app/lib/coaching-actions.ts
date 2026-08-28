@@ -95,6 +95,11 @@ export async function submitScholarship(prevState: any, formData: FormData) {
   const grade = formData.get("grade") as string;
   const scoreRaw = formData.get("score") as string;
   const score = parseFloat(scoreRaw || "0");
+  const ageRaw = formData.get("age") as string;
+  const age = ageRaw ? parseInt(ageRaw) : undefined;
+  const academic_achievements = formData.get("academic_achievements") as string;
+  const why_join = formData.get("why_join") as string;
+  const preferred_stream = formData.get("preferred_stream") as string;
 
   if (!student_name || !email || !phone || !grade) {
     return { success: false, error: "Please fill out all required fields." };
@@ -107,7 +112,11 @@ export async function submitScholarship(prevState: any, formData: FormData) {
       email: email.trim(),
       phone: phone.trim(),
       grade,
-      score
+      score,
+      age,
+      academic_achievements: academic_achievements?.trim(),
+      why_join: why_join?.trim(),
+      preferred_stream
     });
     return { success: true, message: "Registration successful! Our team will contact you for test details." };
   } catch (err: any) {

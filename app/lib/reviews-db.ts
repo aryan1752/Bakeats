@@ -1,11 +1,10 @@
-import Database from "better-sqlite3";
-import fs from "node:fs";
-import path from "node:path";
+import { connectToDatabase } from "./mongodb";
+import { Review } from "./schemas";
 
 export type ReviewStatus = "pending" | "approved" | "rejected";
 
 export type ReviewRow = {
-  id: number;
+  id: string;
   name: string;
   message: string;
   status: ReviewStatus;
@@ -16,91 +15,76 @@ export type ReviewRow = {
   moderation_token: string;
 };
 
-const dataDir = path.join(process.cwd(), "data");
-const dbPath = path.join(dataDir, "reviews.db");
-
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true });
-}
-
-const db = new Database(dbPath);
-
-db.pragma("journal_mode = WAL");
-db.pragma("foreign_keys = ON");
-
-db.exec(`
-CREATE TABLE IF NOT EXISTS reviews (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL,
-  message TEXT NOT NULL,
-  status TEXT NOT NULL CHECK(status IN ('pending','approved','rejected')) DEFAULT 'pending',
-  created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  updated_at TEXT NOT NULL DEFAULT (datetime('now')),
-  approved_at TEXT,
-  submit_ip TEXT,
-  moderation_token TEXT NOT NULL UNIQUE
-);
-
-CREATE INDEX IF NOT EXISTS idx_reviews_status_created
-ON reviews(status, created_at DESC);
-`);
-
-export function createPendingReview(input: {
+export async function createPendingReview(input: {
   name: string;
   message: string;
   submitIp?: string | null;
   moderationToken: string;
-}) {
-  const stmt = db.prepare(`
-    INSERT INTO reviews (name, message, status, submit_ip, moderation_token)
-    VALUES (?, ?, 'pending', ?, ?)
-  `);
+}): Promise<string> {
+  await connectToDatabase();
+  const review = new Review({
+    name: input.name.trim(),
+    message: input.message.trim(),
+    submit_ip: input.submitIp ?? null,
+    moderation_token: input.moderationToken,
+    status: "pending",
+  });
+  const saved = await review.save();
+  return saved._id.toString();
+}
 
-  const info = stmt.run(
-    input.name.trim(),
-    input.message.trim(),
-    input.submitIp ?? null,
-    input.moderationToken,
+export async function getApprovedReviews(limit = 50): Promise<ReviewRow[]> {
+  await connectToDatabase();
+  const docs = await Review.find({ status: "approved" })
+    .sort({ approved_at: -1, created_at: -1 })
+    .limit(limit)
+    .lean();
+
+  return docs.map((doc: any) => ({
+    id: doc._id.toString(),
+    name: doc.name,
+    message: doc.message,
+    status: doc.status as ReviewStatus,
+    created_at: doc.created_at ? doc.created_at.toISOString() : "",
+    updated_at: doc.updated_at ? doc.updated_at.toISOString() : "",
+    approved_at: doc.approved_at ? doc.approved_at.toISOString() : null,
+    submit_ip: doc.submit_ip || null,
+    moderation_token: doc.moderation_token,
+  }));
+}
+
+export async function moderateReviewByToken(params: {
+  token: string;
+  action: "approve" | "reject";
+}): Promise<boolean> {
+  await connectToDatabase();
+  const status: ReviewStatus = params.action === "approve" ? "approved" : "rejected";
+  const update: any = {
+    status,
+    updated_at: new Date(),
+  };
+  if (status === "approved") {
+    update.approved_at = new Date();
+  }
+
+  const result = await Review.updateOne(
+    { moderation_token: params.token },
+    { $set: update }
   );
 
-  return Number(info.lastInsertRowid);
+  return result.modifiedCount > 0;
 }
 
-export function getApprovedReviews(limit = 50): ReviewRow[] {
-  const stmt = db.prepare(`
-    SELECT id, name, message, status, created_at, updated_at, approved_at, submit_ip, moderation_token
-    FROM reviews
-    WHERE status = 'approved'
-    ORDER BY approved_at DESC, created_at DESC
-    LIMIT ?
-  `);
+export async function findRecentPendingByIp(
+  ip: string,
+  withinSeconds: number
+): Promise<boolean> {
+  await connectToDatabase();
+  const cutOff = new Date(Date.now() - withinSeconds * 1000);
+  const count = await Review.countDocuments({
+    submit_ip: ip,
+    created_at: { $gte: cutOff },
+  });
 
-  return stmt.all(limit) as ReviewRow[];
-}
-
-export function moderateReviewByToken(params: { token: string; action: "approve" | "reject" }) {
-  const status: ReviewStatus = params.action === "approve" ? "approved" : "rejected";
-  const stmt = db.prepare(`
-    UPDATE reviews
-    SET status = ?,
-        approved_at = CASE WHEN ? = 'approved' THEN datetime('now') ELSE approved_at END,
-        updated_at = datetime('now')
-    WHERE moderation_token = ?
-  `);
-
-  const info = stmt.run(status, status, params.token);
-  return info.changes > 0;
-}
-
-export function findRecentPendingByIp(ip: string, withinSeconds: number): boolean {
-  const stmt = db.prepare(`
-    SELECT id
-    FROM reviews
-    WHERE submit_ip = ?
-      AND created_at >= datetime('now', ?)
-    LIMIT 1
-  `);
-
-  const row = stmt.get(ip, `-${withinSeconds} seconds`) as { id: number } | undefined;
-  return Boolean(row);
+  return count > 0;
 }

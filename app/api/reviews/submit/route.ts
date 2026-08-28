@@ -36,12 +36,12 @@ export async function POST(req: NextRequest) {
       req.headers.get("x-real-ip") ||
       "unknown";
 
-    if (ip !== "unknown" && findRecentPendingByIp(ip, 60)) {
+    if (ip !== "unknown" && (await findRecentPendingByIp(ip, 60))) {
       return NextResponse.json({ error: "Too many submissions. Please wait a minute." }, { status: 429 });
     }
 
     const token = randomUUID();
-    createPendingReview({
+    await createPendingReview({
       name,
       message,
       submitIp: ip,

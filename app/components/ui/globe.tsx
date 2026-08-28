@@ -1,5 +1,6 @@
 "use client";
 
+import "@/lib/polyfill";
 import { useEffect, useRef, useMemo } from "react";
 import { Color, Fog, PerspectiveCamera, Scene, Vector3 } from "three";
 import ThreeGlobe from "three-globe";
@@ -132,7 +133,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
     );
 
     globeRef.current
-      .polygonsData((countries as Record<string, unknown>).features)
+      .polygonsData((countries as Record<string, any>).features)
       .polygonCapColor(() => defaultProps.polygonColor)
       .polygonSideColor(() => "rgba(255,255,255,0.08)")
       .polygonStrokeColor(() => "rgba(255,255,255,0.28)")
@@ -143,22 +144,22 @@ export function Globe({ globeConfig, data }: WorldProps) {
 
     globeRef.current
       .arcsData(data)
-      .arcStartLat((d: Position) => d.startLat)
-      .arcStartLng((d: Position) => d.startLng)
-      .arcEndLat((d: Position) => d.endLat)
-      .arcEndLng((d: Position) => d.endLng)
-      .arcColor((d: Position) => d.color)
-      .arcAltitude((d: Position) => d.arcAlt)
+      .arcStartLat((d: any) => d.startLat)
+      .arcStartLng((d: any) => d.startLng)
+      .arcEndLat((d: any) => d.endLat)
+      .arcEndLng((d: any) => d.endLng)
+      .arcColor((d: any) => d.color)
+      .arcAltitude((d: any) => d.arcAlt)
       .arcStroke(() => [0.32, 0.28, 0.3][Math.round(Math.random() * 2)])
       .arcDashLength(defaultProps.arcLength)
-      .arcDashInitialGap((d: Position) => d.order)
+      .arcDashInitialGap((d: any) => d.order)
       .arcDashGap(15)
       .arcDashAnimateTime(() => defaultProps.arcTime);
 
     globeRef.current
       .pointsData(filteredPoints)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .pointColor((d: Record<string, any>) => d.color)
+      .pointColor((d: any) => d.color)
       .pointsMerge(true)
       .pointAltitude(0)
       .pointRadius(2);

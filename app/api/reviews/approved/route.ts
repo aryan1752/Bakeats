@@ -3,7 +3,7 @@ import { getApprovedReviews } from "@/lib/reviews-db";
 
 export async function GET() {
   try {
-    const rows = getApprovedReviews(50);
+    const rows = await getApprovedReviews(50);
     const items = rows.map((r) => ({
       id: r.id,
       name: r.name,

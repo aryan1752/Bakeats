@@ -1,3 +1,4 @@
+import "@/lib/polyfill";
 import { StickyBannerDemo } from "@/components/ui/StickyBannerDemo";
 import { GlobeDemo } from "@/components/ui/GlobeDemo";
 import TextHoverEffectDemo from "@/components/ui/text-hover-effect-demo";

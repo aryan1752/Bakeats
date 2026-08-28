@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
     return new NextResponse("Invalid moderation link", { status: 400 });
   }
 
-  const ok = moderateReviewByToken({ token, action });
+  const ok = await moderateReviewByToken({ token, action });
   if (!ok) {
     return new NextResponse("Review not found or already handled", { status: 404 });
   }

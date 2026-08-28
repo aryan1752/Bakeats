@@ -15,13 +15,79 @@
   }
 }
 
-@keyframes scroll {
-  to {
-    transform: translateX(calc(-50% - 0.5rem));
+@theme inline {
+  --animate-scroll: scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite;
+
+  @keyframes scroll {
+    to {
+      transform: translate(calc(-50% - 0.5rem));
+    }
   }
 }
 
-.animate-scroll {
-  animation: scroll var(--animation-duration, 40s)
-    var(--animation-direction, forwards) linear infinite;
+/* Custom Dark Mode Overrides */
+.dark body {
+  background-color: #071728 !important;
+  color: #f3f4f6 !important;
 }
+
+.dark .bg-white {
+  background-color: #0d2036 !important;
+  border-color: #1e3a5f !important;
+  color: #f3f4f6 !important;
+}
+
+.dark .bg-gray-50 {
+  background-color: #091a2e !important;
+  color: #f3f4f6 !important;
+}
+
+.dark .bg-gray-50\/50 {
+  background-color: #0d2036 !important;
+  color: #f3f4f6 !important;
+}
+
+.dark .text-gray-800, 
+.dark .text-gray-700 {
+  color: #f3f4f6 !important;
+}
+
+.dark .text-gray-500, 
+.dark .text-gray-600 {
+  color: #a1b0cb !important;
+}
+
+.dark .border-gray-100, 
+.dark .border-gray-150,
+.dark .border-gray-200 {
+  border-color: #1e3a5f !important;
+}
+
+.dark input, 
+.dark select, 
+.dark textarea {
+  background-color: #091a2e !important;
+  border-color: #1e3a5f !important;
+  color: #f3f4f6 !important;
+}
+
+.dark .hover\:bg-gray-50:hover {
+  background-color: #142842 !important;
+}
+
+.dark tr:hover {
+  background-color: #142842 !important;
+}
+
+.dark table thead th {
+  color: #f3f4f6 !important;
+}
+
+.dark .divide-gray-50 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #1e3a5f !important;
+}
+
+.dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #1e3a5f !important;
+}
+

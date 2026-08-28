@@ -110,9 +110,9 @@ export default function Login() {
         {/* Header Branding */}
         <div className="text-center mb-6">
           <div className="flex justify-center mb-3">
-            <div className="h-14 w-14 border border-amber-300 rounded-lg p-1.5 bg-white shadow-md flex items-center justify-center">
+            <div className="h-14 aspect-[3/2] border border-[#F5BE18] rounded-lg p-1 bg-[#0D2847] shadow-md flex items-center justify-center">
               <img
-                src="/favicon.png"
+                src="/kvi_logo.png"
                 alt="Knowledge Venture Institute Logo"
                 className="h-full w-full object-contain select-none"
               />

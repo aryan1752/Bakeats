@@ -39,9 +39,9 @@ export default function BakeatsNavbar() {
         
         {/* KV Logo */}
         <Link href="/" className="flex items-center shrink-0">
-          <div className="h-11 w-11 border border-amber-300 rounded-lg p-1.5 bg-white shrink-0 shadow-sm flex items-center justify-center">
+          <div className="h-11 aspect-[3/2] border border-[#F5BE18] rounded-lg p-1 bg-[#0D2847] shrink-0 shadow-sm flex items-center justify-center">
             <img
-              src="/favicon.png"
+              src="/kvi_logo.png"
               alt="Knowledge Venture Institute Logo"
               className="h-full w-full object-contain select-none"
             />

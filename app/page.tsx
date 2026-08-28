@@ -251,7 +251,7 @@ export default function Home() {
                 className="w-full flex justify-center"
               >
                 <img 
-                  src="/logo.png" 
+                  src="/kvi_logo.png" 
                   alt="Knowledge Venture Institute Logo" 
                   className="w-full max-w-[260px] sm:max-w-[300px] md:max-w-[340px] h-auto object-contain select-none filter drop-shadow-lg"
                 />
@@ -567,7 +567,7 @@ export default function Home() {
           <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm flex flex-col">
             <div className="relative aspect-video bg-black flex items-center justify-center">
               <iframe 
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                src="https://www.youtube.com/embed/CtMkfZMHUuM" 
                 className="w-full h-full"
                 title="KVI Chemistry Lecture Video"
                 allowFullScreen
@@ -583,7 +583,7 @@ export default function Home() {
           <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm flex flex-col">
             <div className="relative aspect-video bg-black flex items-center justify-center">
               <iframe 
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                src="https://www.youtube.com/embed/A1C-Q2sydxM" 
                 className="w-full h-full"
                 title="KVI Economics Lecture Video"
                 allowFullScreen
@@ -599,7 +599,7 @@ export default function Home() {
           <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm flex flex-col">
             <div className="relative aspect-video bg-black flex items-center justify-center">
               <iframe 
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                src="https://www.youtube.com/embed/bt8HaQctuAk" 
                 className="w-full h-full"
                 title="KVI Foundation Lecture Video"
                 allowFullScreen

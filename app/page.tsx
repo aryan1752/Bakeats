@@ -51,13 +51,22 @@ const branches = {
 };
 
 // Toppers Data
-const toppers = [
-  { name: "Aarav Sharma", score: "98.2%", exam: "Class 10 Board", category: "Foundations", year: "2025", rank: "School Rank 1" },
-  { name: "Diya Verma", score: "96.4%", exam: "Class 9 Final", category: "Foundations", year: "2025", rank: "Top Percentile" },
-  { name: "Rahul Gupta", score: "97.8%", exam: "Class 12 Boards (Commerce)", category: "Commerce", year: "2025", rank: "District Rank 3" },
-  { name: "Neha Singh", score: "95.6%", exam: "Class 12 Boards (Arts)", category: "Arts", year: "2025", rank: "Top in Humanities" },
-  { name: "Sahil Khan", score: "95.2%", exam: "Class 10 Board", category: "Foundations", year: "2025", rank: "School Rank 4" },
-  { name: "Sneha Goel", score: "96.8%", exam: "Class 12 Boards (Commerce)", category: "Commerce", year: "2025", rank: "School Rank 2" }
+const toppersRow1 = [
+  { name: "NAINA", school: "SKV", subject: "POL. SCI", score: "97", image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" },
+  { name: "AAKASH", school: "DAV", subject: "ECONOMICS", score: "97", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80" },
+  { name: "PRIYANKA", school: "KV", subject: "ECONOMICS", score: "99", image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&auto=format&fit=crop&q=80" },
+  { name: "PIYUSH", school: "RPVV", subject: "CHEMISTRY", score: "98", image: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80" },
+  { name: "SHRUTI", school: "SKV", subject: "B. STUDIES", score: "96", image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80" },
+  { name: "ABHISHEK", school: "GBSSS", subject: "ACCOUNTS", score: "97", image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80" }
+];
+
+const toppersRow2 = [
+  { name: "KARAN", school: "GBSSS", subject: "HISTORY", score: "98", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80" },
+  { name: "KAVITA", school: "SKV", subject: "POL. SCI", score: "98", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80" },
+  { name: "SNEHA", school: "DPS", subject: "BIOLOGY", score: "97", image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&auto=format&fit=crop&q=80" },
+  { name: "HARSH", school: "RYAN", subject: "PHYSICS", score: "99", image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80" },
+  { name: "ANJALI", school: "KV", subject: "ENGLISH", score: "98", image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=150&auto=format&fit=crop&q=80" },
+  { name: "ROHAN", school: "DAV", subject: "ECONOMICS", score: "96", image: "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=150&auto=format&fit=crop&q=80" }
 ];
 
 // Faculty Data matching flyers
@@ -142,7 +151,6 @@ export default function Home() {
   const [activeFaculty, setActiveFaculty] = useState(0);
   const [selectedCity, setSelectedCity] = useState<"Delhi" | "Noida">("Delhi");
   const [selectedBranch, setSelectedBranch] = useState(0);
-  const [resultsFilter, setResultsFilter] = useState("All");
 
   const bannerImages = [
     "/0e2f5377-dae3-4d7f-8232-1f2e7bfd559d.png",
@@ -394,42 +402,68 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 5. RESULTS OF CONSISTENT EXCELLENCE (TOPPERS GRID) ── */}
-      <section id="results" className="py-16 max-w-7xl mx-auto px-6 w-full text-center">
-        <h2 className="text-2xl md:text-3xl font-black text-[#0D2847]">A Record of Consistent Excellence</h2>
-        <p className="text-gray-500 text-sm mt-2">See the exceptional percentages secured by our students</p>
-
-        {/* Filter Tabs */}
-        <div className="flex justify-center items-center gap-3 mt-8 flex-wrap">
-          {["All", "Foundations", "Commerce", "Arts"].map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setResultsFilter(filter)}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${resultsFilter === filter ? "bg-[#0D2847] text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
-            >
-              {filter}
-            </button>
-          ))}
+      {/* ── 5. RESULTS OF CONSISTENT EXCELLENCE (BOARD TOPPERS SHOWCASE) ── */}
+      <section id="results" className="py-16 w-full text-center overflow-hidden bg-gray-50/50 dark:bg-slate-900/5">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-2xl md:text-3xl font-black text-[#0D2847] dark:text-white">A Record of Consistent Excellence</h2>
+          <p className="text-gray-500 text-sm mt-2">Our students consistently secure top scores in Board Examinations</p>
         </div>
 
-        {/* Toppers Cards Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-8">
-          {toppers
-            .filter((t) => resultsFilter === "All" || t.category === resultsFilter)
-            .map((topper, idx) => (
-              <div key={idx} className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm flex flex-col items-center">
-                {/* Vector Avatar */}
-                <div className="h-16 w-16 rounded-full bg-[#0D2847]/10 flex items-center justify-center text-2xl font-bold text-[#0D2847] mb-3">
-                  {topper.name.charAt(0)}
+        {/* Row 1: Left to Right Marquee */}
+        <div className="relative w-full overflow-hidden py-4 mt-10">
+          <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-gray-50 dark:from-[#071728] to-transparent z-10 pointer-events-none" />
+          <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-gray-50 dark:from-[#071728] to-transparent z-10 pointer-events-none" />
+          
+          <div className="animate-marquee-right flex gap-6">
+            {[...toppersRow1, ...toppersRow1].map((topper, idx) => (
+              <div key={idx} className="bg-white dark:bg-[#0d2036] border border-gray-150 dark:border-gray-800 rounded-xl p-4 flex items-center justify-between shadow-sm min-w-[280px] md:min-w-[320px] transition duration-300 hover:scale-102 hover:shadow-md select-none">
+                <div className="flex items-center gap-4">
+                  {/* Photo with blue ring border */}
+                  <div className="relative h-16 w-16 rounded-lg overflow-hidden border-2 border-[#0D2847] dark:border-sky-500 shadow-sm flex-shrink-0">
+                    <img src={topper.image} alt={topper.name} className="h-full w-full object-cover" />
+                  </div>
+                  {/* Student Details */}
+                  <div className="text-left">
+                    <h4 className="font-extrabold text-[#0D2847] dark:text-white text-sm">{topper.name}</h4>
+                    <span className="text-[10px] text-gray-400 dark:text-gray-500 block font-bold">({topper.school})</span>
+                    <span className="inline-block bg-[#F5BE18]/10 text-[#0D2847] dark:text-[#F5BE18] font-black text-[9px] uppercase px-2 py-0.5 rounded mt-1.5">{topper.subject}</span>
+                  </div>
                 </div>
-                <h4 className="font-extrabold text-[#0D2847] text-xs text-center line-clamp-1">{topper.name}</h4>
-                <span className="text-xs font-black text-[#F5BE18] mt-1">{topper.score}</span>
-                <span className="text-[10px] text-gray-400 mt-0.5 block text-center line-clamp-1">{topper.exam}</span>
-                <span className="text-[9px] bg-gray-100 px-2 py-0.5 text-gray-500 rounded-full font-bold mt-2">
-                  {topper.rank}
-                </span>
+                {/* Score Circular Badge */}
+                <div className="h-16 w-16 rounded-full border-4 border-dashed border-red-500 dark:border-red-400 flex flex-col items-center justify-center bg-red-50/50 dark:bg-red-950/20 flex-shrink-0">
+                  <span className="text-2xl font-black text-red-600 dark:text-red-400 font-sans tracking-tighter leading-none">{topper.score}</span>
+                  <span className="text-[8px] font-black text-red-800 dark:text-red-300 uppercase tracking-widest leading-none mt-0.5">Marks</span>
+                </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Row 2: Right to Left Marquee */}
+        <div className="relative w-full overflow-hidden py-4 mt-6">
+          <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-gray-50 dark:from-[#071728] to-transparent z-10 pointer-events-none" />
+          <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-gray-50 dark:from-[#071728] to-transparent z-10 pointer-events-none" />
+          
+          <div className="animate-marquee-left flex gap-6">
+            {[...toppersRow2, ...toppersRow2].map((topper, idx) => (
+              <div key={idx} className="bg-white dark:bg-[#0d2036] border border-gray-150 dark:border-gray-800 rounded-xl p-4 flex items-center justify-between shadow-sm min-w-[280px] md:min-w-[320px] transition duration-300 hover:scale-102 hover:shadow-md select-none">
+                <div className="flex items-center gap-4">
+                  <div className="relative h-16 w-16 rounded-lg overflow-hidden border-2 border-[#0D2847] dark:border-sky-500 shadow-sm flex-shrink-0">
+                    <img src={topper.image} alt={topper.name} className="h-full w-full object-cover" />
+                  </div>
+                  <div className="text-left">
+                    <h4 className="font-extrabold text-[#0D2847] dark:text-white text-sm">{topper.name}</h4>
+                    <span className="text-[10px] text-gray-400 dark:text-gray-500 block font-bold">({topper.school})</span>
+                    <span className="inline-block bg-[#F5BE18]/10 text-[#0D2847] dark:text-[#F5BE18] font-black text-[9px] uppercase px-2 py-0.5 rounded mt-1.5">{topper.subject}</span>
+                  </div>
+                </div>
+                <div className="h-16 w-16 rounded-full border-4 border-dashed border-red-500 dark:border-red-400 flex flex-col items-center justify-center bg-red-50/50 dark:bg-red-950/20 flex-shrink-0">
+                  <span className="text-2xl font-black text-red-600 dark:text-red-400 font-sans tracking-tighter leading-none">{topper.score}</span>
+                  <span className="text-[8px] font-black text-red-800 dark:text-red-300 uppercase tracking-widest leading-none mt-0.5">Marks</span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

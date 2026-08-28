@@ -196,8 +196,8 @@
 }
 
 .spacer {
-  height: 20vh;
-  background: #f6f4ee;
+  height: 0;
+  background: transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {

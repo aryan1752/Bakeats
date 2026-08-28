@@ -416,23 +416,25 @@ export default function Home() {
           
           <div className="animate-marquee-right flex gap-6">
             {[...toppersRow1, ...toppersRow1].map((topper, idx) => (
-              <div key={idx} className="bg-white dark:bg-[#0d2036] border border-gray-150 dark:border-gray-800 rounded-xl p-4 flex items-center justify-between shadow-sm min-w-[280px] md:min-w-[320px] transition duration-300 hover:scale-102 hover:shadow-md select-none">
-                <div className="flex items-center gap-4">
-                  {/* Photo with blue ring border */}
-                  <div className="relative h-16 w-16 rounded-lg overflow-hidden border-2 border-[#0D2847] dark:border-sky-500 shadow-sm flex-shrink-0">
-                    <img src={topper.image} alt={topper.name} className="h-full w-full object-cover" />
-                  </div>
-                  {/* Student Details */}
-                  <div className="text-left">
-                    <h4 className="font-extrabold text-[#0D2847] dark:text-white text-sm">{topper.name}</h4>
-                    <span className="text-[10px] text-gray-400 dark:text-gray-500 block font-bold">({topper.school})</span>
-                    <span className="inline-block bg-[#F5BE18]/10 text-[#0D2847] dark:text-[#F5BE18] font-black text-[9px] uppercase px-2 py-0.5 rounded mt-1.5">{topper.subject}</span>
-                  </div>
+              <div key={idx} className="bg-white dark:bg-[#0d2036] border border-gray-150 dark:border-gray-800 rounded-xl p-3.5 flex items-center gap-4 shadow-sm min-w-[260px] md:min-w-[300px] transition duration-300 hover:scale-102 hover:shadow-md select-none">
+                {/* Photo with clean thin border */}
+                <div className="relative h-16 w-16 rounded-lg overflow-hidden border border-gray-100 dark:border-sky-500/20 shadow-sm flex-shrink-0">
+                  <img src={topper.image} alt={topper.name} className="h-full w-full object-cover" />
                 </div>
-                {/* Score Circular Badge */}
-                <div className="h-16 w-16 rounded-full border-4 border-dashed border-red-500 dark:border-red-400 flex flex-col items-center justify-center bg-red-50/50 dark:bg-red-950/20 flex-shrink-0">
-                  <span className="text-2xl font-black text-red-600 dark:text-red-400 font-sans tracking-tighter leading-none">{topper.score}</span>
-                  <span className="text-[8px] font-black text-red-800 dark:text-red-300 uppercase tracking-widest leading-none mt-0.5">Marks</span>
+                {/* Student Details */}
+                <div className="text-left flex-1 min-w-0 flex flex-col justify-between h-16">
+                  <div>
+                    <span className="inline-block font-black text-[9px] uppercase tracking-wider text-[#00A5EC] dark:text-sky-400">
+                      {topper.subject}
+                    </span>
+                    <h4 className="font-extrabold text-[#0D2847] dark:text-white text-xs truncate mt-0.5">{topper.name}</h4>
+                  </div>
+                  <div className="flex items-center justify-between text-[10px] mt-1">
+                    <span className="text-gray-400 dark:text-gray-500 font-bold">({topper.school})</span>
+                    <span className="font-black text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/20 px-2 py-0.5 rounded-md text-[10px]">
+                      {topper.score} Marks
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}
@@ -446,20 +448,25 @@ export default function Home() {
           
           <div className="animate-marquee-left flex gap-6">
             {[...toppersRow2, ...toppersRow2].map((topper, idx) => (
-              <div key={idx} className="bg-white dark:bg-[#0d2036] border border-gray-150 dark:border-gray-800 rounded-xl p-4 flex items-center justify-between shadow-sm min-w-[280px] md:min-w-[320px] transition duration-300 hover:scale-102 hover:shadow-md select-none">
-                <div className="flex items-center gap-4">
-                  <div className="relative h-16 w-16 rounded-lg overflow-hidden border-2 border-[#0D2847] dark:border-sky-500 shadow-sm flex-shrink-0">
-                    <img src={topper.image} alt={topper.name} className="h-full w-full object-cover" />
-                  </div>
-                  <div className="text-left">
-                    <h4 className="font-extrabold text-[#0D2847] dark:text-white text-sm">{topper.name}</h4>
-                    <span className="text-[10px] text-gray-400 dark:text-gray-500 block font-bold">({topper.school})</span>
-                    <span className="inline-block bg-[#F5BE18]/10 text-[#0D2847] dark:text-[#F5BE18] font-black text-[9px] uppercase px-2 py-0.5 rounded mt-1.5">{topper.subject}</span>
-                  </div>
+              <div key={idx} className="bg-white dark:bg-[#0d2036] border border-gray-150 dark:border-gray-800 rounded-xl p-3.5 flex items-center gap-4 shadow-sm min-w-[260px] md:min-w-[300px] transition duration-300 hover:scale-102 hover:shadow-md select-none">
+                {/* Photo with clean thin border */}
+                <div className="relative h-16 w-16 rounded-lg overflow-hidden border border-gray-100 dark:border-sky-500/20 shadow-sm flex-shrink-0">
+                  <img src={topper.image} alt={topper.name} className="h-full w-full object-cover" />
                 </div>
-                <div className="h-16 w-16 rounded-full border-4 border-dashed border-red-500 dark:border-red-400 flex flex-col items-center justify-center bg-red-50/50 dark:bg-red-950/20 flex-shrink-0">
-                  <span className="text-2xl font-black text-red-600 dark:text-red-400 font-sans tracking-tighter leading-none">{topper.score}</span>
-                  <span className="text-[8px] font-black text-red-800 dark:text-red-300 uppercase tracking-widest leading-none mt-0.5">Marks</span>
+                {/* Student Details */}
+                <div className="text-left flex-1 min-w-0 flex flex-col justify-between h-16">
+                  <div>
+                    <span className="inline-block font-black text-[9px] uppercase tracking-wider text-[#00A5EC] dark:text-sky-400">
+                      {topper.subject}
+                    </span>
+                    <h4 className="font-extrabold text-[#0D2847] dark:text-white text-xs truncate mt-0.5">{topper.name}</h4>
+                  </div>
+                  <div className="flex items-center justify-between text-[10px] mt-1">
+                    <span className="text-gray-400 dark:text-gray-500 font-bold">({topper.school})</span>
+                    <span className="font-black text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/20 px-2 py-0.5 rounded-md text-[10px]">
+                      {topper.score} Marks
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}

@@ -11,23 +11,6 @@ export default function Scholarship() {
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
-  // Fee waiver logic
-  let estimateWaiver = "Standard counseling admission";
-  let waiverColor = "text-[#0D2847] dark:text-[#F5BE18]";
-  if (calculatorScore >= 95) {
-    estimateWaiver = "80% - 100% Tuition Fee Waiver";
-    waiverColor = "text-green-600 dark:text-green-400 font-extrabold";
-  } else if (calculatorScore >= 90) {
-    estimateWaiver = "50% - 75% Tuition Fee Waiver";
-    waiverColor = "text-green-600 dark:text-green-400 font-extrabold";
-  } else if (calculatorScore >= 80) {
-    estimateWaiver = "25% - 45% Tuition Fee Waiver";
-    waiverColor = "text-green-500 dark:text-green-400 font-bold";
-  } else if (calculatorScore >= 70) {
-    estimateWaiver = "10% - 20% Tuition Fee Waiver";
-    waiverColor = "text-amber-600 dark:text-amber-400 font-bold";
-  }
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
@@ -61,14 +44,14 @@ export default function Scholarship() {
           <div className="text-center">
             <span className="inline-flex items-center gap-1.5 bg-[#F5BE18]/10 dark:bg-[#F5BE18]/20 text-[#0D2847] dark:text-[#F5BE18] px-3.5 py-1.5 rounded-full text-xs font-bold mb-4">
               <Sparkles className="h-3.5 w-3.5" />
-              <span>Scholarship waiver Estimator</span>
+              <span>Scholarship Registration</span>
             </span>
             <h2 className="text-2xl font-black text-[#0D2847] dark:text-white flex items-center justify-center gap-2">
               <Calculator className="h-6 w-6 text-[#F5BE18]" />
               <span>KV Eligibility Calculator</span>
             </h2>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 leading-relaxed">
-              Move the slider to match your previous final class percentage score and view your estimated KVI tuition scholarship potential.
+              Move the slider to match your previous final class percentage score and proceed with your KVI registration.
             </p>
           </div>
 
@@ -94,24 +77,13 @@ export default function Scholarship() {
             </div>
           </div>
 
-          {/* Eligibility Box */}
-          <div className="bg-gray-50 dark:bg-[#091a2e] border border-gray-150 dark:border-gray-800 p-6 rounded-xl mt-2 text-center shadow-inner">
-            <span className="text-[10px] text-gray-400 dark:text-gray-500 uppercase tracking-wider block font-black">Estimated Scholarship Potential</span>
-            <span className={`text-base md:text-lg block mt-3 ${waiverColor}`}>
-              {estimateWaiver}
-            </span>
-            <span className="text-[9px] text-gray-400 dark:text-gray-500 block mt-3 italic font-semibold">
-              *Subject to performance in the offline admission selection evaluation test.
-            </span>
-          </div>
-
           {/* Form Action Toggle or Success state */}
           {!showForm && successMsg === "" && (
             <button
               onClick={() => setShowForm(true)}
               className="w-full py-3 bg-[#0D2847] hover:bg-[#0D2847]/90 text-white font-black text-xs uppercase tracking-wider rounded-xl transition duration-200 shadow-md cursor-pointer flex items-center justify-center gap-2 mt-4"
             >
-              <span>Lock in Waiver & Register Now</span>
+              <span>Proceed to Register</span>
             </button>
           )}
 

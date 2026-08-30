@@ -87,18 +87,18 @@ const facultyList = [
     photo: "/cs sanjay arya.png"
   },
   {
-    name: "CA Ankur Lakhiwall",
+    name: "CA Aditya Pratap Singh",
     designation: "Qualified Chartered Accountant",
-    subject: "Expert of Accountancy Studies",
+    subject: "Expert of Class 9-10th (Science & Mathematics)",
     exp: "12+ Yrs",
-    quote: "Expert of Accountancy & Corporate Finance",
+    quote: "Building strong analytical foundations for school and boards",
     highlights: [
-      "12+ years of accountancy teaching",
-      "Qualified Chartered Accountant (CA) expert",
-      "Step-by-step balance sheet shortcuts",
-      "Interactive boards-prep score strategies"
+      "12+ years of foundational teaching experience",
+      "Chartered Accountant (CA) with deep logical expertise",
+      "Taught 3,000+ board students successfully",
+      "Conceptual clarity & interactive board-scoring strategies"
     ],
-    specialties: ["Accountancy", "Corporate Tax", "Board Scoring"],
+    specialties: ["Mathematics", "Science", "Foundations Lead"],
     photo: "/aditya.png"
   },
   {

@@ -138,7 +138,7 @@ async function seed() {
       role: "student",
       name: "Diya Verma",
       email: "diya@gmail.com",
-      phone: "8585575250", // Student mobile
+      phone: "8285575250", // Student mobile
       stream: "commerce",
       parentPhone: "8765432109",
       parent_id: parent2._id

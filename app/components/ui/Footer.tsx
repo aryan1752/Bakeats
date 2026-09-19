@@ -66,7 +66,7 @@ export default function Footer() {
             </span>
             <span className="flex items-center gap-2">
               <Phone className="h-4 w-4 text-[#E2AD07] dark:text-[#F5BE18] shrink-0" />
-              <a href="tel:8585575250" className="hover:text-[#E2AD07] dark:hover:text-[#F5BE18]">8585575250</a>
+              <a href="tel:8285575250" className="hover:text-[#E2AD07] dark:hover:text-[#F5BE18]">8285575250</a>
             </span>
           </div>
 

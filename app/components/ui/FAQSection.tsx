@@ -38,7 +38,7 @@ const faqData: FAQItem[] = [
     question: "How can I register for a Demo Class or Scholarship Test?",
     answer: (
       <span>
-        You can register online through our website by clicking the <strong>"Register Now"</strong> button or applying via the <strong>KV Talent Search Scholarship</strong> page. You can also visit our office or call <strong>7011731649 / 8585575250</strong>.
+        You can register online through our website by clicking the <strong>"Register Now"</strong> button or applying via the <strong>KV Talent Search Scholarship</strong> page. You can also visit our office or call <strong>7011731649 / 8285575250</strong>.
       </span>
     )
   },

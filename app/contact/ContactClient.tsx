@@ -44,8 +44,8 @@ export default function ContactClient() {
                   <a href="tel:7011731649" className="hover:text-[#00A5EC] underline transition flex items-center gap-1">
                     📞 7011731649
                   </a>
-                  <a href="tel:8585575250" className="hover:text-[#00A5EC] underline transition flex items-center gap-1">
-                    📞 8585575250
+                  <a href="tel:8285575250" className="hover:text-[#00A5EC] underline transition flex items-center gap-1">
+                    📞 8285575250
                   </a>
                 </div>
               </div>

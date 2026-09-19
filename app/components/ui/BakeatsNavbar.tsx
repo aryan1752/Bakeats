@@ -100,7 +100,7 @@ export default function BakeatsNavbar() {
           </span>
           <span className="flex items-center gap-1.5">
             <Phone className="h-3.5 w-3.5 text-[#F5BE18]" />
-            <a href="tel:8585575250" className="hover:text-white">8585575250</a>
+            <a href="tel:8285575250" className="hover:text-white">8285575250</a>
           </span>
         </div>
         <div className="flex items-center gap-1.5">

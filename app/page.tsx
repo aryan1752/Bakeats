@@ -30,14 +30,14 @@ const branches = {
       name: "Hari Nagar Head Center",
       address: "I-49A, above Dabra Medical Center, Hari Nagar, Jaitpur Badarpur, New Delhi 110044",
       phone1: "7011731649",
-      phone2: "8585575250",
+      phone2: "8285575250",
       hours: "08:00 AM - 08:00 PM"
     },
     {
       name: "Jaitpur Extension Center",
       address: "H-24, Main Road, Jaitpur Extension Part-2, Badarpur, New Delhi 110044",
       phone1: "7011731649",
-      phone2: "8585575250",
+      phone2: "8285575250",
       hours: "09:00 AM - 07:30 PM"
     }
   ],
@@ -46,7 +46,7 @@ const branches = {
       name: "Sector 62 Associate Center",
       address: "A-15, Near Metro Station, Sector 62, Noida, Uttar Pradesh 201301",
       phone1: "7011731649",
-      phone2: "8585575250",
+      phone2: "8285575250",
       hours: "10:00 AM - 07:00 PM"
     }
   ]

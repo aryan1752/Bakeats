@@ -20,6 +20,8 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import { SquigglyText } from "./components/ui/squiggly-text";
 import ScrollJourney from "./components/ui/ScrollJourney";
+import LiveNotificationSection from "./components/ui/LiveNotificationSection";
+import FAQSection from "./components/ui/FAQSection";
 
 // Mock data for Branch Locator
 const branches = {
@@ -87,18 +89,18 @@ const facultyList = [
     photo: "/cs sanjay arya.png"
   },
   {
-    name: "CA Aditya Pratap Singh",
-    designation: "Qualified Chartered Accountant",
-    subject: "Expert of Class 9-10th (Science & Mathematics)",
-    exp: "12+ Yrs",
-    quote: "Building strong analytical foundations for school and boards",
+    name: "Er. Aditya Pratap Singh",
+    designation: "Class 11th & 12th Maths & Physics Faculty",
+    subject: "Expert of 11-12th Maths, Physics & 9-10th Boards",
+    exp: "5+ Yrs",
+    quote: "Building strong analytical foundations & board-scoring problem solving skills",
     highlights: [
-      "12+ years of foundational teaching experience",
-      "Chartered Accountant (CA) with deep logical expertise",
-      "Taught 3,000+ board students successfully",
-      "Conceptual clarity & interactive board-scoring strategies"
+      "5+ years of dedicated teaching experience",
+      "Specialist in Class 11th & 12th Maths & Physics",
+      "Taught 1,000+ Class 9th & 10th board students",
+      "Conceptual clarity & interactive problem solving"
     ],
-    specialties: ["Mathematics", "Science", "Foundations Lead"],
+    specialties: ["11-12th Maths", "11-12th Physics", "9-10th Boards"],
     photo: "/aditya.png"
   },
   {
@@ -115,6 +117,21 @@ const facultyList = [
     ],
     specialties: ["History", "Political Science", "Geography"],
     photo: "/vimal.png"
+  },
+  {
+    name: "Er. Shaurav Singh",
+    designation: "Class 11th & 12th Chemistry Specialist",
+    subject: "Expert of Class 11-12th Chemistry & 9-10th Boards",
+    exp: "B.Tech",
+    quote: "Mastering Chemistry & Science concepts with B.Tech analytical approach",
+    highlights: [
+      "Completed B.Tech Engineering Degree",
+      "Class 9th & 10th Boards Specialist",
+      "Specialist in Class 11th & 12th Chemistry",
+      "Taught 2,000+ students successfully"
+    ],
+    specialties: ["11-12th Chemistry", "9-10th Boards", "Science"],
+    photo: "/er saurabh.png"
   }
 ];
 
@@ -146,17 +163,41 @@ const journeySteps = [
   },
 ];
 
+// Dynamic Typing Text Component
+function TypingText({ text }: { text: string }) {
+  const [displayed, setDisplayed] = useState("");
+
+  useEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      setDisplayed(text.slice(0, index + 1));
+      index++;
+      if (index >= text.length) {
+        clearInterval(interval);
+      }
+    }, 22);
+    return () => clearInterval(interval);
+  }, [text]);
+
+  return (
+    <span>
+      {displayed}
+      <span className="animate-pulse text-[#F5BE18]">|</span>
+    </span>
+  );
+}
+
 export default function Home() {
   const [activeBanner, setActiveBanner] = useState(0);
   const [activeFaculty, setActiveFaculty] = useState(0);
-  const [selectedCity, setSelectedCity] = useState<"Delhi" | "Noida">("Delhi");
-  const [selectedBranch, setSelectedBranch] = useState(0);
 
   const bannerImages = [
     "/0e2f5377-dae3-4d7f-8232-1f2e7bfd559d.png",
     "/image.png",
     "/252eab2d-d802-4ff2-9d53-4cd46c1c7b3d.png",
-    "/8b37fb82-84f4-4e2e-86f3-2a33cfc1a58d.png"
+    "/8b37fb82-84f4-4e2e-86f3-2a33cfc1a58d.png",
+    "/hero_banner_5.jpg",
+    "/hero_banner_6.jpg"
   ];
 
   useEffect(() => {
@@ -173,13 +214,6 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
-  const currentBranch = branches[selectedCity][selectedBranch] || branches[selectedCity][0];
-
-  const handleCityChange = (city: "Delhi" | "Noida") => {
-    setSelectedCity(city);
-    setSelectedBranch(0);
-  };
-
   return (
     <div className="w-full min-h-screen bg-white dark:bg-[#071728] text-gray-800 dark:text-gray-100 flex flex-col font-sans transition-colors duration-200">
       
@@ -193,12 +227,14 @@ export default function Home() {
               animate={{ x: "0%" }}
               exit={{ x: "-100%" }}
               transition={{ type: "tween", ease: "easeInOut", duration: 0.5 }}
-              className="absolute inset-0 w-full h-full"
+              className="absolute inset-0 w-full h-full flex items-center justify-center bg-[#071728]"
             >
               <img
                 src={bannerImages[activeBanner]}
                 alt={`KVI Hero Slide ${activeBanner + 1}`}
-                className="w-full h-full object-fill object-center select-none"
+                className={`w-full h-full select-none ${
+                  activeBanner >= 4 ? "object-contain bg-[#071728]" : "object-fill object-center"
+                }`}
               />
             </motion.div>
           </AnimatePresence>
@@ -217,190 +253,186 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 1.5 ABOUT KNOWLEDGE VENTURE SECTION (Concept C: Clean Details & Larger Floating Logo) ── */}
-      <section className="py-16 bg-white dark:bg-[#071728] border-b border-gray-100 dark:border-gray-800 transition-colors duration-200">
-        <div className="max-w-6xl mx-auto px-6">
+      {/* ── 1.5 ABOUT KNOWLEDGE VENTURE SECTION (Full-Width + Typing & Left-to-Right Entrance Animations) ── */}
+      <section className="py-20 bg-[#071728] border-b border-gray-800 text-white overflow-hidden relative">
+        {/* Subtle radial background glows */}
+        <div className="absolute top-1/2 left-10 -translate-y-1/2 w-96 h-96 bg-[#00A5EC]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-10 right-10 w-96 h-96 bg-[#F5BE18]/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-8 md:px-12">
           
-          {/* Animated Squiggly Header */}
-          <div className="text-center max-w-4xl mx-auto mb-12">
-            <h2 className="text-3xl md:text-5xl font-black text-[#0D2847] dark:text-white leading-tight">
-              About{" "}
+          {/* Animated Squiggly Header with Left-to-Right Entrance Motion */}
+          <motion.div 
+            initial={{ opacity: 0, x: -80 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="text-center w-full mb-12"
+          >
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight tracking-tight">
+              Best Coaching Centre in Hari Nagar, Jaitpur & Badarpur –{" "}
               <SquigglyText stepDuration={70} scale={[4, 6]} className="text-[#E2AD07]">
                 Knowledge Venture Institute
               </SquigglyText>
-            </h2>
-            <p className="text-[#0D2847] dark:text-amber-400 font-extrabold text-xs md:text-sm tracking-widest uppercase mt-3">
-              where{" "}
-              <SquigglyText scale={3} className="text-emerald-600 dark:text-emerald-400">
-                concepts
-              </SquigglyText>{" "}
-              become clear
-            </p>
-          </div>
+            </h1>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mt-12">
-            
-            {/* Left Side: Large Description Text block (No Box, No Border) */}
-            <div className="lg:col-span-7 text-left flex flex-col justify-center">
-              <p className="text-base md:text-lg lg:text-xl font-bold text-gray-700 leading-relaxed dark:text-gray-300">
-                At <span className="text-[#E2AD07] dark:text-[#F5BE18] font-black">Knowledge Venture Institute</span>, we believe that education should empower the mind, not test memory capacity. Our core mission is to steer students away from rote memorization and guide them towards conceptual clarity that lasts a lifetime.
+            {/* Interactive Typing Effect Sub-badge */}
+            <div className="mt-4 flex justify-center items-center">
+              <p className="text-[#0D2847] dark:text-amber-400 font-extrabold text-xs md:text-sm tracking-widest uppercase mt-2">
+                <TypingText text="#1 TUITION CENTER FOR CLASS 6-10TH FOUNDATIONS, 11-12TH COMMERCE & ARTS IN JAITPUR BADARPUR DELHI 110044" />
               </p>
             </div>
+          </motion.div>
 
-            {/* Right Side: Larger Floating Logo Showcase */}
-            <div className="lg:col-span-5 flex justify-center items-center mt-8 lg:mt-0">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+            
+            {/* Left Side: Unboxed Text block with Typing Effect on Last Lines */}
+            <motion.div 
+              initial={{ opacity: 0, x: -100 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.9, delay: 0.2, ease: "easeOut" }}
+              className="lg:col-span-7 text-left flex flex-col justify-center"
+            >
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-gray-700 dark:text-gray-200 leading-relaxed">
+                At <span className="text-[#E2AD07] dark:text-[#F5BE18] font-black">Knowledge Venture Institute (KVI)</span>, Hari Nagar, Jaitpur Badarpur, we deliver top board examination results with 100% conceptual clarity. As the leading coaching institute in South East Delhi for Class 6th-10th Foundations (Science & Maths), Class 11th-12th Commerce (Accounts, Economics, Business Studies) and Humanities (Arts),{" "}
+                <span className="text-gray-700 dark:text-gray-200">
+                  <TypingText text="our senior faculty equips every student to excel." />
+                </span>
+              </p>
+            </motion.div>
+
+            {/* Right Side: Larger Animated Floating Logo with Scale & Glow */}
+            <motion.div 
+              initial={{ opacity: 0, x: 100, scale: 0.8 }}
+              whileInView={{ opacity: 1, x: 0, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.9, delay: 0.3, ease: "easeOut" }}
+              className="lg:col-span-5 flex justify-center items-center mt-4 lg:mt-0"
+            >
               <motion.div
-                animate={{ y: [0, -15, 0] }}
+                animate={{ y: [0, -18, 0], rotate: [0, 1, 0, -1, 0] }}
                 transition={{
                   repeat: Infinity,
-                  duration: 4,
+                  duration: 5,
                   ease: "easeInOut"
                 }}
-                className="w-full flex justify-center"
+                className="w-full flex justify-center relative group cursor-pointer"
               >
+                <div className="absolute inset-0 bg-[#F5BE18]/20 rounded-full filter blur-3xl group-hover:bg-[#F5BE18]/30 transition duration-500" />
                 <img 
                   src="/kvi_logo.png" 
                   alt="Knowledge Venture Institute Logo" 
-                  className="w-full max-w-[260px] sm:max-w-[300px] md:max-w-[340px] h-auto object-contain select-none filter drop-shadow-lg"
+                  className="w-full max-w-[300px] sm:max-w-[360px] md:max-w-[420px] h-auto object-contain select-none filter drop-shadow-[0_15px_30px_rgba(245,190,24,0.3)] transition duration-500 group-hover:scale-105"
                 />
               </motion.div>
-            </div>
+            </motion.div>
 
           </div>
         </div>
       </section>
 
-      {/* ── 1.7 SCROLL JOURNEY TIMELINE ANIMATION ── */}
-      <ScrollJourney 
-        steps={journeySteps} 
-        colors={["#14335F", "#1B4B8F", "#2158A8", "#3E86E0", "#0B1F3A"]}
-      />
 
-      {/* ── 2. GOAL / COURSE SELECTOR GRID (Aakash Screenshot Style) ── */}
-      <section className="py-16 max-w-7xl mx-auto px-6 w-full text-center">
-        {/* Sky-Blue Integrated Header */}
-        <h2 className="text-2xl md:text-3xl font-bold text-[#0D2847] dark:text-white leading-tight">
-          Select your goal <span className="text-[#00A5EC] dark:text-sky-400 block sm:inline">to explore our courses</span>
-        </h2>
-        <p className="text-gray-400 text-[11px] mt-2 tracking-wide uppercase font-bold">Choose a customized stream for board prep success</p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12">
+
+
+      {/* ── STREAM GOAL SELECTION SECTION (Custom Illustration Stream Cards) ── */}
+      <section className="py-16 bg-[#071728] border-b border-gray-800 text-white">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 text-center">
           
-          {/* Card 1: 6-10th Foundations */}
-          <div className="bg-white dark:bg-[#0d2036] border border-gray-100 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition duration-300 flex flex-col items-center border-b-4 hover:border-b-[#00A5EC]">
-            <div className="h-16 w-16 rounded-full bg-sky-50 dark:bg-sky-950/40 text-[#00A5EC] flex items-center justify-center mb-4">
-              <svg viewBox="0 0 24 24" className="h-9 w-9" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M4.5 16.5c-1.5 1.26-2 2.5-2 2.5s1.24-.5 2.5-2Z"/>
-                <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6.05 11.05A22 22 0 0 1 12 15Z"/>
-                <path d="M9 15v3.5a1.5 1.5 0 0 0 3 0V15"/>
-                <path d="M15 9h-3.5a1.5 1.5 0 0 0 0 3H15"/>
-              </svg>
-            </div>
-            <h3 className="font-extrabold text-xs text-[#0D2847] dark:text-white uppercase tracking-wider">6-10th Foundations</h3>
-          </div>
+          <h2 className="text-3xl md:text-5xl font-black text-white leading-tight">
+            Select your <span className="text-[#00A5EC]">goal</span> to explore our courses
+          </h2>
+          <p className="text-amber-400 text-xs md:text-sm font-extrabold uppercase tracking-widest mt-3">
+            CHOOSE A CUSTOMIZED STREAM FOR BOARD PREP SUCCESS
+          </p>
 
-          {/* Card 2: Commerce Stream */}
-          <div className="bg-white dark:bg-[#0d2036] border border-gray-100 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition duration-300 flex flex-col items-center border-b-4 hover:border-b-[#F5BE18]">
-            <div className="h-16 w-16 rounded-full bg-amber-50 dark:bg-amber-950/40 text-[#F5BE18] flex items-center justify-center mb-4">
-              <svg viewBox="0 0 24 24" className="h-9 w-9" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/>
-                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-              </svg>
-            </div>
-            <h3 className="font-extrabold text-xs text-[#0D2847] dark:text-white uppercase tracking-wider">Commerce Stream</h3>
-          </div>
-
-          {/* Card 3: Arts Stream */}
-          <div className="bg-white dark:bg-[#0d2036] border border-gray-100 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition duration-300 flex flex-col items-center border-b-4 hover:border-b-purple-500">
-            <div className="h-16 w-16 rounded-full bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-4">
-              <svg viewBox="0 0 24 24" className="h-9 w-9" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
-                <path d="M2 12h20"/>
-              </svg>
-            </div>
-            <h3 className="font-extrabold text-xs text-[#0D2847] dark:text-white uppercase tracking-wider">Humanities / Arts</h3>
-          </div>
-
-        </div>
-      </section>
-
-      {/* ── 3. INTERACTIVE CENTER LOCATOR WIDGET ── */}
-      <section className="bg-white border-b border-gray-100 dark:bg-[#071728] dark:border-gray-800 py-16">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          
-          <div className="lg:col-span-5 text-left">
-            <h2 className="text-2xl md:text-3xl font-black text-[#0D2847]">Locate Our Centers</h2>
-            <p className="text-gray-500 text-sm mt-2 leading-relaxed">
-              Find the nearest Knowledge Venture Institute study centers offering classes for your chosen stream.
-            </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 max-w-5xl mx-auto">
             
-            <div className="flex gap-4 mt-6">
-              <div className="flex flex-col gap-1 w-1/2">
-                <label className="text-[10px] font-bold text-gray-400 uppercase">Select State/City</label>
-                <select 
-                  className="bg-white border border-gray-200 rounded-md p-2.5 text-xs text-gray-700 outline-none focus:border-[#F5BE18] w-full"
-                  value={selectedCity}
-                  onChange={(e) => handleCityChange(e.target.value as "Delhi" | "Noida")}
-                >
-                  <option value="Delhi">Delhi NCR</option>
-                  <option value="Noida">Noida (UP)</option>
-                </select>
+            {/* Card 1: 6-10th Foundations */}
+            <Link
+              href="/enrollment?stream=foundations"
+              className="group bg-[#0d2036] border-2 border-gray-800 rounded-3xl p-5 overflow-hidden shadow-xl hover:shadow-2xl hover:border-[#00A5EC] hover:ring-4 hover:ring-[#00A5EC]/20 transition-all duration-300 flex flex-col items-center justify-between cursor-pointer text-center"
+            >
+              <div className="w-full flex flex-col items-center">
+                <div className="relative w-full aspect-square rounded-2xl overflow-hidden mb-4 border border-gray-800 group-hover:scale-102 transition duration-300 shadow-md">
+                  <img 
+                    src="/stream_foundations.jpg" 
+                    alt="6-10th Foundations" 
+                    className="w-full h-full object-cover object-center select-none"
+                  />
+                </div>
+                <h3 className="font-black text-lg md:text-xl text-white group-hover:text-[#00A5EC] transition uppercase tracking-wide">
+                  6-10TH FOUNDATIONS
+                </h3>
+                <p className="text-xs text-gray-400 mt-1.5 font-medium leading-relaxed">
+                  Mathematics, Science & School Board Conceptual Base
+                </p>
               </div>
+              <span className="mt-5 w-full py-2.5 rounded-xl bg-[#00A5EC] text-white font-extrabold text-xs uppercase tracking-wider group-hover:bg-[#00A5EC]/90 transition shadow-md flex items-center justify-center gap-1.5">
+                <span>Explore Batches</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </span>
+            </Link>
 
-              <div className="flex flex-col gap-1 w-1/2">
-                <label className="text-[10px] font-bold text-gray-400 uppercase">Select Branch Center</label>
-                <select 
-                  className="bg-white border border-gray-200 rounded-md p-2.5 text-xs text-gray-700 outline-none focus:border-[#F5BE18] w-full"
-                  value={selectedBranch}
-                  onChange={(e) => setSelectedBranch(Number(e.target.value))}
-                >
-                  {branches[selectedCity].map((branch, idx) => (
-                    <option key={idx} value={idx}>{branch.name}</option>
-                  ))}
-                </select>
+            {/* Card 2: Commerce Stream */}
+            <Link
+              href="/enrollment?stream=commerce"
+              className="group bg-[#0d2036] border-2 border-gray-800 rounded-3xl p-5 overflow-hidden shadow-xl hover:shadow-2xl hover:border-[#F5BE18] hover:ring-4 hover:ring-[#F5BE18]/20 transition-all duration-300 flex flex-col items-center justify-between cursor-pointer text-center"
+            >
+              <div className="w-full flex flex-col items-center">
+                <div className="relative w-full aspect-square rounded-2xl overflow-hidden mb-4 border border-gray-800 group-hover:scale-102 transition duration-300 shadow-md">
+                  <img 
+                    src="/stream_commerce.jpg" 
+                    alt="Commerce Stream" 
+                    className="w-full h-full object-cover object-center select-none"
+                  />
+                </div>
+                <h3 className="font-black text-lg md:text-xl text-white group-hover:text-[#F5BE18] transition uppercase tracking-wide">
+                  COMMERCE STREAM
+                </h3>
+                <p className="text-xs text-gray-400 mt-1.5 font-medium leading-relaxed">
+                  Accountancy, Economics & Business Studies
+                </p>
               </div>
-            </div>
-          </div>
+              <span className="mt-5 w-full py-2.5 rounded-xl bg-[#F5BE18] text-[#0D2847] font-black text-xs uppercase tracking-wider group-hover:bg-amber-300 transition shadow-md flex items-center justify-center gap-1.5">
+                <span>Explore Batches</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </span>
+            </Link>
 
-          <div className="lg:col-span-7 bg-white border border-gray-100 p-6 rounded-xl shadow-md grid grid-cols-1 sm:grid-cols-12 gap-6 items-center">
-            <div className="sm:col-span-8 flex flex-col gap-3">
-              <span className="text-[#F5BE18] text-xs font-bold uppercase tracking-wider block">Currently Selected Branch</span>
-              <h3 className="font-extrabold text-[#0D2847] text-lg">{currentBranch.name}</h3>
-              <p className="text-xs text-gray-500 flex items-start gap-1">
-                <MapPin className="h-4 w-4 text-[#F5BE18] shrink-0 mt-0.5" />
-                <span>{currentBranch.address}</span>
-              </p>
-              <div className="flex flex-wrap gap-x-4 gap-y-2 mt-2">
-                <span className="text-xs text-gray-500 flex items-center gap-1">
-                  <Phone className="h-3.5 w-3.5 text-[#F5BE18]" />
-                  <a href={`tel:${currentBranch.phone1}`} className="hover:underline">{currentBranch.phone1}</a>
-                </span>
-                <span className="text-xs text-gray-500 flex items-center gap-1">
-                  <Phone className="h-3.5 w-3.5 text-[#F5BE18]" />
-                  <a href={`tel:${currentBranch.phone2}`} className="hover:underline">{currentBranch.phone2}</a>
-                </span>
+            {/* Card 3: Humanities / Arts */}
+            <Link
+              href="/enrollment?stream=arts"
+              className="group bg-[#0d2036] border-2 border-gray-800 rounded-3xl p-5 overflow-hidden shadow-xl hover:shadow-2xl hover:border-purple-400 hover:ring-4 hover:ring-purple-400/20 transition-all duration-300 flex flex-col items-center justify-between cursor-pointer text-center"
+            >
+              <div className="w-full flex flex-col items-center">
+                <div className="relative w-full aspect-square rounded-2xl overflow-hidden mb-4 border border-gray-800 group-hover:scale-102 transition duration-300 shadow-md">
+                  <img 
+                    src="/stream_arts.jpg" 
+                    alt="Humanities / Arts" 
+                    className="w-full h-full object-cover object-center select-none"
+                  />
+                </div>
+                <h3 className="font-black text-lg md:text-xl text-white group-hover:text-purple-400 transition uppercase tracking-wide">
+                  HUMANITIES / ARTS
+                </h3>
+                <p className="text-xs text-gray-400 mt-1.5 font-medium leading-relaxed">
+                  History, Political Science & Geography
+                </p>
               </div>
-            </div>
-            <div className="sm:col-span-4 flex flex-col gap-3 justify-center">
-              <a 
-                href={`https://maps.google.com/?q=${encodeURIComponent(currentBranch.address)}`} 
-                target="_blank" 
-                rel="noreferrer" 
-                className="w-full bg-[#0D2847] hover:bg-[#0D2847]/90 text-white py-2 rounded-lg text-xs font-bold text-center transition"
-              >
-                Directions
-              </a>
-              <Link 
-                href="/contact" 
-                className="w-full border border-gray-200 hover:border-[#F5BE18] hover:text-[#0D2847] py-2 rounded-lg text-xs font-bold text-center text-gray-500 transition"
-              >
-                Book Visit
-              </Link>
-            </div>
+              <span className="mt-5 w-full py-2.5 rounded-xl bg-purple-600 text-white font-extrabold text-xs uppercase tracking-wider group-hover:bg-purple-500 transition shadow-md flex items-center justify-center gap-1.5">
+                <span>Explore Batches</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </span>
+            </Link>
+
           </div>
         </div>
       </section>
+
+      {/* ── LIVE FACULTY BROADCAST ANNOUNCEMENTS ── */}
+      <LiveNotificationSection />
 
       {/* ── 5. RESULTS OF CONSISTENT EXCELLENCE (BOARD TOPPERS SHOWCASE) ── */}
       <section id="results" className="py-16 w-full text-center overflow-hidden bg-gray-50/50 dark:bg-slate-900/5">
@@ -430,7 +462,7 @@ export default function Home() {
                     <h4 className="font-extrabold text-[#0D2847] dark:text-white text-xs truncate mt-0.5">{topper.name}</h4>
                   </div>
                   <div className="flex items-center justify-between text-[10px] mt-1">
-                    <span className="text-gray-400 dark:text-gray-500 font-bold">({topper.school})</span>
+                    <span className="text-gray-600 dark:text-gray-300 font-bold">({topper.school})</span>
                     <span className="font-black text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/20 px-2 py-0.5 rounded-md text-[10px]">
                       {topper.score} Marks
                     </span>
@@ -462,7 +494,7 @@ export default function Home() {
                     <h4 className="font-extrabold text-[#0D2847] dark:text-white text-xs truncate mt-0.5">{topper.name}</h4>
                   </div>
                   <div className="flex items-center justify-between text-[10px] mt-1">
-                    <span className="text-gray-400 dark:text-gray-500 font-bold">({topper.school})</span>
+                    <span className="text-gray-600 dark:text-gray-300 font-bold">({topper.school})</span>
                     <span className="font-black text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/20 px-2 py-0.5 rounded-md text-[10px]">
                       {topper.score} Marks
                     </span>
@@ -476,23 +508,23 @@ export default function Home() {
 
       {/* ── 6. FACULTY & TEACHERS SECTION (Premium Slider Card Layout) ── */}
       <section id="faculty" className="bg-white border-b border-gray-100 dark:bg-[#071728] dark:border-gray-800 py-16 w-full transition-colors duration-200">
-        <div className="max-w-4xl mx-auto px-6 text-center relative">
+        <div className="w-full max-w-7xl mx-auto px-4 md:px-8 text-center relative">
           
-          <h2 className="text-2xl md:text-3xl font-bold text-[#0D2847] dark:text-white leading-tight">Our Experienced Faculty</h2>
-          <p className="text-gray-400 text-[10px] tracking-wide uppercase font-bold mt-1">
+          <h2 className="text-2xl md:text-4xl font-black text-[#0D2847] dark:text-white leading-tight">Our Experienced Faculty</h2>
+          <p className="text-gray-400 text-xs tracking-wide uppercase font-bold mt-2">
             Classes are taught by highly qualified board specialists and senior professionals
           </p>
 
-          {/* Main Slider Card Frame */}
-          <div className="relative mt-12 bg-white dark:bg-[#0d2036] border border-gray-150 dark:border-gray-800 rounded-[28px] p-6 md:p-10 shadow-xl max-w-3xl mx-auto text-left">
+          {/* Main Slider Card Frame - Expanded to ~75% Desktop Screen Width */}
+          <div className="relative mt-12 bg-white dark:bg-[#0d2036] border border-gray-150 dark:border-gray-800 rounded-[32px] p-6 md:p-12 shadow-2xl w-full lg:w-[85%] xl:w-[75%] max-w-6xl mx-auto text-left">
             
             {/* Left Hover Button */}
             <button
               onClick={() => setActiveFaculty((prev) => (prev === 0 ? facultyList.length - 1 : prev - 1))}
-              className="absolute top-1/2 -translate-y-1/2 -left-6 z-20 h-12 w-12 rounded-full bg-[#00A5EC] hover:bg-[#00A5EC]/90 text-white flex items-center justify-center transition shadow-lg cursor-pointer focus:outline-none hidden md:flex"
+              className="absolute top-1/2 -translate-y-1/2 -left-6 z-20 h-13 w-13 rounded-full bg-[#00A5EC] hover:bg-[#00A5EC]/90 text-white flex items-center justify-center transition shadow-xl cursor-pointer focus:outline-none hidden md:flex"
               aria-label="Previous faculty"
             >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
               </svg>
             </button>
@@ -500,10 +532,10 @@ export default function Home() {
             {/* Right Hover Button */}
             <button
               onClick={() => setActiveFaculty((prev) => (prev === facultyList.length - 1 ? 0 : prev + 1))}
-              className="absolute top-1/2 -translate-y-1/2 -right-6 z-20 h-12 w-12 rounded-full bg-[#00A5EC] hover:bg-[#00A5EC]/90 text-white flex items-center justify-center transition shadow-lg cursor-pointer focus:outline-none hidden md:flex"
+              className="absolute top-1/2 -translate-y-1/2 -right-6 z-20 h-13 w-13 rounded-full bg-[#00A5EC] hover:bg-[#00A5EC]/90 text-white flex items-center justify-center transition shadow-xl cursor-pointer focus:outline-none hidden md:flex"
               aria-label="Next faculty"
             >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
               </svg>
             </button>
@@ -517,11 +549,11 @@ export default function Home() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -15 }}
                   transition={{ duration: 0.35 }}
-                  className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"
+                  className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center"
                 >
                   {/* Photo Section */}
                   <div className="lg:col-span-5 flex justify-center w-full">
-                    <div className="relative w-full max-w-[260px] aspect-square rounded-2xl overflow-hidden border-2 border-sky-100 dark:border-gray-800 shadow-md">
+                    <div className="relative w-full max-w-[300px] aspect-square rounded-2xl overflow-hidden border-2 border-sky-100 dark:border-gray-800 shadow-xl">
                       <img 
                         src={facultyList[activeFaculty].photo} 
                         alt={facultyList[activeFaculty].name} 
@@ -532,26 +564,26 @@ export default function Home() {
 
                   {/* Copy Details Section */}
                   <div className="lg:col-span-7 flex flex-col justify-start">
-                    <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest block">
+                    <span className="text-xs font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest block">
                       Exp: {facultyList[activeFaculty].exp}
                     </span>
-                    <h3 className="text-2xl font-extrabold text-[#0D2847] dark:text-white mt-1 leading-tight">
+                    <h3 className="text-2xl md:text-3xl font-black text-[#0D2847] dark:text-white mt-1 leading-tight">
                       {facultyList[activeFaculty].name}
                     </h3>
-                    <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mt-0.5">
+                    <span className="text-[10px] font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider block mt-0.5">
                       {facultyList[activeFaculty].designation}
                     </span>
 
-                    <p className="text-sm italic text-gray-500 dark:text-gray-400 mt-3 border-l-2 border-emerald-500 pl-3 leading-relaxed">
+                    <p className="text-sm italic text-gray-700 dark:text-gray-200 mt-3 border-l-2 border-emerald-500 pl-3 leading-relaxed">
                       "{facultyList[activeFaculty].quote}"
                     </p>
 
                     {/* Key Highlights */}
                     <div className="mt-4">
-                      <span className="text-[9px] text-gray-400 dark:text-gray-500 font-black uppercase tracking-wider block">Key Highlights</span>
+                      <span className="text-[9px] text-gray-700 dark:text-gray-300 font-black uppercase tracking-wider block">Key Highlights</span>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-2">
                         {facultyList[activeFaculty].highlights.map((h, hidx) => (
-                          <div key={hidx} className="flex items-center gap-2 bg-emerald-50/40 dark:bg-emerald-950/20 border border-emerald-100/30 dark:border-emerald-900/30 p-2 rounded-lg text-[10px] font-bold text-gray-600 dark:text-gray-300">
+                          <div key={hidx} className="flex items-center gap-2 bg-emerald-50/40 dark:bg-emerald-950/20 border border-emerald-100/30 dark:border-emerald-900/30 p-2 rounded-lg text-[10px] font-bold text-gray-700 dark:text-gray-200">
                             <span className="text-emerald-500 dark:text-emerald-400 text-xs">✓</span>
                             <span>{h}</span>
                           </div>
@@ -561,7 +593,7 @@ export default function Home() {
 
                     {/* Specialties */}
                     <div className="mt-4">
-                      <span className="text-[9px] text-gray-400 dark:text-gray-500 font-black uppercase tracking-wider block">Specialties</span>
+                      <span className="text-[9px] text-gray-700 dark:text-gray-300 font-black uppercase tracking-wider block">Specialties</span>
                       <div className="flex flex-wrap gap-2 mt-1.5">
                         {facultyList[activeFaculty].specialties.map((s, sidx) => (
                           <span key={sidx} className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50/20 border border-emerald-100/50 text-emerald-600 dark:text-emerald-400 rounded-full text-[9px] font-black uppercase tracking-wider">
@@ -600,8 +632,8 @@ export default function Home() {
 
       {/* ── 7. DEMO LECTURES & VIDEOS SHOWCASE ── */}
       <section className="py-16 max-w-7xl mx-auto px-6 w-full text-center">
-        <h2 className="text-2xl md:text-3xl font-black text-[#0D2847]">Watch Demo Lecture Videos</h2>
-        <p className="text-gray-500 text-sm mt-2">Get a sneak peek into KVI's clear conceptual teaching methodology</p>
+        <h2 className="text-2xl md:text-3xl font-black text-[#0D2847] dark:text-white">Watch Demo Lecture Videos</h2>
+        <p className="text-gray-600 dark:text-gray-300 text-sm mt-2">Get a sneak peek into KVI's clear conceptual teaching methodology</p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
           
@@ -626,8 +658,8 @@ export default function Home() {
             </div>
             <div className="p-4 text-left">
               <span className="text-xs font-bold text-[#F5BE18] uppercase">Class 12 Economics</span>
-              <h4 className="font-extrabold text-[#0D2847] text-sm mt-1">Money & Banking: CDR, VCR, CRR & SLR</h4>
-              <p className="text-xs text-gray-500 mt-1">By CS Sanjay Arya (Company Secretary)</p>
+              <h4 className="font-extrabold text-[#0D2847] dark:text-white text-sm mt-1">Money & Banking: CDR, VCR, CRR & SLR</h4>
+              <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">By CS Sanjay Arya (Company Secretary)</p>
             </div>
           </a>
 
@@ -652,8 +684,8 @@ export default function Home() {
             </div>
             <div className="p-4 text-left">
               <span className="text-xs font-bold text-[#F5BE18] uppercase">Class 12 Business Studies</span>
-              <h4 className="font-extrabold text-[#0D2847] text-sm mt-1">Management as a Profession & Professionalism</h4>
-              <p className="text-xs text-gray-500 mt-1">By CS Sanjay Arya (Company Secretary)</p>
+              <h4 className="font-extrabold text-[#0D2847] dark:text-white text-sm mt-1">Management as a Profession & Professionalism</h4>
+              <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">By CS Sanjay Arya (Company Secretary)</p>
             </div>
           </a>
 
@@ -678,34 +710,96 @@ export default function Home() {
             </div>
             <div className="p-4 text-left">
               <span className="text-xs font-bold text-[#F5BE18] uppercase">Class 12 Economics</span>
-              <h4 className="font-extrabold text-[#0D2847] text-sm mt-1">National Income: Normal Resident Concept</h4>
-              <p className="text-xs text-gray-500 mt-1">By CS Sanjay Arya (Company Secretary)</p>
+              <h4 className="font-extrabold text-[#0D2847] dark:text-white text-sm mt-1">National Income: Normal Resident Concept</h4>
+              <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">By CS Sanjay Arya (Company Secretary)</p>
             </div>
           </a>
 
         </div>
       </section>
 
-      {/* ── 8. ADMISSION ENROLLMENT BANNER (Yellow & White Theme) ── */}
+      {/* ── 8. ADMISSION ENROLLMENT BANNER ── */}
       <section className="bg-gradient-to-r from-[#F5BE18] via-[#E2AD07] to-[#E2AD07] py-12 text-[#0D2847] transition-colors duration-200">
         <div className="max-w-5xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-center md:text-left">
             <h2 className="text-xl md:text-2xl font-black text-[#0D2847]">Admissions Open - Limited Seats per Batch!</h2>
             <p className="text-xs text-[#0D2847]/85 mt-1 leading-relaxed max-w-xl font-bold">
-              Join Knowledge Venture Institute today and experience conceptual clarity with professional guidance.
+              Join Knowledge Venture Institute today and experience conceptual clarity with professional guidance in Hari Nagar, Jaitpur & Badarpur.
             </p>
           </div>
           <div className="flex gap-3">
-            <Link href="/scholarship" className="px-5 py-2.5 bg-white hover:bg-gray-50 text-[#0D2847] font-black text-xs rounded-md transition shadow-md">
-              Eligibility Calculator
-            </Link>
-            <Link href="/contact" className="px-5 py-2.5 bg-[#0D2847] hover:bg-[#0D2847]/90 text-white font-bold text-xs rounded-md transition shadow-md">
-              Find Our Center
+            <Link href="/scholarship" className="px-5 py-2.5 bg-[#0D2847] hover:bg-[#071728] text-white font-black text-xs rounded-lg transition shadow-md">
+              Apply for Scholarship
             </Link>
           </div>
         </div>
       </section>
-      
+
+      {/* ── 9. LOCAL SEO RICH CONTENT & LOCAL FAQS SECTION ── */}
+      <section className="py-16 bg-[#071728] text-white border-t border-gray-800">
+        <div className="max-w-6xl mx-auto px-4 md:px-6">
+          
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <span className="text-[#00A5EC] font-black text-xs uppercase tracking-widest block mb-2">
+              Top Rated Local Coaching Institute
+            </span>
+            <h2 className="text-2xl md:text-4xl font-black text-white leading-tight">
+              Why Knowledge Venture Institute (KVI) is #1 in Hari Nagar, Jaitpur & Badarpur
+            </h2>
+            <p className="text-gray-300 text-xs md:text-sm font-medium mt-3 leading-relaxed">
+              Empowering students of South East Delhi (PIN 110044) with structured concept building, senior faculty mentorship, and consistent 95%+ board exam scores.
+            </p>
+          </div>
+
+          {/* 4 Feature Pillars Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            <div className="bg-[#0d2036] border border-gray-800 p-6 rounded-2xl shadow-lg">
+              <div className="h-10 w-10 rounded-xl bg-[#00A5EC]/20 text-[#00A5EC] flex items-center justify-center font-black text-lg mb-4">
+                01
+              </div>
+              <h3 className="font-black text-base text-white mb-2">Board Exam Specialists</h3>
+              <p className="text-xs text-gray-300 leading-relaxed font-medium">
+                Comprehensive CBSE & State Board syllabus coverage for Class 9, 10, 11 & 12 with past 10-year sample paper practice.
+              </p>
+            </div>
+
+            <div className="bg-[#0d2036] border border-gray-800 p-6 rounded-2xl shadow-lg">
+              <div className="h-10 w-10 rounded-xl bg-[#F5BE18]/20 text-[#F5BE18] flex items-center justify-center font-black text-lg mb-4">
+                02
+              </div>
+              <h3 className="font-black text-base text-white mb-2">Qualified Senior Faculty</h3>
+              <p className="text-xs text-gray-300 leading-relaxed font-medium">
+                Classes conducted by CS Sanjay Arya (Qualified Company Secretary), Er. Aditya Pratap Singh, Vimal Sharma (15+ Yrs Exp) & Er. Shaurav Singh (B.Tech).
+              </p>
+            </div>
+
+            <div className="bg-[#0d2036] border border-gray-800 p-6 rounded-2xl shadow-lg">
+              <div className="h-10 w-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center font-black text-lg mb-4">
+                03
+              </div>
+              <h3 className="font-black text-base text-white mb-2">Individual Care & Small Batches</h3>
+              <p className="text-xs text-gray-300 leading-relaxed font-medium">
+                Personalized attention with small batch sizes, regular performance tracking, and weekly doubt clearance sessions.
+              </p>
+            </div>
+
+            <div className="bg-[#0d2036] border border-gray-800 p-6 rounded-2xl shadow-lg">
+              <div className="h-10 w-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-black text-lg mb-4">
+                04
+              </div>
+              <h3 className="font-black text-base text-white mb-2">Prime Accessible Location</h3>
+              <p className="text-xs text-gray-300 leading-relaxed font-medium">
+                Located above Dabra Medical Center, Hari Nagar, easily accessible for students from Jaitpur Extension, Badarpur, Ekta Vihar & Mithapur.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 🎨 CLEAN ACCORDION FAQ SECTION MATCHING DESIGN SPECIFICATION 🎨 */}
+      <FAQSection />
+
     </div>
   );
 }

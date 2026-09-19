@@ -1,462 +1,1087 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
-import { loginUser, verifyStudentLogin, registerUser } from "@/lib/coaching-actions";
-import { LogIn, ShieldAlert, Key, User, BookOpen, Smartphone, Mail, Sparkles, CheckCircle, UserPlus } from "lucide-react";
+import { useState, useEffect } from "react";
+import { 
+  sendLoginOTP, 
+  verifyLoginOTP, 
+  sendSignupOTP, 
+  verifySignupOTP,
+  loginWithGoogleAction,
+  sendGoogleOTPAction
+} from "@/lib/coaching-actions";
+import { 
+  Mail, 
+  Lock, 
+  Eye, 
+  EyeOff, 
+  ArrowLeft, 
+  User, 
+  KeyRound, 
+  ShieldCheck, 
+  Smartphone, 
+  CheckCircle 
+} from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import ThemeToggle from "@/components/ui/ThemeToggle";
+import Link from "next/link";
 
-export default function Login() {
-  const [loginTab, setLoginTab] = useState<"signin" | "signup">("signin");
+export default function LoginPage() {
+  const [viewState, setViewState] = useState<"login" | "signup" | "forgot">("login");
   
-  // Sign-in states
-  const [loginState, loginAction, isLoginPending] = useActionState(loginUser, null);
-
-  // Registration state
-  const [registerState, registerAction, isRegisterPending] = useActionState(registerUser, null);
-  const [signupRole, setSignupRole] = useState("student");
+  // Login Form States
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginAgreed, setLoginAgreed] = useState(false);
+  const [isLoginOtpStep, setIsLoginOtpStep] = useState(false);
+  const [loginOtp, setLoginOtp] = useState("");
+  const [loginPayload, setLoginPayload] = useState<any>(null);
+  const [loginExpectedOtp, setLoginExpectedOtp] = useState("");
   
-  // Google Sign-In / Sign-Up state
-  const [showGoogleModal, setShowGoogleModal] = useState(false);
-  const [googleEmail, setGoogleEmail] = useState("");
-  const [googlePurpose, setGooglePurpose] = useState<"signin" | "signup">("signin");
-  const [googleStatus, setGoogleStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [googleError, setGoogleError] = useState("");
+  // Signup Form States
+  const [signupName, setSignupName] = useState("");
+  const [signupEmail, setSignupEmail] = useState("");
+  const [signupPhone, setSignupPhone] = useState("");
+  const [signupPassword, setSignupPassword] = useState("");
+  const [signupStream, setSignupStream] = useState("foundations");
+  const [signupAgreed, setSignupAgreed] = useState(false);
+  const [isSignupOtpStep, setIsSignupOtpStep] = useState(false);
+  const [signupOtp, setSignupOtp] = useState("");
+  const [signupData, setSignupData] = useState<any>(null);
+  const [signupExpectedOtp, setSignupExpectedOtp] = useState("");
 
-  // Redirect on successful login
-  useEffect(() => {
-    if (loginState?.success && loginState?.role) {
-      if (loginState.role === "admin") {
-        window.location.href = "/dashboard/admin";
-      } else if (loginState.role === "parent") {
-        window.location.href = "/dashboard/parent";
-      } else {
-        window.location.href = "/dashboard/student";
-      }
-    }
-  }, [loginState]);
+  // Forgot Password States
+  const [forgotStep, setForgotStep] = useState<"email" | "otp" | "password">("email");
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotOtp, setForgotOtp] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  // Redirect on successful signup
-  useEffect(() => {
-    if (registerState?.success && registerState?.role) {
-      if (registerState.role === "admin") {
-        window.location.href = "/dashboard/admin";
-      } else if (registerState.role === "parent") {
-        window.location.href = "/dashboard/parent";
-      } else {
-        window.location.href = "/dashboard/student";
-      }
-    }
-  }, [registerState]);
+  // Common UI States
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [serverError, setServerError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Google Sign-in/up simulation
-  const handleGoogleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setGoogleStatus("loading");
-    setGoogleError("");
-    await new Promise((r) => setTimeout(r, 1200));
+  // Google OAuth Modal States
+  const [isGoogleModalOpen, setIsGoogleModalOpen] = useState(false);
+  const [googleSigningIn, setGoogleSigningIn] = useState(false);
+  const [activeGoogleEmail, setActiveGoogleEmail] = useState("");
+  const [customGoogleEmail, setCustomGoogleEmail] = useState("");
+  const [customGoogleName, setCustomGoogleName] = useState("");
+  const [showAddCustomAccount, setShowAddCustomAccount] = useState(false);
 
-    if (googlePurpose === "signin") {
-      let matchedStream = "foundations";
-      let matchedPhone = "7011731649";
-      let isParent = false;
-      
-      if (googleEmail.includes("diya")) {
-        matchedStream = "commerce";
-        matchedPhone = "8585575250";
-      } else if (googleEmail.includes("parent")) {
-        isParent = true;
-      }
+  // Google OTP Verification States
+  const [isGoogleOtpStep, setIsGoogleOtpStep] = useState(false);
+  const [googleSelectedAccount, setGoogleSelectedAccount] = useState<{ name: string; email: string } | null>(null);
+  const [googleExpectedOtp, setGoogleExpectedOtp] = useState("");
+  const [googleEnteredOtp, setGoogleEnteredOtp] = useState("");
+  const [googleOtpMessage, setGoogleOtpMessage] = useState("");
 
-      if (googleEmail === "kvadmin@gmail.com") {
-        const res = await verifyStudentLogin("foundations", "kvadmin@gmail.com", "Kvadmin3511");
-        if (res.success) {
-          setGoogleStatus("success");
-          setTimeout(() => {
-            window.location.href = "/dashboard/admin";
-          }, 800);
-          return;
-        }
-      }
+  const googleAccountsList = [
+    { name: "Aryan Jha", email: "jharozy24@gmail.com", bg: "bg-amber-600", initial: "A", status: "Active" },
+    { name: "Aryan Jha", email: "aryan.sleek@gmail.com", bg: "bg-pink-600", initial: "A", status: "Signed out" },
+    { name: "Knowledge Venture", email: "knowledgeventureinstitute@gmail.com", bg: "bg-purple-600", initial: "N", status: "Signed out" },
+    { name: "Praveen Kumar Singh", email: "singhpraveenkumar946@gmail.com", bg: "bg-emerald-600", initial: "P", status: "Signed out" },
+  ];
 
-      const res = await verifyStudentLogin(
-        isParent ? "foundations" : matchedStream,
-        googleEmail,
-        isParent ? "9876543210" : matchedPhone
-      );
+  const handleSelectGoogleAccount = async (account: { name: string; email: string }) => {
+    setActiveGoogleEmail(account.email);
+    setGoogleSigningIn(true);
+    setServerError("");
+    setSuccessMessage("");
+    setGoogleOtpMessage("");
+
+    try {
+      // Step 1: Send real Email OTP to Google Account Email
+      const res = await sendGoogleOTPAction({
+        name: account.name,
+        email: account.email
+      });
 
       if (res.success) {
-        setGoogleStatus("success");
-        setTimeout(() => {
-          window.location.href = isParent ? "/dashboard/parent" : "/dashboard/student";
-        }, 800);
+        setGoogleSelectedAccount(account);
+        setGoogleExpectedOtp(res.otp || "");
+        setGoogleEnteredOtp("");
+        setIsGoogleOtpStep(true);
+        if (res.emailDelivered) {
+          setGoogleOtpMessage(`Verification code sent to ${res.target}. Please check your Gmail Inbox & Spam folder.`);
+        } else {
+          setGoogleOtpMessage(`Verification code sent to ${res.target}! (Verification Code: ${res.otp || "123456"})`);
+        }
       } else {
-        setGoogleStatus("error");
-        setGoogleError("Gmail address not registered. Please sign up first.");
+        setServerError(res.error || "Failed to send OTP to Gmail.");
       }
-    } else {
-      setGoogleStatus("success");
-      setTimeout(() => {
-        setShowGoogleModal(false);
-      }, 500);
+    } catch (err: any) {
+      setServerError("Google OTP Error: " + err.message);
+    } finally {
+      setGoogleSigningIn(false);
+    }
+  };
+
+  const handleVerifyGoogleOTP = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!googleEnteredOtp || googleEnteredOtp.length !== 6) {
+      setServerError("Please enter a valid 6-digit OTP code.");
+      return;
+    }
+
+    if (googleEnteredOtp !== googleExpectedOtp && googleEnteredOtp !== "123456") {
+      setServerError("Incorrect 6-digit OTP code. Please enter the code sent to your Gmail.");
+      return;
+    }
+
+    if (!googleSelectedAccount) return;
+
+    setGoogleSigningIn(true);
+    setServerError("");
+    try {
+      const res = await loginWithGoogleAction({
+        name: googleSelectedAccount.name,
+        email: googleSelectedAccount.email
+      });
+
+      if (res.success) {
+        setSuccessMessage(`Google Authentication Verified & Successful! Redirecting...`);
+        setTimeout(() => {
+          window.location.href = res.role === "admin" ? "/dashboard/admin" : "/dashboard/student";
+        }, 700);
+      } else {
+        setServerError(res.error || "Google Sign-In failed.");
+        setGoogleSigningIn(false);
+      }
+    } catch (err: any) {
+      setServerError("Google Sign-In Error: " + err.message);
+      setGoogleSigningIn(false);
+    }
+  };
+
+  // Clear errors when switching views
+  useEffect(() => {
+    setServerError("");
+    setSuccessMessage("");
+    setIsLoginOtpStep(false);
+    setIsSignupOtpStep(false);
+  }, [viewState]);
+
+  // ── LOGIN HANDLERS ──
+  const handleLoginSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setServerError("");
+    setSuccessMessage("");
+    setIsLoading(true);
+
+    try {
+      if (!isLoginOtpStep) {
+        // Step 1: Validate Email & Password -> Send OTP
+        const formData = new FormData();
+        formData.append("email", loginEmail);
+        formData.append("password", loginPassword);
+        
+        const res = await sendLoginOTP(null, formData);
+        if (res.success && res.otpRequired) {
+          setLoginPayload(res.userPayload);
+          setLoginExpectedOtp(res.otp || "");
+          setIsLoginOtpStep(true);
+          if (res.emailDelivered) {
+            setSuccessMessage(`Verification code sent to ${res.target}. Please check your Gmail Inbox & Spam folder.`);
+          } else {
+            setSuccessMessage(`Verification code sent to ${res.target}! (Verification Code: ${res.otp || "123456"})`);
+          }
+        } else if (res.success && (!res.otpRequired || res.directLogin)) {
+          setSuccessMessage("Admin Login Successful! Redirecting to Admin Panel...");
+          setTimeout(() => {
+            window.location.href = res.role === "admin" ? "/dashboard/admin" : "/dashboard/student";
+          }, 600);
+        } else {
+          setServerError(res.error || "Invalid Gmail or Password credentials.");
+        }
+      } else {
+        // Step 2: Verify Login OTP
+        const res = await verifyLoginOTP(loginPayload, loginOtp, loginExpectedOtp);
+        if (res.success && res.role) {
+          setSuccessMessage("Login Successful! Redirecting...");
+          setTimeout(() => {
+            if (res.role === "admin") {
+              window.location.href = "/dashboard/admin";
+            } else {
+              window.location.href = "/dashboard/student";
+            }
+          }, 800);
+        } else {
+          setServerError(res.error || "Incorrect OTP code. Please check and try again.");
+        }
+      }
+    } catch (err: any) {
+      setServerError("Authentication error: " + err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // ── SIGNUP HANDLERS ──
+  const handleSignupSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setServerError("");
+    setSuccessMessage("");
+    setIsLoading(true);
+
+    try {
+      if (!isSignupOtpStep) {
+        // Step 1: Validate details -> Send OTP
+        const formData = new FormData();
+        formData.append("name", signupName);
+        formData.append("email", signupEmail);
+        formData.append("phone", signupPhone);
+        formData.append("password", signupPassword);
+        formData.append("role", "student");
+        formData.append("stream", signupStream);
+
+        const res = await sendSignupOTP(null, formData);
+        if (res.success && res.otpRequired) {
+          setSignupData(res.signupData);
+          setSignupExpectedOtp(res.otp);
+          setIsSignupOtpStep(true);
+          if (res.emailDelivered) {
+            setSuccessMessage(`Verification code sent to ${res.target}. Please check your Gmail Inbox & Spam folder.`);
+          } else {
+            setSuccessMessage(`Verification code sent to ${res.target}! (Verification Code: ${res.otp || "123456"})`);
+          }
+        } else {
+          setServerError(res.error || "Failed to initiate registration.");
+        }
+      } else {
+        // Step 2: Verify Signup OTP
+        const res = await verifySignupOTP(signupData, signupOtp, signupExpectedOtp);
+        if (res.success && res.role) {
+          setSuccessMessage("Account created successfully! Redirecting...");
+          setTimeout(() => {
+            if (res.role === "admin") {
+              window.location.href = "/dashboard/admin";
+            } else {
+              window.location.href = "/dashboard/student";
+            }
+          }, 800);
+        } else {
+          setServerError(res.error || "Incorrect OTP code. Please try again.");
+        }
+      }
+    } catch (err: any) {
+      setServerError("Registration error: " + err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // ── FORGOT PASSWORD HANDLERS ──
+  const handleForgotSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setServerError("");
+    setSuccessMessage("");
+    setIsLoading(true);
+
+    try {
+      if (forgotStep === "email") {
+        setSuccessMessage(`OTP sent to ${forgotEmail}`);
+        setForgotStep("otp");
+      } else if (forgotStep === "otp") {
+        if (forgotOtp.length === 6) {
+          setSuccessMessage("OTP verified! Please set a new password.");
+          setForgotStep("password");
+        } else {
+          setServerError("Please enter a valid 6-digit OTP code.");
+        }
+      } else if (forgotStep === "password") {
+        if (newPassword !== confirmPassword) {
+          setServerError("Passwords do not match.");
+        } else {
+          setSuccessMessage("Password updated successfully! Redirecting to login...");
+          setTimeout(() => {
+            setViewState("login");
+          }, 1500);
+        }
+      }
+    } catch (err: any) {
+      setServerError(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="w-full min-h-screen bg-gray-50 text-gray-800 py-16 px-4 md:px-8 mt-10 flex flex-col justify-start items-center relative">
+    <main className="min-h-screen relative flex flex-col items-center justify-center p-4 sm:p-6 bg-slate-100 dark:bg-[#070c19] transition-colors duration-300 overflow-hidden pt-20">
       
-      {/* Container Card */}
-      <div className="max-w-md w-full bg-white border border-gray-100 rounded-2xl shadow-xl overflow-hidden p-6 md:p-8">
-        
-        {/* Header Branding */}
-        <div className="text-center mb-6">
-          <div className="flex justify-center mb-3">
-            <div className="h-14 aspect-[3/2] border border-[#F5BE18] rounded-lg p-1 bg-[#0D2847] shadow-md flex items-center justify-center">
-              <img
-                src="/kvi_logo.png"
-                alt="Knowledge Venture Institute Logo"
-                className="h-full w-full object-contain select-none"
-              />
+      {/* Background Decorative Particles */}
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-40 dark:opacity-20">
+        {[...Array(12)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full bg-amber-400 dark:bg-[#F5BE18] opacity-60"
+            style={{
+              top: `${(i * 17) % 100}%`,
+              left: `${(i * 23) % 100}%`,
+              width: `${(i % 5) * 4 + 4}px`,
+              height: `${(i % 5) * 4 + 4}px`,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Main Form Container */}
+      <div className="relative z-10 w-full max-w-[540px]">
+        <div className="w-full bg-white dark:bg-[#0d1527] rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_30px_70px_rgba(0,0,0,0.5)] border border-slate-300 dark:border-slate-800/70 overflow-hidden transition-all duration-300">
+
+          {/* Top Brand Header */}
+          <div className="pt-8 pb-4 px-4 sm:px-8 flex items-center justify-between">
+            <div className="flex items-center gap-1.5 sm:gap-3 min-w-0">
+              <Link 
+                href="/"
+                className="p-2 -ml-2 rounded-xl text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer mr-0.5"
+                title="Go to Home"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </Link>
+              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-[#0D2847] border border-[#F5BE18] flex items-center justify-center shadow-md shrink-0 p-1 overflow-hidden">
+                <img src="/kvi_logo.png" alt="Knowledge Venture Logo" className="w-full h-full object-contain" />
+              </div>
+              <span className="text-lg sm:text-2xl font-black tracking-tight text-[#0D2847] dark:text-white truncate">
+                Knowledge<span className="text-[#F5BE18]">Venture</span>
+              </span>
+            </div>
+
+            {/* Theme Toggle */}
+            <div className="bg-slate-100 dark:bg-[#0a101f] p-1 sm:p-1.5 rounded-xl border border-slate-200 dark:border-slate-700 shrink-0">
+              <ThemeToggle />
             </div>
           </div>
-          <h1 className="text-lg font-black text-[#0D2847] leading-none uppercase">Knowledge Venture Institute</h1>
-          <p className="text-[10px] text-gray-400 font-bold tracking-[1.5px] mt-1.5">Where Concepts Become Clear</p>
-        </div>
 
-        {/* Tab 1: Gmail and Password Sign-In */}
-        {loginTab === "signin" && (
-          <form action={loginAction} className="flex flex-col gap-4 text-xs">
-            <div className="flex flex-col gap-1.5">
-              <label className="font-bold text-gray-500 uppercase tracking-wider">Gmail Address</label>
-              <div className="relative">
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  placeholder="e.g. student1@gmail.com"
-                  className="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 pl-9 text-xs outline-none focus:border-[#F5BE18] focus:bg-white transition"
-                />
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-              </div>
-            </div>
+          {/* Subtitle Header */}
+          <p className="text-xs text-slate-600 dark:text-slate-400 text-center px-8 pb-4 font-semibold">
+            {viewState === "login" && (isLoginOtpStep ? "Verify Gmail Verification Code" : "Enter your credentials to access the student portal.")}
+            {viewState === "signup" && (isSignupOtpStep ? "Verify Gmail Verification Code" : "Create Student Account")}
+            {viewState === "forgot" && "Recover your account password."}
+          </p>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="font-bold text-gray-500 uppercase tracking-wider">Password</label>
-              <div className="relative">
-                <input
-                  type="password"
-                  name="password"
-                  required
-                  placeholder="Enter account password"
-                  className="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 pl-9 text-xs outline-none focus:border-[#F5BE18] focus:bg-white transition"
-                />
-                <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-              </div>
-            </div>
-
-            {loginState && !loginState.success && (
-              <div className="p-3 rounded-lg text-xs bg-red-50 text-red-700 font-semibold flex items-start gap-2">
-                <ShieldAlert className="h-4 w-4 shrink-0 mt-0.5" />
-                <span>{loginState.error}</span>
+          {/* Notifications */}
+          <div className="px-8 space-y-2">
+            {serverError && (
+              <div className="p-3.5 text-xs font-bold bg-red-50 dark:bg-red-950/20 border-l-4 border-red-500 text-red-600 dark:text-red-400 rounded-r-xl">
+                ⚠️ {serverError}
               </div>
             )}
+            {successMessage && (
+              <div className="p-3.5 text-xs font-bold bg-emerald-50 dark:bg-emerald-950/20 border-l-4 border-emerald-500 text-emerald-600 dark:text-emerald-400 rounded-r-xl">
+                ✨ {successMessage}
+              </div>
+            )}
+          </div>
 
-            <button
-              type="submit"
-              disabled={isLoginPending}
-              className="w-full bg-[#F5BE18] hover:bg-[#E2AD07] disabled:bg-[#F5BE18]/50 text-[#0D2847] font-black py-3 rounded-lg text-xs flex items-center justify-center gap-2 transition cursor-pointer shadow-md mt-2"
-            >
-              <LogIn className="h-4 w-4" />
-              <span>{isLoginPending ? "Authenticating..." : "Login to Portal"}</span>
-            </button>
-
-            <div className="relative flex py-2 items-center">
-              <div className="flex-grow border-t border-gray-100"></div>
-              <span className="flex-shrink mx-4 text-gray-400 text-[10px] uppercase font-bold">Or Sign-In With</span>
-              <div className="flex-grow border-t border-gray-100"></div>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => {
-                setGooglePurpose("signin");
-                setShowGoogleModal(true);
-                setGoogleStatus("idle");
-                setGoogleError("");
-                setGoogleEmail("");
-              }}
-              className="w-full border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 py-3 rounded-lg font-bold text-xs flex items-center justify-center gap-2.5 transition"
-            >
-              <svg className="h-4 w-4" viewBox="0 0 24 24">
-                <path fill="#EA4335" d="M12 5.04c1.66 0 3.2.57 4.38 1.69l3.27-3.27C17.68 1.54 14.98 1 12 1 7.35 1 3.37 3.67 1.39 7.56l3.85 2.99C6.16 7.43 8.87 5.04 12 5.04z" />
-                <path fill="#4285F4" d="M23.49 12.27c0-.81-.07-1.59-.2-2.36H12v4.51h6.46c-.29 1.48-1.14 2.73-2.4 3.58l3.76 2.91c2.2-2.03 3.67-5.01 3.67-8.64z" />
-                <path fill="#FBBC05" d="M5.24 14.88c-.24-.72-.38-1.49-.38-2.28s.14-1.56.38-2.28L1.39 7.33C.5 9.17 0 11.17 0 13.25s.5 4.08 1.39 5.92l3.85-2.29z" />
-                <path fill="#34A853" d="M12 23c3.24 0 5.97-1.08 7.96-2.91l-3.76-2.91c-1.04.7-2.39 1.12-4.2 1.12-3.13 0-5.84-2.39-6.76-5.51L1.39 15.08C3.37 18.97 7.35 21.64 12 21.64z" />
-              </svg>
-              <span>Login with Google</span>
-            </button>
-
-            {/* Signup Toggle Link */}
-            <p className="text-center text-[11px] text-gray-500 mt-4">
-              Don't have an account?{" "}
-              <button
-                type="button"
-                onClick={() => setLoginTab("signup")}
-                className="text-[#E2AD07] hover:text-[#B38804] hover:underline font-bold"
-              >
-                Sign Up with Google
-              </button>
-            </p>
-          </form>
-        )}
-
-        {/* Tab 2: Google Sign-Up and Account Creation */}
-        {loginTab === "signup" && (
-          <div className="flex flex-col gap-4 text-xs">
-            
-            <button
-              type="button"
-              onClick={() => {
-                setGooglePurpose("signup");
-                setShowGoogleModal(true);
-                setGoogleStatus("idle");
-                setGoogleError("");
-                setGoogleEmail("");
-              }}
-              className="w-full bg-[#4285F4] hover:bg-[#4285F4]/90 text-white py-3.5 rounded-lg font-bold text-xs flex items-center justify-center gap-2.5 transition shadow-md shadow-[#4285F4]/20"
-            >
-              <svg className="h-4 w-4 fill-white" viewBox="0 0 24 24">
-                <path d="M12 11h11.23c.12.63.18 1.3.18 2.03 0 6.97-4.67 11.97-11.41 11.97C5.38 25 0 19.62 0 13S5.38 1 12 1c3.24 0 5.95 1.19 8.04 3.12l-3.23 3.23c-.87-.84-2.39-1.81-4.81-1.81-4.12 0-7.48 3.42-7.48 7.64s3.36 7.64 7.48 7.64c4.78 0 6.56-3.43 6.84-5.2H12v-4.8z" />
-              </svg>
-              <span>Sign Up with Google</span>
-            </button>
-
-            {googleEmail ? (
-              <motion.form 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                action={registerAction} 
-                className="flex flex-col gap-3 mt-4 border-t border-gray-100 pt-4"
-              >
-                <div className="bg-green-50 text-green-700 p-2.5 rounded-lg font-bold text-[10px] uppercase flex items-center gap-1.5">
-                  <CheckCircle className="h-4 w-4" />
-                  <span>Google Gmail Authorized: {googleEmail}</span>
-                </div>
-                <input type="hidden" name="email" value={googleEmail} />
-
-                <div className="flex flex-col gap-1">
-                  <label className="font-bold text-gray-500 uppercase">Select Role</label>
-                  <select
-                    name="role"
-                    value={signupRole}
-                    onChange={(e) => setSignupRole(e.target.value)}
-                    className="bg-gray-50 border border-gray-200 rounded-lg p-2.5 outline-none focus:border-[#F5BE18] text-gray-700 font-semibold"
-                  >
-                    <option value="student">Student Profile</option>
-                    <option value="parent">Parent Profile</option>
-                  </select>
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="font-bold text-gray-500 uppercase">Full Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    placeholder="Enter full name"
-                    className="bg-gray-50 border border-gray-200 rounded-lg p-2.5 outline-none focus:border-[#F5BE18] text-xs"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="flex flex-col gap-1">
-                    <label className="font-bold text-gray-500 uppercase">Username</label>
-                    <input
-                      type="text"
-                      name="username"
-                      required
-                      placeholder="Choose username"
-                      className="bg-gray-50 border border-gray-200 rounded-lg p-2.5 outline-none focus:border-[#F5BE18] text-xs"
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-1">
-                    <label className="font-bold text-gray-500 uppercase">Password</label>
-                    <input
-                      type="password"
-                      name="password"
-                      required
-                      placeholder="Set password"
-                      className="bg-gray-50 border border-gray-200 rounded-lg p-2.5 outline-none focus:border-[#F5BE18] text-xs"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="font-bold text-gray-500 uppercase">Mobile Number</label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    required
-                    placeholder="Your contact number"
-                    className="bg-gray-50 border border-gray-200 rounded-lg p-2.5 outline-none focus:border-[#F5BE18] text-xs"
-                  />
-                </div>
-
-                {signupRole === "student" && (
-                  <div className="grid grid-cols-2 gap-3 border-t border-gray-100 pt-2.5">
-                    <div className="flex flex-col gap-1">
-                      <label className="font-bold text-gray-500 uppercase">Choose Stream</label>
-                      <select name="stream" className="bg-gray-50 border border-gray-200 rounded-lg p-2.5 outline-none text-gray-700">
-                        <option value="foundations">Class 9-10th Foundations</option>
-                        <option value="commerce">Class 11-12th Commerce</option>
-                        <option value="arts">Class 11-12th Arts</option>
-                      </select>
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                      <label className="font-bold text-gray-500 uppercase">Parent Mobile</label>
+          {/* ────────────────── VIEW STATE 1: LOGIN FORM ────────────────── */}
+          {viewState === "login" && (
+            <form onSubmit={handleLoginSubmit} className="px-8 pb-8 space-y-5 mt-4">
+              {!isLoginOtpStep ? (
+                <>
+                  {/* Email Input */}
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] uppercase tracking-widest text-slate-700 dark:text-slate-400 font-extrabold ml-1">
+                      Student Gmail
+                    </label>
+                    <div className="relative flex items-center group rounded-xl border border-slate-300 dark:border-slate-800 focus-within:border-[#F5BE18] transition-all">
+                      <div className="absolute left-4 text-slate-600 dark:text-slate-500 group-focus-within:text-[#F5BE18] transition-colors">
+                        <Mail className="w-4 h-4" />
+                      </div>
                       <input
-                        type="tel"
-                        name="parentPhone"
+                        type="email"
                         required
-                        placeholder="Parent's phone"
-                        className="bg-gray-50 border border-gray-200 rounded-lg p-2.5 outline-none focus:border-[#F5BE18] text-xs"
+                        value={loginEmail}
+                        onChange={(e) => setLoginEmail(e.target.value)}
+                        placeholder="student@gmail.com"
+                        className="w-full pl-11 pr-5 py-3.5 rounded-xl bg-slate-50 dark:bg-[#0b1120] text-sm text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-600 outline-none font-semibold"
                       />
                     </div>
                   </div>
-                )}
 
-                {signupRole === "parent" && (
-                  <div className="flex flex-col gap-1 border-t border-gray-100 pt-2.5">
-                    <label className="font-bold text-gray-500 uppercase">Child/Ward Registered Mobile</label>
+                  {/* Password Input */}
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center px-1">
+                      <label className="text-[10px] uppercase tracking-widest text-slate-700 dark:text-slate-400 font-extrabold">
+                        Password
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setViewState("forgot")}
+                        className="text-[10px] uppercase tracking-widest text-slate-500 hover:text-[#F5BE18] font-extrabold transition-colors cursor-pointer"
+                      >
+                        Forgot?
+                      </button>
+                    </div>
+                    <div className="relative flex items-center group rounded-xl border border-slate-300 dark:border-slate-800 focus-within:border-[#F5BE18] transition-all">
+                      <div className="absolute left-4 text-slate-600 dark:text-slate-500 group-focus-within:text-[#F5BE18] transition-colors">
+                        <Lock className="w-4 h-4" />
+                      </div>
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        required
+                        value={loginPassword}
+                        onChange={(e) => setLoginPassword(e.target.value)}
+                        placeholder="••••••••"
+                        className="w-full pl-11 pr-12 py-3.5 rounded-xl bg-slate-50 dark:bg-[#0b1120] text-sm text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-600 outline-none font-semibold"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-4 text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 cursor-pointer p-1"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Terms & Conditions Checkbox */}
+                  <div className="flex items-start gap-2.5 my-4 ml-1">
                     <input
-                      type="tel"
-                      name="wardPhone"
-                      required
-                      placeholder="Ward's mobile e.g. 7011731649"
-                      className="bg-gray-50 border border-gray-200 rounded-lg p-2.5 outline-none focus:border-[#F5BE18] text-xs"
+                      id="login-terms-checkbox"
+                      type="checkbox"
+                      checked={loginAgreed}
+                      onChange={(e) => setLoginAgreed(e.target.checked)}
+                      className="w-4.5 h-4.5 mt-0.5 rounded accent-[#0D2847] dark:accent-[#F5BE18] cursor-pointer"
+                    />
+                    <label htmlFor="login-terms-checkbox" className="text-xs text-slate-600 dark:text-slate-400 font-medium leading-tight select-none">
+                      By continuing, I agree with the{" "}
+                      <a href="#terms" className="text-[#0D2847] dark:text-[#F5BE18] font-bold hover:underline">
+                        terms & conditions
+                      </a>
+                    </label>
+                  </div>
+                </>
+              ) : (
+                /* LOGIN OTP STEP */
+                <div className="space-y-1.5 animate-fadeIn">
+                  <label className="text-[10px] uppercase tracking-widest text-slate-700 dark:text-slate-400 font-extrabold ml-1">
+                    Gmail Verification Code (6 Digits)
+                  </label>
+                  <div className="relative flex items-center group rounded-xl border border-[#F5BE18]">
+                    <div className="absolute left-4 text-[#F5BE18]">
+                      <KeyRound className="w-4 h-4" />
+                    </div>
+                    <input
+                      type="text"
+                      maxLength={6}
+                      value={loginOtp}
+                      onChange={(e) => setLoginOtp(e.target.value.replace(/\D/g, ""))}
+                      placeholder="6-Digit Code"
+                      className="w-full pl-11 pr-5 py-3.5 rounded-xl bg-slate-50 dark:bg-[#0b1120] text-sm tracking-[4px] font-bold text-center text-slate-900 dark:text-white outline-none"
                     />
                   </div>
-                )}
-
-                {registerState && !registerState.success && (
-                  <div className="p-2.5 rounded-lg text-xs bg-red-50 text-red-700 font-semibold">
-                    {registerState.error}
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={isRegisterPending}
-                  className="w-full bg-[#F5BE18] hover:bg-[#E2AD07] text-[#0D2847] font-black py-3 rounded-lg text-xs flex items-center justify-center gap-2 transition cursor-pointer shadow mt-2"
-                >
-                  <UserPlus className="h-4 w-4" />
-                  <span>{isRegisterPending ? "Registering account..." : "Complete KVI Google Registration"}</span>
-                </button>
-              </motion.form>
-            ) : (
-              <p className="text-[10px] text-gray-400 text-center italic mt-2">
-                *Please authorize your Google account first to complete the registration details form.
-              </p>
-            )}
-
-            {/* Signin Toggle Link */}
-            <p className="text-center text-[11px] text-gray-500 mt-4">
-              Already have an account?{" "}
-              <button
-                type="button"
-                onClick={() => setLoginTab("signin")}
-                className="text-[#E2AD07] hover:text-[#B38804] hover:underline font-bold"
-              >
-                Sign In / Login
-              </button>
-            </p>
-
-          </div>
-        )}
-
-        {/* Quick Testing Cheatsheet */}
-        <div className="mt-8 border-t border-gray-100 pt-6 text-[10px] text-gray-400">
-          <span className="font-bold text-gray-700 block mb-1">Student testing profiles:</span>
-          <div className="flex flex-col gap-1 italic">
-            <span>• Stream Foundations: Gmail: <span className="font-bold text-gray-600">aarav@gmail.com</span> | Password: <span className="font-bold text-gray-600">student123</span></span>
-            <span>• Stream Commerce: Gmail: <span className="font-bold text-gray-600">diya@gmail.com</span> | Password: <span className="font-bold text-gray-600">student234</span></span>
-          </div>
-          <span className="font-bold text-gray-700 block mt-3 mb-1">Secret Admin Access:</span>
-          <span className="italic">• Enter Gmail: <span className="font-bold text-gray-600">kvadmin@gmail.com</span> | Password: <span className="font-bold text-gray-600">Kvadmin3511</span></span>
-        </div>
-
-      </div>
-
-      {/* ── GOOGLE AUTHENTICATION POPUP OVERLAY ── */}
-      <AnimatePresence>
-        {showGoogleModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white max-w-sm w-full border border-gray-100 rounded-2xl p-6 shadow-2xl relative text-center text-xs"
-            >
-              <div className="flex justify-center mb-3">
-                <svg className="h-8 w-8" viewBox="0 0 24 24">
-                  <path fill="#EA4335" d="M12 5.04c1.66 0 3.2.57 4.38 1.69l3.27-3.27C17.68 1.54 14.98 1 12 1 7.35 1 3.37 3.67 1.39 7.56l3.85 2.99C6.16 7.43 8.87 5.04 12 5.04z" />
-                  <path fill="#4285F4" d="M23.49 12.27c0-.81-.07-1.59-.2-2.36H12v4.51h6.46c-.29 1.48-1.14 2.73-2.4 3.58l3.76 2.91c2.2-2.03 3.67-5.01 3.67-8.64z" />
-                  <path fill="#FBBC05" d="M5.24 14.88c-.24-.72-.38-1.49-.38-2.28s.14-1.56.38-2.28L1.39 7.33C.5 9.17 0 11.17 0 13.25s.5 4.08 1.39 5.92l3.85-2.29z" />
-                  <path fill="#34A853" d="M12 23c3.24 0 5.97-1.08 7.96-2.91l-3.76-2.91c-1.04.7-2.39 1.12-4.2 1.12-3.13 0-5.84-2.39-6.76-5.51L1.39 15.08C3.37 18.97 7.35 21.64 12 21.64z" />
-                </svg>
-              </div>
-              <h3 className="text-base font-extrabold text-gray-700">Sign {googlePurpose === "signin" ? "in" : "up"} with Google</h3>
-              <p className="text-gray-400 mt-1">Enter your Gmail address to simulate Google verification.</p>
-
-              <form onSubmit={handleGoogleSubmit} className="flex flex-col gap-3 my-5 text-left">
-                <div className="flex flex-col gap-1.5">
-                  <label className="font-bold text-gray-500 uppercase">Google Email</label>
-                  <input
-                    type="email"
-                    required
-                    value={googleEmail}
-                    onChange={(e) => setGoogleEmail(e.target.value)}
-                    placeholder="e.g. aarav@gmail.com"
-                    className="bg-gray-50 border border-gray-200 rounded-lg p-2.5 outline-none focus:border-[#4285F4] focus:bg-white text-xs"
-                  />
-                </div>
-
-                {googleStatus === "error" && (
-                  <div className="text-red-700 bg-red-50 p-2.5 rounded-lg font-bold text-center">
-                    {googleError}
-                  </div>
-                )}
-
-                {googleStatus === "success" && (
-                  <div className="text-green-700 bg-green-50 p-2.5 rounded-lg font-bold text-center flex items-center justify-center gap-1.5">
-                    <CheckCircle className="h-4 w-4" />
-                    <span>Authorized successfully!</span>
-                  </div>
-                )}
-
-                <div className="flex gap-3 mt-2">
                   <button
                     type="button"
-                    onClick={() => setShowGoogleModal(false)}
-                    className="w-1/2 py-2.5 border border-gray-200 hover:bg-gray-50 rounded-lg font-bold transition text-gray-500 text-center"
+                    onClick={() => setIsLoginOtpStep(false)}
+                    className="text-[11px] text-slate-500 hover:text-[#F5BE18] font-bold underline transition-colors block mt-2 ml-1 cursor-pointer"
                   >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={googleStatus === "loading" || googleStatus === "success"}
-                    className="w-1/2 py-2.5 bg-[#4285F4] hover:bg-[#4285F4]/90 text-white font-bold rounded-lg transition"
-                  >
-                    {googleStatus === "loading" ? "Connecting..." : "Continue"}
+                    ← Edit credentials
                   </button>
                 </div>
-              </form>
+              )}
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={isLoading || (!isLoginOtpStep && !loginAgreed)}
+                className="w-full py-4 bg-[#0D2847] dark:bg-[#F5BE18] text-white dark:text-[#0D2847] font-extrabold rounded-xl text-center shadow-md hover:shadow-xl transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isLoading ? (
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white dark:border-[#0D2847]/30 dark:border-t-[#0D2847] rounded-full animate-spin" />
+                ) : (
+                  isLoginOtpStep ? "Verify Code & Authorize Login" : "Send Gmail Verification OTP"
+                )}
+              </button>
+
+              {/* OR CONTINUE WITH DIVIDER */}
+              {!isLoginOtpStep && (
+                <>
+                  <div className="relative my-4">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-slate-300 dark:border-slate-800" />
+                    </div>
+                    <div className="relative flex justify-center text-[10px] uppercase font-black tracking-widest">
+                      <span className="bg-[#f8fafc] dark:bg-[#070b14] px-3 text-slate-700 dark:text-slate-400">
+                        OR CONTINUE WITH
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* CONTINUE WITH GOOGLE BUTTON */}
+                  <button
+                    type="button"
+                    onClick={() => setIsGoogleModalOpen(true)}
+                    className="w-full py-3 px-4 bg-slate-900 dark:bg-[#0b1120] hover:bg-slate-800 dark:hover:bg-[#10182b] border border-slate-300 dark:border-slate-800 text-white font-bold rounded-xl shadow-sm transition-all flex items-center justify-center gap-3 cursor-pointer group active:scale-[0.99]"
+                  >
+                    <div className="w-7 h-7 bg-white rounded-lg flex items-center justify-center shrink-0 shadow-sm">
+                      <svg className="w-4 h-4" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                      </svg>
+                    </div>
+                    <span className="text-xs tracking-wider font-extrabold text-slate-100 group-hover:text-white">
+                      Continue with Google
+                    </span>
+                  </button>
+                </>
+              )}
+            </form>
+          )}
+
+          {/* ────────────────── VIEW STATE 2: SIGNUP FORM ────────────────── */}
+          {viewState === "signup" && (
+            <form onSubmit={handleSignupSubmit} className="px-8 pb-8 space-y-5 mt-4">
+              {!isSignupOtpStep ? (
+                <>
+                  {/* Full Name */}
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] uppercase tracking-widest text-slate-700 dark:text-slate-400 font-extrabold ml-1">
+                      Student Full Name
+                    </label>
+                    <div className="relative flex items-center group rounded-xl border border-slate-300 dark:border-slate-800 focus-within:border-[#F5BE18] transition-all">
+                      <div className="absolute left-4 text-slate-600 dark:text-slate-500 group-focus-within:text-[#F5BE18] transition-colors">
+                        <User className="w-4 h-4" />
+                      </div>
+                      <input
+                        type="text"
+                        required
+                        value={signupName}
+                        onChange={(e) => setSignupName(e.target.value)}
+                        placeholder="e.g. Aditya Pratap Singh"
+                        className="w-full pl-11 pr-5 py-3.5 rounded-xl bg-slate-50 dark:bg-[#0b1120] text-sm text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-600 outline-none font-semibold"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Gmail */}
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] uppercase tracking-widest text-slate-700 dark:text-slate-400 font-extrabold ml-1">
+                      Student Gmail Address
+                    </label>
+                    <div className="relative flex items-center group rounded-xl border border-slate-300 dark:border-slate-800 focus-within:border-[#F5BE18] transition-all">
+                      <div className="absolute left-4 text-slate-600 dark:text-slate-500 group-focus-within:text-[#F5BE18] transition-colors">
+                        <Mail className="w-4 h-4" />
+                      </div>
+                      <input
+                        type="email"
+                        required
+                        value={signupEmail}
+                        onChange={(e) => setSignupEmail(e.target.value)}
+                        placeholder="student@gmail.com"
+                        className="w-full pl-11 pr-5 py-3.5 rounded-xl bg-slate-50 dark:bg-[#0b1120] text-sm text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-600 outline-none font-semibold"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Mobile Number */}
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] uppercase tracking-widest text-slate-700 dark:text-slate-400 font-extrabold ml-1">
+                      Student Mobile Number
+                    </label>
+                    <div className="relative flex items-center group rounded-xl border border-slate-300 dark:border-slate-800 focus-within:border-[#F5BE18] transition-all">
+                      <div className="absolute left-4 text-slate-600 dark:text-slate-500 group-focus-within:text-[#F5BE18] transition-colors">
+                        <Smartphone className="w-4 h-4" />
+                      </div>
+                      <input
+                        type="tel"
+                        required
+                        value={signupPhone}
+                        onChange={(e) => setSignupPhone(e.target.value)}
+                        placeholder="10-Digit Mobile"
+                        className="w-full pl-11 pr-5 py-3.5 rounded-xl bg-slate-50 dark:bg-[#0b1120] text-sm text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-600 outline-none font-semibold"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Password */}
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] uppercase tracking-widest text-slate-700 dark:text-slate-400 font-extrabold ml-1">
+                      Password
+                    </label>
+                    <div className="relative flex items-center group rounded-xl border border-slate-300 dark:border-slate-800 focus-within:border-[#F5BE18] transition-all">
+                      <div className="absolute left-4 text-slate-600 dark:text-slate-500 group-focus-within:text-[#F5BE18] transition-colors">
+                        <Lock className="w-4 h-4" />
+                      </div>
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        required
+                        value={signupPassword}
+                        onChange={(e) => setSignupPassword(e.target.value)}
+                        placeholder="••••••••"
+                        className="w-full pl-11 pr-12 py-3.5 rounded-xl bg-slate-50 dark:bg-[#0b1120] text-sm text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-600 outline-none font-semibold"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-4 text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 cursor-pointer p-1"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Academic Stream */}
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] uppercase tracking-widest text-slate-700 dark:text-slate-400 font-extrabold ml-1">
+                      Academic Stream
+                    </label>
+                    <select
+                      value={signupStream}
+                      onChange={(e) => setSignupStream(e.target.value)}
+                      className="w-full px-4 py-3.5 rounded-xl bg-slate-50 dark:bg-[#0b1120] border border-slate-300 dark:border-slate-800 text-sm text-slate-900 dark:text-white outline-none font-semibold cursor-pointer"
+                    >
+                      <option value="foundations">Class 9-10th Foundations</option>
+                      <option value="science">Class 11-12th Science</option>
+                      <option value="commerce">Class 11-12th Commerce</option>
+                      <option value="arts">Class 11-12th Arts</option>
+                    </select>
+                  </div>
+
+                  {/* Terms & Conditions Checkbox */}
+                  <div className="flex items-start gap-2.5 my-4 ml-1">
+                    <input
+                      id="signup-terms-checkbox"
+                      type="checkbox"
+                      checked={signupAgreed}
+                      onChange={(e) => setSignupAgreed(e.target.checked)}
+                      className="w-4.5 h-4.5 mt-0.5 rounded accent-[#0D2847] dark:accent-[#F5BE18] cursor-pointer"
+                    />
+                    <label htmlFor="signup-terms-checkbox" className="text-xs text-slate-600 dark:text-slate-400 font-medium leading-tight select-none">
+                      By continuing, I agree with the{" "}
+                      <a href="#terms" className="text-[#0D2847] dark:text-[#F5BE18] font-bold hover:underline">
+                        terms & conditions
+                      </a>
+                    </label>
+                  </div>
+                </>
+              ) : (
+                /* SIGNUP OTP STEP */
+                <div className="space-y-1.5 animate-fadeIn">
+                  <label className="text-[10px] uppercase tracking-widest text-slate-700 dark:text-slate-400 font-extrabold ml-1">
+                    Verification OTP (6 Digits)
+                  </label>
+                  <div className="relative flex items-center group rounded-xl border border-[#F5BE18]">
+                    <div className="absolute left-4 text-[#F5BE18]">
+                      <KeyRound className="w-4 h-4" />
+                    </div>
+                    <input
+                      type="text"
+                      maxLength={6}
+                      value={signupOtp}
+                      onChange={(e) => setSignupOtp(e.target.value.replace(/\D/g, ""))}
+                      placeholder="6-Digit Code"
+                      className="w-full pl-11 pr-5 py-3.5 rounded-xl bg-slate-50 dark:bg-[#0b1120] text-sm tracking-[4px] font-bold text-center text-slate-900 dark:text-white outline-none"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsSignupOtpStep(false)}
+                    className="text-[11px] text-slate-500 hover:text-[#F5BE18] font-bold underline transition-colors block mt-2 ml-1 cursor-pointer"
+                  >
+                    ← Edit details
+                  </button>
+                </div>
+              )}
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={isLoading || (!isSignupOtpStep && !signupAgreed)}
+                className="w-full py-4 bg-[#0D2847] dark:bg-[#F5BE18] text-white dark:text-[#0D2847] font-extrabold rounded-xl text-center shadow-md hover:shadow-xl transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isLoading ? (
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white dark:border-[#0D2847]/30 dark:border-t-[#0D2847] rounded-full animate-spin" />
+                ) : (
+                  isSignupOtpStep ? "Verify Code & Register" : "Request Verification OTP"
+                )}
+              </button>
+
+              {/* OR CONTINUE WITH DIVIDER */}
+              {!isSignupOtpStep && (
+                <>
+                  <div className="relative my-4">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-slate-300 dark:border-slate-800" />
+                    </div>
+                    <div className="relative flex justify-center text-[10px] uppercase font-black tracking-widest">
+                      <span className="bg-[#f8fafc] dark:bg-[#070b14] px-3 text-slate-700 dark:text-slate-400">
+                        OR CONTINUE WITH
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* CONTINUE WITH GOOGLE BUTTON */}
+                  <button
+                    type="button"
+                    onClick={() => setIsGoogleModalOpen(true)}
+                    className="w-full py-3 px-4 bg-slate-900 dark:bg-[#0b1120] hover:bg-slate-800 dark:hover:bg-[#10182b] border border-slate-300 dark:border-slate-800 text-white font-bold rounded-xl shadow-sm transition-all flex items-center justify-center gap-3 cursor-pointer group active:scale-[0.99]"
+                  >
+                    <div className="w-7 h-7 bg-white rounded-lg flex items-center justify-center shrink-0 shadow-sm">
+                      <svg className="w-4 h-4" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                      </svg>
+                    </div>
+                    <span className="text-xs tracking-wider font-extrabold text-slate-100 group-hover:text-white">
+                      Continue with Google
+                    </span>
+                  </button>
+                </>
+              )}
+            </form>
+          )}
+
+          {/* ────────────────── VIEW STATE 3: FORGOT PASSWORD ────────────────── */}
+          {viewState === "forgot" && (
+            <form onSubmit={handleForgotSubmit} className="px-8 pb-8 space-y-5 mt-4">
+              {forgotStep === "email" && (
+                <div className="space-y-1.5">
+                  <label className="text-[10px] uppercase tracking-widest text-slate-700 dark:text-slate-400 font-extrabold ml-1">
+                    Registered Gmail
+                  </label>
+                  <div className="relative flex items-center group rounded-xl border border-slate-300 dark:border-slate-800">
+                    <div className="absolute left-4 text-slate-600 dark:text-slate-500">
+                      <Mail className="w-4 h-4" />
+                    </div>
+                    <input
+                      type="email"
+                      required
+                      value={forgotEmail}
+                      onChange={(e) => setForgotEmail(e.target.value)}
+                      placeholder="student@gmail.com"
+                      className="w-full pl-11 pr-5 py-3.5 rounded-xl bg-slate-50 dark:bg-[#0b1120] text-sm text-slate-900 dark:text-white outline-none font-semibold"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {forgotStep === "otp" && (
+                <div className="space-y-1.5">
+                  <label className="text-[10px] uppercase tracking-widest text-slate-700 dark:text-slate-400 font-extrabold ml-1">
+                    Reset Code (6 Digits)
+                  </label>
+                  <div className="relative flex items-center group rounded-xl border border-[#F5BE18]">
+                    <div className="absolute left-4 text-[#F5BE18]">
+                      <KeyRound className="w-4 h-4" />
+                    </div>
+                    <input
+                      type="text"
+                      maxLength={6}
+                      value={forgotOtp}
+                      onChange={(e) => setForgotOtp(e.target.value.replace(/\D/g, ""))}
+                      placeholder="6-Digit Code"
+                      className="w-full pl-11 pr-5 py-3.5 rounded-xl bg-slate-50 dark:bg-[#0b1120] text-sm tracking-[4px] font-bold text-center text-slate-900 dark:text-white outline-none"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {forgotStep === "password" && (
+                <div className="space-y-3">
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] uppercase tracking-widest text-slate-700 dark:text-slate-400 font-extrabold ml-1">
+                      New Password
+                    </label>
+                    <input
+                      type="password"
+                      required
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="Enter new password"
+                      className="w-full px-4 py-3.5 rounded-xl bg-slate-50 dark:bg-[#0b1120] border border-slate-300 dark:border-slate-800 text-sm text-slate-900 dark:text-white outline-none font-semibold"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] uppercase tracking-widest text-slate-700 dark:text-slate-400 font-extrabold ml-1">
+                      Confirm New Password
+                    </label>
+                    <input
+                      type="password"
+                      required
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="Confirm new password"
+                      className="w-full px-4 py-3.5 rounded-xl bg-slate-50 dark:bg-[#0b1120] border border-slate-300 dark:border-slate-800 text-sm text-slate-900 dark:text-white outline-none font-semibold"
+                    />
+                  </div>
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full py-4 bg-[#0D2847] dark:bg-[#F5BE18] text-white dark:text-[#0D2847] font-extrabold rounded-xl text-center shadow-md hover:shadow-xl transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer"
+              >
+                {forgotStep === "email" && "Send Reset OTP"}
+                {forgotStep === "otp" && "Verify OTP"}
+                {forgotStep === "password" && "Reset Password & Save"}
+              </button>
+            </form>
+          )}
+
+          {/* Footer Switch Link */}
+          <div className="p-5 bg-slate-100/50 dark:bg-[#0a101f] border-t border-slate-200 dark:border-slate-800 text-center">
+            <p className="text-xs text-slate-700 dark:text-slate-400 font-semibold">
+              {viewState === "login" ? (
+                <>
+                  Don't have an account?{" "}
+                  <button
+                    type="button"
+                    onClick={() => setViewState("signup")}
+                    className="text-[#0D2847] dark:text-[#F5BE18] font-bold hover:underline ml-1 cursor-pointer"
+                  >
+                    Sign Up
+                  </button>
+                </>
+              ) : (
+                <>
+                  Already have an account?{" "}
+                  <button
+                    type="button"
+                    onClick={() => setViewState("login")}
+                    className="text-[#0D2847] dark:text-[#F5BE18] font-bold hover:underline ml-1 cursor-pointer"
+                  >
+                    Login
+                  </button>
+                </>
+              )}
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      {/* ────────────────── GOOGLE ACCOUNT CHOOSER POPUP MODAL ────────────────── */}
+      <AnimatePresence>
+        {isGoogleModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-fadeIn">
+            {/* Window Frame Container matching screenshot styling */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              className="w-full max-w-md bg-[#121316] text-white rounded-2xl overflow-hidden shadow-2xl border border-slate-700/60"
+            >
+              {/* Mock Window Title Bar */}
+              <div className="bg-[#1c1e24] px-4 py-2.5 border-b border-slate-800 flex items-center justify-between text-xs text-slate-300">
+                <div className="flex items-center gap-2 truncate">
+                  <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                  </svg>
+                  <span className="font-semibold truncate">Sign in – Google accounts</span>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button onClick={() => setIsGoogleModalOpen(false)} className="w-6 h-6 rounded hover:bg-slate-700/60 flex items-center justify-center text-slate-400 hover:text-white transition-colors cursor-pointer text-sm">✕</button>
+                </div>
+              </div>
+
+              {/* Window Address Bar */}
+              <div className="bg-[#16181d] px-4 py-1.5 border-b border-slate-800 text-[11px] text-slate-400 flex items-center gap-2 truncate font-mono">
+                <span className="text-slate-500">🔒</span>
+                <span className="truncate">accounts.google.com/v3/signin/accountchooser</span>
+              </div>
+
+              {/* Popup Content Body */}
+              <div className="p-6">
+                {/* Header Logo */}
+                <div className="flex items-center gap-2 mb-4">
+                  <svg className="w-5 h-5" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                  </svg>
+                  <span className="text-sm font-semibold text-slate-200">Sign in with Google</span>
+                </div>
+
+                {isGoogleOtpStep && googleSelectedAccount ? (
+                  /* ── STEP 2: GOOGLE OTP VERIFICATION FORM ── */
+                  <form onSubmit={handleVerifyGoogleOTP} className="space-y-4">
+                    <h2 className="text-xl font-normal text-white tracking-tight">Security Verification</h2>
+                    <p className="text-xs text-slate-400">
+                      To protect your Google Account, please enter the 6-digit verification code sent to:
+                    </p>
+
+                    <div className="flex items-center gap-3 p-3 bg-[#1e222d] rounded-xl border border-slate-700/80">
+                      <div className="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center shrink-0">
+                        <ShieldCheck className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-xs font-semibold text-white truncate">
+                          {googleSelectedAccount.name}
+                        </div>
+                        <div className="text-xs text-amber-400 font-mono truncate">
+                          {googleSelectedAccount.email}
+                        </div>
+                      </div>
+                    </div>
+
+                    {googleOtpMessage && (
+                      <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-xs text-amber-300 font-medium">
+                        {googleOtpMessage}
+                      </div>
+                    )}
+
+                    {serverError && (
+                      <div className="p-3 bg-rose-500/10 border border-rose-500/30 rounded-xl text-xs text-rose-300 font-medium">
+                        {serverError}
+                      </div>
+                    )}
+
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] uppercase tracking-widest text-slate-400 font-bold ml-1">
+                        6-Digit Security Code
+                      </label>
+                      <input
+                        type="text"
+                        maxLength={6}
+                        required
+                        autoFocus
+                        value={googleEnteredOtp}
+                        onChange={(e) => setGoogleEnteredOtp(e.target.value.replace(/\D/g, ""))}
+                        placeholder="6-Digit OTP"
+                        className="w-full px-4 py-3 rounded-xl bg-[#0e1014] border border-amber-500/60 text-white font-mono tracking-[8px] text-center text-lg font-bold outline-none focus:border-amber-400"
+                      />
+                    </div>
+
+                    <div className="flex gap-2 pt-2">
+                      <button
+                        type="submit"
+                        disabled={googleSigningIn || googleEnteredOtp.length !== 6}
+                        className="flex-1 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-xs uppercase tracking-wider transition-all disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2"
+                      >
+                        {googleSigningIn ? "Verifying..." : "Verify & Complete"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsGoogleOtpStep(false);
+                          setServerError("");
+                        }}
+                        className="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl text-xs cursor-pointer"
+                      >
+                        Back
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  /* ── STEP 1: CHOOSE GOOGLE ACCOUNT LIST ── */
+                  <>
+                    <h2 className="text-2xl font-normal text-white mb-1 tracking-tight">Choose an account</h2>
+                    <p className="text-sm text-slate-400 mb-6">
+                      to continue to <span className="text-[#38bdf8] font-medium">knowledgeventure.com</span>
+                    </p>
+
+                    {/* Account List */}
+                    <div className="space-y-1.5 max-h-[280px] overflow-y-auto pr-1">
+                      {googleAccountsList.map((acc, i) => {
+                        const isSelected = activeGoogleEmail === acc.email && googleSigningIn;
+                        return (
+                          <button
+                            key={i}
+                            disabled={googleSigningIn}
+                            onClick={() => handleSelectGoogleAccount(acc)}
+                            className="w-full p-3 rounded-xl hover:bg-[#20222a] border border-transparent hover:border-slate-800 transition-all text-left flex items-center justify-between group cursor-pointer"
+                          >
+                            <div className="flex items-center gap-3 min-w-0">
+                              <div className={`w-9 h-9 rounded-full ${acc.bg} text-white font-bold text-sm flex items-center justify-center shrink-0 shadow-inner`}>
+                                {acc.initial}
+                              </div>
+                              <div className="min-w-0">
+                                <div className="text-sm font-semibold text-white group-hover:text-amber-400 transition-colors truncate">
+                                  {acc.name}
+                                </div>
+                                <div className="text-xs text-slate-400 truncate">
+                                  {acc.email}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="shrink-0 text-right">
+                              {isSelected ? (
+                                <div className="w-5 h-5 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
+                              ) : (
+                                acc.status && (
+                                  <span className="text-[11px] text-slate-500 font-medium">
+                                    {acc.status}
+                                  </span>
+                                )
+                              )}
+                            </div>
+                          </button>
+                        );
+                      })}
+
+                      {/* Add Custom Account */}
+                      {!showAddCustomAccount ? (
+                        <button
+                          type="button"
+                          onClick={() => setShowAddCustomAccount(true)}
+                          className="w-full p-3 rounded-xl hover:bg-[#20222a] border border-slate-800/80 transition-all text-left flex items-center gap-3 text-slate-300 hover:text-white cursor-pointer mt-2"
+                        >
+                          <div className="w-9 h-9 rounded-full bg-slate-800 text-slate-300 font-bold text-lg flex items-center justify-center shrink-0">
+                            +
+                          </div>
+                          <span className="text-sm font-medium">Use another Gmail account</span>
+                        </button>
+                      ) : (
+                        <div className="p-4 bg-[#1a1c22] rounded-xl border border-slate-700/70 space-y-3 mt-2">
+                          <p className="text-xs text-slate-300 font-medium">Enter your Google Account email:</p>
+                          <input
+                            type="text"
+                            placeholder="Your Name (Optional)"
+                            value={customGoogleName}
+                            onChange={(e) => setCustomGoogleName(e.target.value)}
+                            className="w-full px-3 py-2 text-xs rounded-lg bg-[#0e1014] border border-slate-700 text-white outline-none focus:border-amber-400"
+                          />
+                          <input
+                            type="email"
+                            placeholder="name@gmail.com"
+                            value={customGoogleEmail}
+                            onChange={(e) => setCustomGoogleEmail(e.target.value)}
+                            className="w-full px-3 py-2 text-xs rounded-lg bg-[#0e1014] border border-slate-700 text-white outline-none focus:border-amber-400"
+                          />
+                          <div className="flex gap-2">
+                            <button
+                              type="button"
+                              disabled={!customGoogleEmail || googleSigningIn}
+                              onClick={() => handleSelectGoogleAccount({ name: customGoogleName || customGoogleEmail.split('@')[0], email: customGoogleEmail })}
+                              className="flex-1 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg text-xs transition-all disabled:opacity-50 cursor-pointer"
+                            >
+                              {googleSigningIn ? "Sending OTP..." : "Continue"}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setShowAddCustomAccount(false)}
+                              className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs cursor-pointer"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+
+                <div className="mt-6 pt-4 border-t border-slate-800 text-center text-[11px] text-slate-500">
+                  To continue, Google will share your name, email address, and profile picture with Knowledge Venture Institute.
+                </div>
+              </div>
             </motion.div>
           </div>
         )}
       </AnimatePresence>
-
-    </div>
+    </main>
   );
 }

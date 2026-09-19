@@ -297,14 +297,16 @@ export default function FoundersSection() {
   }
 
   return (
-    <section className="bg-black min-h-screen py-24 px-6">
-      <div className="text-center mb-16">
-        <h2 className="text-5xl md:text-6xl font-light text-white tracking-tight mb-4">
-          The Leader Behind the Bakeats
+    <section className="bg-[#071728] min-h-[60vh] py-20 px-6 border-b border-gray-800">
+      <div className="text-center mb-12">
+        <span className="text-[#F5BE18] font-black text-xs uppercase tracking-widest block mb-2">
+          Leadership & Academic Vision
+        </span>
+        <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-4">
+          Empowering Board Students in Hari Nagar & Badarpur
         </h2>
-        <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
-          Meet the founder of bakeats — passionate creators who turned their vision 
-           into reality.
+        <p className="text-gray-300 text-sm md:text-base max-w-2xl mx-auto leading-relaxed font-semibold">
+          Meet the academic leaders of Knowledge Venture Institute (KVI) who turned concept-driven education into a proven success model for thousands of students.
         </p>
       </div>
 
@@ -320,10 +322,10 @@ export default function FoundersSection() {
             alt={founder.name}
             className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
           />
-          <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/70 to-transparent flex items-end justify-between">
+          <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/80 to-transparent flex items-end justify-between">
             <div>
               <p className="text-white text-xl font-semibold leading-tight">{founder.name}</p>
-              <p className="text-gray-300 text-sm">{founder.title}</p>
+              <p className="text-amber-300 text-sm font-medium">{founder.title}</p>
             </div>
             <button className="w-11 h-11 rounded-full border border-white/60 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all duration-200 flex-shrink-0">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">

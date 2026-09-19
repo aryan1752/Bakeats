@@ -8,7 +8,9 @@ const UserSchema = new Schema({
   name: { type: String, required: true },
   email: { type: String },
   phone: { type: String },
-  stream: { type: String, enum: ["foundations", "commerce", "arts"] },
+  address: { type: String },
+  grade: { type: String },
+  stream: { type: String, enum: ["foundations", "commerce", "arts", "science"] },
   parentPhone: { type: String },
   parent_id: { type: Schema.Types.ObjectId, ref: "User" }
 });
@@ -57,7 +59,7 @@ const ContactSchema = new Schema({
 const MaterialSchema = new Schema({
   title: { type: String, required: true },
   type: { type: String, required: true, enum: ["notes", "dpp", "test_paper"] },
-  stream: { type: String, required: true, enum: ["foundations", "commerce", "arts"] },
+  stream: { type: String, required: true, enum: ["foundations", "commerce", "arts", "science"] },
   subject: { type: String, required: true },
   file_url: { type: String, required: true },
   uploaded_at: { type: Date, default: Date.now }
@@ -97,6 +99,17 @@ const PerformanceSchema = new Schema({
   remarks: { type: String }
 });
 
+// 11. Simple Direct Enrollment Form Schema
+const EnrollmentSchema = new Schema({
+  student_name: { type: String, required: true },
+  phone: { type: String, required: true },
+  email: { type: String },
+  stream: { type: String, required: true },
+  school_or_city: { type: String },
+  status: { type: String, enum: ["pending", "contacted", "enrolled"], default: "pending" },
+  created_at: { type: Date, default: Date.now }
+});
+
 export const User = mongoose.models.User || mongoose.model("User", UserSchema);
 export const Faculty = mongoose.models.Faculty || mongoose.model("Faculty", FacultySchema);
 export const Lecture = mongoose.models.Lecture || mongoose.model("Lecture", LectureSchema);
@@ -107,6 +120,7 @@ export const Attendance = mongoose.models.Attendance || mongoose.model("Attendan
 export const Fee = mongoose.models.Fee || mongoose.model("Fee", FeeSchema);
 export const Schedule = mongoose.models.Schedule || mongoose.model("Schedule", ScheduleSchema);
 export const Performance = mongoose.models.Performance || mongoose.model("Performance", PerformanceSchema);
+export const Enrollment = mongoose.models.Enrollment || mongoose.model("Enrollment", EnrollmentSchema);
 
 // 11. Customer/Student Reviews
 const ReviewSchema = new Schema({
@@ -121,4 +135,18 @@ const ReviewSchema = new Schema({
 });
 
 export const Review = mongoose.models.Review || mongoose.model("Review", ReviewSchema);
+
+// 12. Broadcast Notifications Schema
+const NotificationSchema = new Schema({
+  title: { type: String, required: true },
+  message: { type: String, required: true },
+  sender: { type: String, default: "Faculty / Admin" },
+  stream: { type: String, default: "all" }, // "all", "foundations", "science", "commerce", "arts"
+  priority: { type: String, enum: ["info", "important", "urgent"], default: "info" },
+  image_url: { type: String },
+  date: { type: String },
+  created_at: { type: Date, default: Date.now }
+});
+
+export const Notification = mongoose.models.Notification || mongoose.model("Notification", NotificationSchema);
 

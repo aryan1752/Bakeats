@@ -133,7 +133,7 @@ export default async function ParentDashboard() {
             </div>
             <div>
               <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Logged in as Parent</span>
-              <h1 className="text-xl font-black text-[#0D2847]">{session.name}</h1>
+              <h1 className="text-xl font-black text-[#0D2847] dark:text-white">{session.name}</h1>
               <span className="text-xs text-gray-500 mt-1 block font-semibold">Ward Student: <span className="text-[#F5BE18] font-bold">{child.name}</span></span>
             </div>
           </div>
@@ -158,7 +158,7 @@ export default async function ParentDashboard() {
               <span className="text-[10px] text-gray-400 font-bold uppercase block">Ward Tuition Fee Status</span>
               {fee ? (
                 <>
-                  <span className="text-2xl font-black text-[#0D2847] block mt-1">
+                  <span className="text-2xl font-black text-[#0D2847] dark:text-white block mt-1">
                     ₹{(fee.amount_due - fee.amount_paid).toLocaleString()} Due
                   </span>
                   <span className="text-[10px] text-gray-500 block mt-1">Paid: ₹{fee.amount_paid.toLocaleString()}</span>
@@ -190,7 +190,7 @@ export default async function ParentDashboard() {
           <div className="bg-white border border-gray-100 p-6 rounded-2xl shadow-sm flex items-center justify-between">
             <div>
               <span className="text-[10px] text-gray-400 font-bold uppercase block">Academic Test Reports</span>
-              <span className="text-2xl font-black text-[#0D2847] block mt-1">
+              <span className="text-2xl font-black text-[#0D2847] dark:text-white block mt-1">
                 {grades.length > 0 ? `${Math.round((grades[0].marksObtained / grades[0].maxMarks) * 100)}%` : "N/A"}
               </span>
               <span className="text-[10px] text-gray-500 block mt-1">Latest evaluation status: Graded</span>
@@ -207,7 +207,7 @@ export default async function ParentDashboard() {
           
           {/* Detailed Attendance List Left (6 Columns) */}
           <div className="lg:col-span-6 bg-white border border-gray-100 p-6 rounded-2xl shadow-sm">
-            <h2 className="text-base font-extrabold text-[#0D2847] mb-4 flex items-center gap-2 border-b border-gray-100 pb-3">
+            <h2 className="text-base font-extrabold text-[#0D2847] dark:text-white mb-4 flex items-center gap-2 border-b border-gray-100 pb-3">
               <Calendar className="h-5 w-5 text-[#F5BE18]" />
               <span>Ward Attendance Logs</span>
             </h2>
@@ -230,7 +230,7 @@ export default async function ParentDashboard() {
 
           {/* Child Performance Grades (6 Columns) */}
           <div className="lg:col-span-6 bg-white border border-gray-100 p-6 rounded-2xl shadow-sm">
-            <h2 className="text-base font-extrabold text-[#0D2847] mb-4 flex items-center gap-2 border-b border-gray-100 pb-3">
+            <h2 className="text-base font-extrabold text-[#0D2847] dark:text-white mb-4 flex items-center gap-2 border-b border-gray-100 pb-3">
               <Award className="h-5 w-5 text-[#F5BE18]" />
               <span>Ward Performance Grades</span>
             </h2>
@@ -241,7 +241,7 @@ export default async function ParentDashboard() {
                 return (
                   <div key={idx} className="border border-gray-100 p-3.5 rounded-xl text-xs flex justify-between items-center">
                     <div>
-                      <span className="font-extrabold text-[#0D2847] block">{grade.testName}</span>
+                      <span className="font-extrabold text-[#0D2847] dark:text-white block">{grade.testName}</span>
                       <span className="text-[10px] text-gray-400 mt-1 block">Marks: {grade.marksObtained}/{grade.maxMarks} • Remarks: "{grade.remarks || 'Keep it up'}"</span>
                     </div>
                     <span className="text-sm font-black text-[#F5BE18]">{pct}%</span>

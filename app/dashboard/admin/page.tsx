@@ -1,37 +1,12 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { connectToDatabase } from "@/lib/mongodb";
-import { User, Contact, Scholarship } from "@/lib/schemas";
+import { User, Contact, Scholarship, Enrollment } from "@/lib/schemas";
 import AdminDashboardClient from "./AdminDashboardClient";
 import { LogOut } from "lucide-react";
 
 // Offline Mock Fallbacks
-const mockStudentsFallback = [
-  {
-    _id: "65c3b1a20a1dd7228f2d0002",
-    name: "Aarav Sharma",
-    email: "aarav@gmail.com",
-    phone: "7011731649",
-    stream: "foundations",
-    parentPhone: "9876543210"
-  },
-  {
-    _id: "65c3b1a20a1dd7228f2d0004",
-    name: "Diya Verma",
-    email: "diya@gmail.com",
-    phone: "8585575250",
-    stream: "commerce",
-    parentPhone: "8765432109"
-  },
-  {
-    _id: "65c3b1a20a1dd7228f2d0006",
-    name: "Neha Singh",
-    email: "neha@gmail.com",
-    phone: "9999999999",
-    stream: "arts",
-    parentPhone: "8888888888"
-  }
-];
+const mockStudentsFallback: any[] = [];
 
 const mockContactsFallback = [
   {
@@ -39,31 +14,42 @@ const mockContactsFallback = [
     email: "rajesh@gmail.com",
     message: "Kindly share the morning batch fee schedule for class 9 foundational course.",
     created_at: new Date()
-  },
-  {
-    name: "Sunita Kapoor",
-    email: "sunita@gmail.com",
-    message: "Does the class 11-12 commerce batch cover business study doubts?",
-    created_at: new Date()
   }
 ];
 
 const mockScholarshipsFallback = [
   {
-    student_name: "Aman Gupta",
-    email: "aman@gmail.com",
-    phone: "9911223344",
-    grade: "Class 10th",
-    score: 94.2,
-    status: "pending"
+    student_name: "Priya Singh",
+    email: "priya@gmail.com",
+    phone: "9876543210",
+    grade: "Class 10",
+    score: 92,
+    status: "approved",
+    age: 15,
+    academic_achievements: "School topper in 9th grade Science olympiad.",
+    why_join: "Want strong conceptual base for 10th boards.",
+    preferred_stream: "foundations"
+  }
+];
+
+const mockEnrollmentsFallback = [
+  {
+    student_name: "Aakash Malhotra",
+    phone: "9811223344",
+    email: "aakash@gmail.com",
+    stream: "Class 11-12th Science",
+    school_or_city: "DPS Mathura Road / Delhi",
+    status: "pending",
+    created_at: new Date()
   },
   {
-    student_name: "Ritu Sen",
-    email: "ritu@gmail.com",
-    phone: "8822334455",
-    grade: "Class 12th Commerce",
-    score: 89.5,
-    status: "pending"
+    student_name: "Sneha Kapoor",
+    phone: "9877665544",
+    email: "sneha@gmail.com",
+    stream: "Class 9-10th Foundations",
+    school_or_city: "KV Andrews Ganj / Delhi",
+    status: "contacted",
+    created_at: new Date()
   }
 ];
 
@@ -75,7 +61,7 @@ export default async function AdminDashboard() {
     redirect("/login");
   }
 
-  let session: { id: string; username: string; role: string; name: string };
+  let session: any = null;
   try {
     session = JSON.parse(sessionCookie);
     if (session.role !== "admin") {
@@ -88,6 +74,7 @@ export default async function AdminDashboard() {
   let dbStudents: any[] = [];
   let dbContacts: any[] = [];
   let dbScholarships: any[] = [];
+  let dbEnrollments: any[] = [];
 
   try {
     await connectToDatabase();
@@ -112,8 +99,8 @@ export default async function AdminDashboard() {
       created_at: c.created_at
     }));
 
-    // Fetch Scholarships
-    const scholarshipsList = await Scholarship.find({}).sort({ created_at: -1 }).limit(15).lean();
+    // Fetch Scholarships (Form 2 Reports)
+    const scholarshipsList = await Scholarship.find({}).sort({ created_at: -1 }).limit(20).lean();
     dbScholarships = scholarshipsList.map((s: any) => ({
       student_name: s.student_name,
       email: s.email,
@@ -127,48 +114,35 @@ export default async function AdminDashboard() {
       preferred_stream: s.preferred_stream || null
     }));
 
+    // Fetch Direct Enrollments (Form 1 Reports)
+    const enrollmentsList = await Enrollment.find({}).sort({ created_at: -1 }).limit(20).lean();
+    dbEnrollments = enrollmentsList.map((e: any) => ({
+      student_name: e.student_name,
+      phone: e.phone,
+      email: e.email,
+      stream: e.stream,
+      school_or_city: e.school_or_city,
+      status: e.status,
+      created_at: e.created_at
+    }));
+
   } catch (err: any) {
     console.warn("MongoDB connection failed in Admin Page, falling back to mock lists:", err.message);
     dbStudents = mockStudentsFallback;
     dbContacts = mockContactsFallback;
     dbScholarships = mockScholarshipsFallback;
+    dbEnrollments = mockEnrollmentsFallback;
   }
 
   return (
-    <div className="w-full min-h-screen bg-gray-50 text-gray-800 py-12 px-4 md:px-8 mt-10">
-      <div className="max-w-7xl mx-auto flex flex-col gap-8">
-        
-        {/* Header Action Row */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white border border-gray-100 p-6 rounded-2xl shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-full bg-[#0D2847]/10 flex items-center justify-center text-xl font-bold text-[#0D2847]">
-              A
-            </div>
-            <div>
-              <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">KVI Administration Panel</span>
-              <h1 className="text-xl font-black text-[#0D2847]">{session.name}</h1>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <a 
-              href="/api/logout" 
-              className="flex items-center gap-2 px-4 py-2 border border-red-200 hover:bg-red-50 text-red-600 rounded-lg text-xs font-bold transition"
-            >
-              <LogOut className="h-4 w-4" />
-              <span>Sign Out</span>
-            </a>
-          </div>
-        </div>
-
-        {/* Client workspace tab controller */}
-        <AdminDashboardClient 
-          students={dbStudents} 
-          contacts={dbContacts} 
-          scholarships={dbScholarships} 
-        />
-
-      </div>
+    <div className="w-full min-h-screen bg-gray-50 text-gray-800 pt-0 md:pt-4 p-0 m-0">
+      {/* Client workspace tab controller */}
+      <AdminDashboardClient 
+        students={dbStudents} 
+        contacts={dbContacts} 
+        scholarships={dbScholarships}
+        enrollments={dbEnrollments}
+      />
     </div>
   );
 }

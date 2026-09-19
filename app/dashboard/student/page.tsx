@@ -1,29 +1,18 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { connectToDatabase } from "@/lib/mongodb";
-import { User, Material, Attendance, Schedule, Performance } from "@/lib/schemas";
+import { Attendance, Schedule } from "@/lib/schemas";
+import { getMaterialsAction } from "@/lib/coaching-actions";
 import { 
   Calendar, 
   Download, 
   FileText, 
   LogOut, 
-  Award, 
   CheckCircle, 
-  Clock 
+  Clock
 } from "lucide-react";
 
 // Offline Mock Fallbacks
-const mockGradesFallback = [
-  { testName: "Weekly Algebra Test 1", maxMarks: 50, marksObtained: 42, remarks: "Good conceptual understanding." },
-  { testName: "Monthly General Science Test 1", maxMarks: 100, marksObtained: 81, remarks: "Active participator in Sunday doubt class." }
-];
-
-const mockMaterialsFallback = [
-  { title: "Class 10 Quadratic Equations Practice Sheet", type: "dpp", subject: "Maths", file_url: "#", uploaded_at: new Date() },
-  { title: "Class 9 Science Gravitation Chapter Notes", type: "notes", subject: "Science", file_url: "#", uploaded_at: new Date() },
-  { title: "Class 10 CBSE Math Mock Test Paper 2026", type: "test_paper", subject: "Maths", file_url: "#", uploaded_at: new Date() }
-];
-
 const mockSchedulesFallback = [
   { title: "Morning Batch Foundation Maths", date: "Monday - Saturday", time: "08:30 AM - 10:00 AM", subject: "Maths", batch: "foundations" },
   { title: "Special Science Conceptual Batch", date: "Sunday", time: "09:00 AM - 11:30 AM", subject: "Science", batch: "foundations" }
@@ -49,9 +38,11 @@ export default async function StudentDashboard() {
 
   let totalClasses = 10;
   let presentClasses = 9;
-  let grades: any[] = [];
   let materials: any[] = [];
   let schedules: any[] = [];
+
+  // Fetch materials matching student stream dynamically (handles DB + live fallback)
+  materials = await getMaterialsAction(session.stream || "foundations");
 
   try {
     await connectToDatabase();
@@ -63,26 +54,7 @@ export default async function StudentDashboard() {
       presentClasses = attendanceRecords.filter((r: any) => r.status === "present" || r.status === "late").length;
     }
 
-    // 2. Fetch Grades from MongoDB
-    const gradesList = await Performance.find({ student_id: session.id }).sort({ _id: -1 }).lean();
-    grades = gradesList.map((g: any) => ({
-      testName: g.testName,
-      maxMarks: g.maxMarks,
-      marksObtained: g.marksObtained,
-      remarks: g.remarks
-    }));
-
-    // 3. Fetch Materials for the student's stream from MongoDB
-    const materialsList = await Material.find({ stream: session.stream }).sort({ _id: -1 }).lean();
-    materials = materialsList.map((m: any) => ({
-      title: m.title,
-      type: m.type,
-      subject: m.subject,
-      file_url: m.file_url,
-      uploaded_at: m.uploaded_at
-    }));
-
-    // 4. Fetch schedules matching batch/stream from MongoDB
+    // 2. Fetch schedules matching batch/stream from MongoDB
     const schedulesList = await Schedule.find({ batch: session.stream }).lean();
     schedules = schedulesList.map((s: any) => ({
       title: s.title,
@@ -92,41 +64,38 @@ export default async function StudentDashboard() {
       batch: s.batch
     }));
 
-    // Fallbacks if MongoDB is connected but returned empty
-    if (grades.length === 0) grades = mockGradesFallback;
-    if (materials.length === 0) materials = mockMaterialsFallback;
     if (schedules.length === 0) schedules = mockSchedulesFallback;
 
   } catch (err: any) {
-    console.warn("MongoDB connection failed in Student Dashboard, falling back to mock data:", err.message);
-    grades = mockGradesFallback;
-    materials = mockMaterialsFallback;
+    console.warn("MongoDB connection failed in Student Dashboard, using fallback schedules:", err.message);
     schedules = mockSchedulesFallback;
   }
 
   const attendanceRate = totalClasses > 0 ? Math.round((presentClasses / totalClasses) * 100) : 100;
 
   return (
-    <div className="w-full min-h-screen bg-gray-50 text-gray-800 py-12 px-4 md:px-8 mt-10">
-      <div className="max-w-7xl mx-auto flex flex-col gap-8">
+    <div className="w-full min-h-screen bg-gray-50 dark:bg-[#071728] text-gray-800 dark:text-gray-100 py-4 sm:py-8 px-3 sm:px-6 md:px-8">
+      <div className="max-w-7xl mx-auto flex flex-col gap-6 sm:gap-8">
         
         {/* Header Action Row */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white border border-gray-100 p-6 rounded-2xl shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-full bg-[#0D2847]/10 flex items-center justify-center text-xl font-bold text-[#0D2847]">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-[#0d2036] border border-gray-100 dark:border-gray-800 p-4 sm:p-6 rounded-2xl shadow-sm">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
+            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-[#0D2847]/10 dark:bg-[#F5BE18]/20 flex items-center justify-center text-lg sm:text-xl font-bold text-[#0D2847] dark:text-[#F5BE18] shrink-0">
               {session.name.charAt(0)}
             </div>
-            <div>
-              <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Logged in as Student</span>
-              <h1 className="text-xl font-black text-[#0D2847]">{session.name}</h1>
-              <span className="text-[10px] text-gray-400 font-bold uppercase block mt-1">Stream: <span className="text-[#F5BE18]">{session.stream}</span></span>
+            <div className="min-w-0 flex-1">
+              <span className="text-[10px] text-gray-400 dark:text-gray-400 font-bold uppercase tracking-wider block">Logged in as Student</span>
+              <h1 className="text-lg sm:text-xl font-black text-[#0D2847] dark:text-white truncate">{session.name}</h1>
+              <span className="text-[10px] sm:text-xs text-gray-400 font-bold uppercase block mt-0.5 truncate">
+                Stream: <span className="text-[#F5BE18] font-bold">{session.stream === "foundations" ? "Class 9-10th Foundations" : session.stream === "science" ? "Class 11-12th Science" : session.stream === "commerce" ? "Class 11-12th Commerce" : "Class 11-12th Arts"}</span>
+              </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 w-full sm:w-auto shrink-0">
             <a 
               href="/api/logout" 
-              className="flex items-center gap-2 px-4 py-2 border border-red-200 hover:bg-red-50 text-red-600 rounded-lg text-xs font-bold transition"
+              className="flex items-center justify-center gap-2 px-4 py-2 border border-red-200 dark:border-red-900/50 hover:bg-red-50 dark:hover:bg-red-950/30 text-red-600 dark:text-red-400 rounded-xl text-xs font-bold transition w-full sm:w-auto"
             >
               <LogOut className="h-4 w-4" />
               <span>Sign Out</span>
@@ -135,153 +104,72 @@ export default async function StudentDashboard() {
         </div>
 
         {/* Highlight Metric Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           
           {/* Attendance Card */}
-          <div className="bg-white border border-gray-100 p-6 rounded-2xl shadow-sm flex items-center justify-between">
-            <div>
-              <span className="text-[10px] text-gray-400 font-bold uppercase block">Attendance Ratio</span>
-              <span className="text-2xl font-black text-[#0D2847] block mt-1">{attendanceRate}%</span>
-              <span className="text-[10px] text-gray-500 block mt-1">Total classes tracked: {totalClasses}</span>
+          <div className="bg-white dark:bg-[#0d2036] border border-gray-100 dark:border-gray-800 p-4 sm:p-6 rounded-2xl shadow-sm flex items-center justify-between gap-3 min-w-0">
+            <div className="min-w-0 flex-1">
+              <span className="text-[10px] text-gray-400 font-bold uppercase block tracking-wider">Attendance Ratio</span>
+              <span className="text-xl sm:text-2xl font-black text-[#0D2847] dark:text-white block mt-1">{attendanceRate}%</span>
+              <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 block mt-1 truncate">Total classes tracked: {totalClasses}</span>
             </div>
-            <div className="h-16 w-16 rounded-full border-4 border-green-500 border-t-transparent flex items-center justify-center text-xs font-bold text-green-600">
-              <CheckCircle className="h-6 w-6 text-green-500" />
-            </div>
-          </div>
-
-          {/* Test Performance Card */}
-          <div className="bg-white border border-gray-100 p-6 rounded-2xl shadow-sm flex items-center justify-between">
-            <div>
-              <span className="text-[10px] text-gray-400 font-bold uppercase block">Latest Test Performance</span>
-              <span className="text-2xl font-black text-[#0D2847] block mt-1">
-                {grades.length > 0 ? `${grades[0].marksObtained}/${grades[0].maxMarks}` : "N/A"}
-              </span>
-              <span className="text-[10px] text-gray-500 block mt-1">
-                {grades.length > 0 ? grades[0].testName : "No tests evaluated yet"}
-              </span>
-            </div>
-            <div className="h-16 w-16 rounded-full bg-[#F5BE18]/10 text-[#0D2847] flex items-center justify-center">
-              <Award className="h-7 w-7 text-[#F5BE18]" />
+            <div className="h-12 w-12 sm:h-16 sm:w-16 rounded-full border-4 border-green-500 border-t-transparent flex items-center justify-center text-xs font-bold text-green-600 shrink-0">
+              <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-green-500" />
             </div>
           </div>
 
           {/* Current Batch Info */}
-          <div className="bg-white border border-gray-100 p-6 rounded-2xl shadow-sm flex items-center justify-between">
-            <div>
-              <span className="text-[10px] text-gray-400 font-bold uppercase block">Assigned Stream Batch</span>
-              <span className="text-lg font-black text-[#0D2847] block mt-1 uppercase">{session.stream}</span>
-              <span className="text-[10px] text-gray-500 block mt-1">Structured syllabus preparation</span>
+          <div className="bg-white dark:bg-[#0d2036] border border-gray-100 dark:border-gray-800 p-4 sm:p-6 rounded-2xl shadow-sm flex items-center justify-between gap-3 min-w-0">
+            <div className="min-w-0 flex-1">
+              <span className="text-[10px] text-gray-400 font-bold uppercase block tracking-wider">Assigned Stream Batch</span>
+              <span className="text-xs sm:text-sm font-black text-[#0D2847] dark:text-white block mt-1 uppercase truncate">{session.stream === "foundations" ? "Class 9-10th Foundations" : session.stream === "science" ? "Class 11-12th Science" : session.stream === "commerce" ? "Class 11-12th Commerce" : "Class 11-12th Arts"}</span>
+              <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 block mt-1 truncate">Structured syllabus preparation</span>
             </div>
-            <div className="h-16 w-16 rounded-full bg-[#0D2847]/5 text-[#0D2847] flex items-center justify-center">
-              <Clock className="h-7 w-7" />
+            <div className="h-12 w-12 sm:h-16 sm:w-16 rounded-full bg-[#0D2847]/5 dark:bg-white/10 text-[#0D2847] dark:text-[#F5BE18] flex items-center justify-center shrink-0">
+              <Clock className="h-5 w-5 sm:h-7 sm:w-7" />
             </div>
           </div>
 
         </div>
 
         {/* Dashboard Panels */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="w-full">
           
-          {/* Notes & Test Materials Left (8 Columns) */}
-          <div className="lg:col-span-8 flex flex-col gap-6">
-            
-            {/* Download Study Materials */}
-            <div className="bg-white border border-gray-100 p-6 rounded-2xl shadow-sm">
-              <h2 className="text-base font-extrabold text-[#0D2847] mb-4 flex items-center gap-2 border-b border-gray-100 pb-3">
-                <FileText className="h-5 w-5 text-[#F5BE18]" />
-                <span>Download Notes / DPP / Mock Test Papers</span>
-              </h2>
+          {/* Download Study Materials */}
+          <div className="bg-white dark:bg-[#0d2036] border border-gray-100 dark:border-gray-800/80 p-4 sm:p-6 rounded-2xl shadow-sm w-full">
+            <h2 className="text-sm sm:text-base font-extrabold text-[#0D2847] dark:text-white mb-4 flex items-center gap-2 border-b border-gray-100 dark:border-gray-800 pb-3 leading-snug">
+              <FileText className="h-5 w-5 text-[#F5BE18] shrink-0" />
+              <span>Download Notes / DPP / Mock Test Papers ({session.stream === "foundations" ? "Class 9-10th" : session.stream === "science" ? "Science" : session.stream === "commerce" ? "Commerce" : "Arts"})</span>
+            </h2>
 
-              <div className="flex flex-col gap-3">
-                {materials.map((item, idx) => (
-                  <div key={idx} className="flex justify-between items-center border border-gray-100 p-3.5 rounded-xl hover:bg-gray-50 transition text-xs">
-                    <div className="flex items-center gap-3">
-                      <div className="h-8 w-8 rounded bg-gray-100 text-gray-500 flex items-center justify-center font-bold">
-                        {item.type === "notes" ? "📝" : item.type === "dpp" ? "📊" : "📄"}
-                      </div>
-                      <div>
-                        <span className="font-bold text-[#0D2847] block">{item.title}</span>
-                        <div className="flex items-center gap-2 text-[10px] text-gray-400 mt-1">
-                          <span className="uppercase font-bold text-[#F5BE18]">{item.type}</span>
-                          <span>•</span>
-                          <span>Subject: {item.subject}</span>
-                          <span>•</span>
-                          <span>Uploaded: {new Date(item.uploaded_at).toISOString().split("T")[0]}</span>
-                        </div>
+            <div className="flex flex-col gap-3">
+              {materials.map((item, idx) => (
+                <div key={idx} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border border-gray-100 dark:border-gray-800/90 p-3 sm:p-4 rounded-xl bg-gray-50/50 dark:bg-white/5 hover:bg-gray-100/60 dark:hover:bg-white/10 transition text-xs">
+                  <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
+                    <div className="h-9 w-9 rounded-lg bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 flex items-center justify-center text-sm font-bold shrink-0 shadow-sm mt-0.5 sm:mt-0">
+                      {item.type === "notes" ? "📝" : item.type === "dpp" ? "📊" : "📄"}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <span className="font-bold text-[#0D2847] dark:text-white block text-xs sm:text-sm leading-tight break-words">{item.title}</span>
+                      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] text-gray-500 dark:text-gray-400 mt-1.5 font-medium">
+                        <span className="uppercase font-bold text-[#F5BE18]">{item.type === "dpp" ? "DPP / Assignment" : item.type === "notes" ? "Lecture Notes" : "Mock Test Paper"}</span>
+                        <span className="hidden sm:inline">•</span>
+                        <span>Subject: <strong className="text-gray-700 dark:text-gray-300">{item.subject}</strong></span>
+                        <span>•</span>
+                        <span>Uploaded: {new Date(item.uploaded_at).toISOString().split("T")[0]}</span>
                       </div>
                     </div>
-
-                    <a 
-                      href={item.file_url} 
-                      className="flex items-center gap-1 bg-[#0D2847] hover:bg-[#0D2847]/90 text-white px-3 py-1.5 rounded text-[10px] font-bold transition font-semibold"
-                    >
-                      <Download className="h-3 w-3" />
-                      <span>Download PDF</span>
-                    </a>
                   </div>
-                ))}
-              </div>
-            </div>
 
-            {/* Performance Report cards */}
-            <div className="bg-white border border-gray-100 p-6 rounded-2xl shadow-sm">
-              <h2 className="text-base font-extrabold text-[#0D2847] mb-4 flex items-center gap-2 border-b border-gray-100 pb-3">
-                <Award className="h-5 w-5 text-[#F5BE18]" />
-                <span>Performance Report Cards</span>
-              </h2>
-
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse text-xs">
-                  <thead>
-                    <tr className="border-b border-gray-100 text-gray-400 font-bold uppercase text-[10px]">
-                      <th className="pb-2">Test Name</th>
-                      <th className="pb-2">Max Marks</th>
-                      <th className="pb-2">Marks Obtained</th>
-                      <th className="pb-2">Percentage</th>
-                      <th className="pb-2">Teacher Remarks</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-50 text-gray-700">
-                    {grades.map((grade, idx) => {
-                      const pct = Math.round((grade.marksObtained / grade.maxMarks) * 100);
-                      return (
-                        <tr key={idx} className="hover:bg-gray-50/50">
-                          <td className="py-3 font-bold text-[#0D2847]">{grade.testName}</td>
-                          <td className="py-3">{grade.maxMarks}</td>
-                          <td className="py-3 font-extrabold">{grade.marksObtained}</td>
-                          <td className="py-3 text-[#F5BE18] font-black">{pct}%</td>
-                          <td className="py-3 text-gray-500 italic">{grade.remarks || "No remarks."}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-          </div>
-
-          {/* Schedules Calendar Right (4 Columns) */}
-          <div className="lg:col-span-4 flex flex-col gap-6">
-            <div className="bg-[#0D2847] text-white p-6 rounded-2xl shadow-sm border border-[#F5BE18]/20 relative overflow-hidden">
-              <div className="absolute inset-0 bg-[#F5BE18]/5 rounded-full filter blur-xl" />
-              <h2 className="text-base font-extrabold text-[#F5BE18] mb-4 flex items-center gap-2 border-b border-white/10 pb-3 relative z-10">
-                <Calendar className="h-5 w-5" />
-                <span>Weekly Lecture Schedule</span>
-              </h2>
-
-              <div className="flex flex-col gap-4 relative z-10 text-xs">
-                {schedules.map((schedule, idx) => (
-                  <div key={idx} className="bg-white/5 border border-white/10 p-3.5 rounded-xl hover:bg-white/10 transition">
-                    <span className="text-[10px] text-gray-300 font-bold uppercase tracking-wider block">{schedule.batch} Stream</span>
-                    <span className="font-extrabold text-white block mt-1">{schedule.title}</span>
-                    <div className="flex justify-between items-center text-[10px] text-gray-400 mt-2">
-                      <span>{schedule.date}</span>
-                      <span className="text-[#F5BE18] font-bold">{schedule.time}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  <a 
+                    href={item.file_url} 
+                    className="flex items-center justify-center gap-1.5 bg-[#0D2847] dark:bg-[#F5BE18] hover:bg-[#0D2847]/90 dark:hover:bg-[#e0ac10] text-white dark:text-[#0D2847] px-3.5 py-2 rounded-lg text-[11px] font-bold transition shrink-0 self-stretch sm:self-center w-full sm:w-auto shadow-sm active:scale-95"
+                  >
+                    <Download className="h-3.5 w-3.5" />
+                    <span>Download PDF</span>
+                  </a>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -291,3 +179,4 @@ export default async function StudentDashboard() {
     </div>
   );
 }
+

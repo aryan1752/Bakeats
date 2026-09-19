@@ -4,272 +4,78 @@ import { Timeline } from "./timeline";
 export function TimelineDemo() {
   const data = [
     {
-      title: "February 2025",
+      title: "Institute Foundation",
       content: (
         <div>
-          <p className="mb-8 text-xs font-serif italic text-neutral-800 md:text-sm dark:text-neutral-200">
-            our logo was baked to perfection
+          <h4 className="text-base md:text-xl font-black text-[#F5BE18] mb-2">
+            Establishment of Knowledge Venture Institute (KVI)
+          </h4>
+          <p className="mb-4 text-xs font-semibold text-neutral-300 md:text-sm leading-relaxed">
+            Founded in Hari Nagar, Jaitpur Badarpur, New Delhi with a singular mission: providing top-tier academic coaching for Class 6th to 12th students with 100% conceptual clarity and small batch sizes.
           </p>
-          <div className="grid grid-cols-2 gap-4">
-            <img
-              src="https://res.cloudinary.com/ddtifclgr/image/upload/v1770276430/giphy_mpxneu.gif"
-              alt="startup template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-           
+          <div className="mb-6 flex flex-col gap-2 text-xs font-bold text-gray-200">
+            <div>✅ Opened Head Office above Dabra Medical Center, Hari Nagar</div>
+            <div>✅ Introduced Class 11-12th Commerce & Humanities specialization</div>
+            <div>✅ Launched Class 6th to 10th Foundations batch</div>
           </div>
         </div>
       ),
     },
     {
-      title: "march 2025",
+      title: "Faculty Expansion",
       content: (
         <div>
-          <p className="mb-8 text-xs font-serif italic text-neutral-800 md:text-sm dark:text-neutral-200">
-            Locked the perfect packaging idea
+          <h4 className="text-base md:text-xl font-black text-[#00A5EC] mb-2">
+            Senior Faculty & Qualified Professionals Onboarded
+          </h4>
+          <p className="mb-4 text-xs font-semibold text-neutral-300 md:text-sm leading-relaxed">
+            Strengthened our teaching team with CS Sanjay Arya (Company Secretary for Commerce), Er. Aditya Pratap Singh (5+ Yrs Exp for 11-12th Maths & Physics), Vimal Sharma (15+ Yrs Exp for Humanities), and Er. Shaurav Singh (B.Tech for 11-12th Chemistry & 9-10th Boards).
           </p>
-          <p className="mb-8 text-xs font-normal text-neutral-800 md:text-sm dark:text-neutral-200">
-            The packaging ensured freshness, extended shelf life, and gave Bakeats products a consistent retail presence.
-          </p>
-          <div className="grid grid-cols-2 gap-4">
-            <img
-              src="https://res.cloudinary.com/ddtifclgr/image/upload/v1770276765/elaichi_f1ovdn.jpg"
-              alt="hero template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            <img
-              src="https://res.cloudinary.com/ddtifclgr/image/upload/v1770277307/suji_ecc1eo.jpg"
-              alt="feature template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            <img
-              src="https://res.cloudinary.com/ddtifclgr/image/upload/v1770277727/Whisk_d0ee34b77c03aaa8add4e75013b2b5b5dr_xqmqkk.png"
-              alt="bento template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            <img
-              src="https://res.cloudinary.com/ddtifclgr/image/upload/v1770278969/Whisk_ccbfed9ae7d1eab9cf4439e295e772cddr-Photoroom_yjczb7.png"
-              alt="cards template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
+          <div className="mb-6 flex flex-col gap-2 text-xs font-bold text-gray-200">
+            <div>✅ 100% Board pattern mock tests & daily practice sheets</div>
+            <div>✅ Dedicated doubt clearance hours post classes</div>
+            <div>✅ Parent-Teacher performance review meetings</div>
           </div>
         </div>
       ),
     },
     {
-      title: "april 2025",
+      title: "Board Results",
       content: (
         <div>
-          <p className="mb-4 text-xs font-serif italic text-neutral-800 md:text-sm dark:text-neutral-200">
-           factory setup begain
+          <h4 className="text-base md:text-xl font-black text-emerald-400 mb-2">
+            Consistent Board Toppers (95%+ Scores)
+          </h4>
+          <p className="mb-4 text-xs font-semibold text-neutral-300 md:text-sm leading-relaxed">
+            KVI students secured top marks in Economics (99/100), Political Science (98/100), History (98/100), Chemistry (98/100), and Accounts (97/100) across CBSE & State Board examinations in Badarpur & Jaitpur.
           </p>
-          <div className="mb-8">
-            <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅ FSSAI hygiene guidelines adopted
-            </div>
-            <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅ Hygiene training for staff completed
-            </div>
-            <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅ Quality inspection standards defined
-            </div>
-            <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅ Equipment deep-clean schedule fixed
-            </div>
-            <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅ Packaging trials started
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <img
-              src="https://res.cloudinary.com/ddtifclgr/image/upload/v1770280115/unnamed_oashnj.jpg"
-              alt="hero template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            <img
-              src="https://res.cloudinary.com/ddtifclgr/image/upload/v1770281026/799cad03-1605-49a6-9b92-5cd7b1301911_osq3ua.png"
-              alt="feature template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            
-            <img
-              src="https://res.cloudinary.com/ddtifclgr/image/upload/v1770286740/WhatsApp_Image_2026-02-05_at_3.47.49_PM_fzfsvl.jpg"
-              alt="feature template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            <img
-              src="https://res.cloudinary.com/ddtifclgr/image/upload/v1770288134/WhatsApp_Image_2026-02-05_at_4.10.54_PM_xnprcd.jpg"
-              alt="feature template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            
+          <div className="mb-6 flex flex-col gap-2 text-xs font-bold text-gray-200">
+            <div>✅ Over 3,000+ students taught successfully</div>
+            <div>✅ Highest scoring results in Hari Nagar, Jaitpur Extension & Badarpur</div>
           </div>
         </div>
       ),
     },
     {
-      title: "june 2025",
+      title: "Talent Search",
       content: (
         <div>
-          <p className="mb-4 text-xs font-serif italic text-neutral-800 md:text-sm dark:text-neutral-200">
-            archived launch milestone
+          <h4 className="text-base md:text-xl font-black text-[#F5BE18] mb-2">
+            KV Talent Search Scholarship & Reward Program
+          </h4>
+          <p className="mb-4 text-xs font-semibold text-neutral-300 md:text-sm leading-relaxed">
+            Introduced fee waiver scholarships for deserving students of Hari Nagar, Jaitpur, Badarpur, and South East Delhi to ensure quality coaching is accessible to all.
           </p>
-          <div className="mb-8">
-            <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅ star-studded launch with actress madhurima tuli
-            </div>
-            <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅ Bakeats stepped into the market
-            </div>
-            <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅  Orders officially opened
-            </div>
-            <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅  First batch released to market
-            </div>
-            <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅  Distribution network expanded
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <img
-              src="https://res.cloudinary.com/ddtifclgr/image/upload/v1770285621/ANI-20250616065859_bb0s4e.jpg"
-              alt="hero template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            <img
-              src="https://res.cloudinary.com/ddtifclgr/image/upload/v1770291409/WhatsApp_Image_2026-02-05_at_5.05.39_PM_wy0koq.jpg"
-              alt="feature template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            <img
-              src="https://res.cloudinary.com/ddtifclgr/image/upload/v1770289800/WhatsApp_Image_2026-02-05_at_4.39.28_PM_wzvp4e.jpg"
-              alt="bento template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            <img
-              src="https://res.cloudinary.com/ddtifclgr/image/upload/v1770289972/WhatsApp_Image_2026-02-05_at_4.42.18_PM_mzbyji.jpg"
-              alt="cards template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
+          <div className="mb-6 flex flex-col gap-2 text-xs font-bold text-gray-200">
+            <div>✅ Up to 100% fee waiver for top scorers</div>
+            <div>✅ Free textbook assistance and exam study material</div>
           </div>
         </div>
       ),
-    },
-    {
-      title: "September 2025",
-      content: (
-        <div>
-          <p className="mb-4 text-xs font-serif italic text-neutral-800 md:text-sm dark:text-neutral-200">
-            Recognition, reviews, and influencer buzz
-          </p>
-          <div className="mb-8">
-            <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅ Felicitated by the Deputy CM of Uttar Pradesh
-            </div>
-            <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅ cookies Reviewed by RJ Raunac
-            </div>
-            <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅ Represented Bakeats at award event
-            </div>
-            <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              ✅ 50+ Influencer Diwali Campaign
-            </div>
-           
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <img
-              src="https://res.cloudinary.com/ddtifclgr/image/upload/v1770290654/WhatsApp_Image_2026-02-05_at_4.53.46_PM_qboy76.jpg"
-              alt="hero template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            <img
-              src="https://res.cloudinary.com/ddtifclgr/image/upload/v1770286175/WhatsApp_Image_2026-02-05_at_3.37.50_PM_a5wyml.jpg"
-              alt="feature template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            <img
-              src="https://res.cloudinary.com/ddtifclgr/image/upload/v1770291092/WhatsApp_Image_2026-02-05_at_5.00.56_PM_j7cwiy.jpg"
-              alt="bento template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-            <img
-              src="https://res.cloudinary.com/ddtifclgr/image/upload/v1770291710/WhatsApp_Image_2026-02-05_at_5.11.16_PM_msdxzi.jpg"
-              alt="cards template"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-          </div>
-        </div>
-      ),
-    },
-    {
-      title: "December 2025",
-      content: (
-        <div>
-          <p className="mb-4 text-xs font-serif italic text-neutral-800 md:text-sm dark:text-neutral-200">
-            Revenue Milestone
-          </p>
-          <div className="mb-10">
-            <div className="mb-4 flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300 font-serif italic bold">
-              Crossed ₹4 Crore revenue within 5½ months of launch
-            </div>
-            <div className="flex items-center gap-2 text-xs text-neutral-700 md:text-sm dark:text-neutral-300">
-              In just five and a half months, Bakeats crossed ₹4 crore in revenue, driven by growing customer love, repeat orders, and steady expansion across stores and online platforms.
-            </div>
-           
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-           
-            <img
-              src="https://res.cloudinary.com/ddtifclgr/image/upload/v1774032474/WhatsApp_Image_2026-03-21_at_12.13.23_AM_jb7chi.jpg"
-              alt="cards template"
-              width={1000}
-              height={1000}
-              className=" w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60"
-            />
-          </div>
-        </div>
-      ),
-    },
-    
+    }
   ];
   return (
-    <div className="relative w-full overflow-clip">
+    <div className="relative w-full overflow-clip bg-[#071728] border-b border-gray-800">
       <Timeline data={data} />
     </div>
   );

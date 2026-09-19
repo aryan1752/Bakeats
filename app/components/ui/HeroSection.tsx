@@ -84,7 +84,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             isTransitioning ? 'translate-x-[-20px] opacity-0' : 'translate-x-0 opacity-100'
           }`}
         >
-          <div className="mb-3 text-[10px] tracking-[0.35em] text-black/60 uppercase md:mb-7 md:text-[12px] md:tracking-[0.5em]">
+          <div className="mb-3 text-[10px] tracking-[0.35em] text-black font-bold uppercase md:mb-7 md:text-[12px] md:tracking-[0.5em]">
             Bakeats
           </div>
 
@@ -94,28 +94,25 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             COOKIE
           </h1>
 
-          <p className="mt-3 text-[11px] tracking-[0.22em] text-black/65 uppercase md:mt-7 md:text-[33px] md:tracking-[0.28em]">
+          <p className="mt-3 text-[11px] tracking-[0.22em] text-black font-semibold uppercase md:mt-7 md:text-[33px] md:tracking-[0.28em]">
             {currentCookie.subtitle}
           </p>
 
-          <p className="mt-3 max-w-[90vw] text-[14px] leading-[1.45] text-black/80 md:mt-6 md:max-w-[560px] md:text-[35px]">
+          <p className="mt-3 max-w-[90vw] text-[14px] leading-[1.45] text-black md:mt-6 md:max-w-[560px] md:text-[35px] font-medium">
             {currentCookie.description}
           </p>
 
-          <div className="mt-4 flex flex-wrap gap-2 md:mt-11 md:gap-4">
+          <div className="mt-4 md:mt-8">
             <a
-  href="https://wa.me/919266565336"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="inline-block rounded-full bg-black px-4 py-2 text-[11px] tracking-wide text-white transition hover:bg-black/80 md:px-9 md:py-4 md:text-sm"
->
-  WhatsApp
-</a>
-            
+              href="#order"
+              className="inline-block rounded-full bg-black px-4 py-2 text-[11px] tracking-wide text-white transition hover:bg-black/80 md:px-9 md:py-4 md:text-sm font-bold"
+            >
+              ORDER NOW
+            </a>
           </div>
         </div>
 
-        {/* Right counter + nav */}
+        {/* Right content */}
         <div
           className={`absolute right-[8vw] top-1/2 z-20 flex -translate-y-1/2 items-center gap-2 transition-all duration-700 md:right-16 md:gap-6 lg:right-24 ${
             isTransitioning ? 'translate-x-[20px] opacity-0' : 'translate-x-0 opacity-100'
@@ -125,7 +122,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             {String(currentIndex + 1).padStart(2, '0')}
           </div>
 
-          <div className="flex flex-col items-center gap-2 text-black/70 md:gap-4">
+          <div className="flex flex-col items-center gap-2 text-black md:gap-4 font-bold">
             <button
               onClick={onPrev}
               className="group flex flex-col items-center gap-0.5 text-[9px] tracking-[0.16em] md:gap-1 md:text-[11px] md:tracking-[0.2em]"
@@ -135,7 +132,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <span>PREV</span>
             </button>
 
-            <div className="h-5 w-px bg-black/30 md:h-8" />
+            <div className="h-5 w-px bg-black md:h-8" />
 
             <button
               onClick={onNext}
@@ -146,7 +143,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <ChevronDown className="h-4 w-4 transition-transform group-hover:translate-y-1" />
             </button>
 
-            <div className="mt-2 text-[10px] text-black/45">
+            <div className="mt-2 text-[10px] text-black font-bold">
               {String(totalCookies).padStart(2, '0')}
             </div>
           </div>

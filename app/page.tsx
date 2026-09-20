@@ -514,6 +514,9 @@ export default function Home() {
       {/* ── LIVE FACULTY BROADCAST ANNOUNCEMENTS ── */}
       <LiveNotificationSection />
 
+      {/* ── 4.5 YOUR JOURNEY AT KNOWLEDGE VENTURE INSTITUTE (5-STEP SCROLL ANIMATION) ── */}
+      <ScrollJourney steps={journeySteps} />
+
       {/* ── 5. RESULTS OF CONSISTENT EXCELLENCE (BOARD TOPPERS SHOWCASE) ── */}
       <section id="results" className="py-16 w-full text-center overflow-hidden bg-gray-50/50 dark:bg-slate-900/5">
         <div className="max-w-7xl mx-auto px-6">

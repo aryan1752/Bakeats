@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     siteName: "Knowledge Venture Institute (KVI)",
     images: [
       {
-        url: "/kvi_logo.png",
+        url: "/newlogo.png",
         width: 1200,
         height: 630,
         alt: "Knowledge Venture Institute Hari Nagar Jaitpur Badarpur Delhi"
@@ -58,8 +58,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Best Coaching Centre in Hari Nagar, Jaitpur & Badarpur | KVI",
-    description: "Top Coaching for Class 6-10th Foundations, 11-12th Commerce & Arts Stream in Jaitpur, Badarpur, Hari Nagar Delhi.",
-    images: ["/kvi_logo.png"]
+    description: "Top Coaching for Class 6-10th Foundations, 11-12th Science, Commerce & Arts Stream in Jaitpur, Badarpur, Hari Nagar Delhi.",
+    images: ["/newlogo.png"]
   },
   robots: {
     index: true,
@@ -85,7 +85,7 @@ export default function RootLayout({
     "name": "Knowledge Venture Institute",
     "alternateName": "KVI Coaching Institute",
     "url": "https://bakeats-blond.vercel.app/",
-    "logo": "https://bakeats-blond.vercel.app/kvi_logo.png",
+    "logo": "https://bakeats-blond.vercel.app/newlogo.png",
     "description": "Leading coaching institute in Hari Nagar, Jaitpur & Badarpur, New Delhi offering Class 6-10th Foundations, Class 11-12th Commerce and Humanities (Arts) programs.",
     "telephone": "+91-7011731649",
     "priceRange": "₹₹",

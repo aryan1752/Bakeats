@@ -28,7 +28,7 @@ const faqData: FAQItem[] = [
         We offer specialized coaching for:
         <br />• <strong>Class 6th–10th Foundations:</strong> Science, Mathematics & English Board Prep.
         <br />• <strong>Class 11th–12th Commerce:</strong> Accountancy, Economics & Business Studies by CS Sanjay Arya.
-        <br />• <strong>Class 11th–12th Science & Maths:</strong> Physics, Chemistry & Mathematics by Er. Aditya Pratap Singh & Er. Shaurav Singh.
+        <br />• <strong>Class 11th–12th Science & Maths:</strong> Physics, Chemistry & Mathematics by Er. Aditya Pratap Singh & Er. Saurabh Singh.
         <br />• <strong>Class 11th–12th Humanities (Arts):</strong> History, Political Science & Geography by Vimal Sharma (15+ Yrs Exp).
       </span>
     )

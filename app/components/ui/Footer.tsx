@@ -20,13 +20,11 @@ export default function Footer() {
           {/* Brand Info */}
           <div className="flex flex-col gap-4">
             <div className="flex items-center">
-              <div className="h-10 aspect-[3/2] border border-[#F5BE18] rounded-lg p-1 bg-[#0D2847] shrink-0 shadow-sm flex items-center justify-center">
-                <img
-                  src="/kvi_logo.png"
-                  alt="Knowledge Venture Institute Logo"
-                  className="h-full w-full object-contain select-none"
-                />
-              </div>
+              <img
+                src="/newlogo.png"
+                alt="Knowledge Venture Institute Logo"
+                className="h-10 sm:h-11 w-auto object-contain select-none shrink-0"
+              />
               <div className="ml-3 flex flex-col justify-center leading-none">
                 <span className="text-[#E2AD07] dark:text-[#F5BE18] font-black text-sm tracking-wider">KNOWLEDGE VENTURE</span>
                 <span className="text-gray-700 dark:text-white text-[9px] tracking-[4px] font-bold mt-0.5">INSTITUTE</span>

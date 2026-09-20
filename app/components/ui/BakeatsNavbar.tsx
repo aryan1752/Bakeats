@@ -114,13 +114,11 @@ export default function BakeatsNavbar() {
         
         {/* KV Logo */}
         <Link href="/" className="flex items-center shrink-0">
-          <div className="h-11 aspect-[3/2] border border-[#F5BE18] rounded-lg p-1 bg-[#0D2847] shrink-0 shadow-sm flex items-center justify-center">
-            <img
-              src="/kvi_logo.png"
-              alt="Knowledge Venture Institute Logo"
-              className="h-full w-full object-contain select-none"
-            />
-          </div>
+          <img
+            src="/newlogo.png"
+            alt="Knowledge Venture Institute Logo"
+            className="h-10 sm:h-12 w-auto object-contain select-none shrink-0"
+          />
           <div className="ml-2.5 flex flex-col justify-center leading-none">
             <span className="text-[#0D2847] dark:text-[#0D2847] font-black text-sm md:text-base tracking-wide">KNOWLEDGE VENTURE</span>
             <span className="text-[#0D2847] dark:text-[#0D2847] text-[9px] md:text-[10px] tracking-[4px] font-black mt-0.5">INSTITUTE</span>

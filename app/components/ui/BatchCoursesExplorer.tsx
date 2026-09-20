@@ -24,7 +24,7 @@ export interface BatchItem {
   id: string;
   title: string;
   grade: string;
-  stream: "foundations" | "commerce" | "arts" | "morning";
+  stream: "foundations" | "science" | "commerce" | "arts" | "cacs" | "morning";
   streamLabel: string;
   target: string;
   scheduleSummary: string;
@@ -59,7 +59,7 @@ export const batchList: BatchItem[] = [
       { subject: "TTS Session", timing: "4:00 PM - 5:00 PM", days: "Tuesday, Thursday, Saturday (TTS)" }
     ],
     teachers: [
-      { name: "Pankaj Mishra Sir", role: "Director & Senior Mentor", exp: "12+ Yrs Exp" }
+      { name: "Foundation Educators", role: "Science, Maths & English Specialist", exp: "8+ Yrs Exp" }
     ]
   },
   {
@@ -84,7 +84,7 @@ export const batchList: BatchItem[] = [
     ],
     teachers: [
       { name: "Er. Aditya Pratap Singh", role: "11-12th Maths & Physics / 9-10th Boards", exp: "5+ Yrs Exp (1000+ Students)" },
-      { name: "Er. Shaurav Singh", role: "11-12th Chemistry & 9-10th Specialist", exp: "B.Tech (2000+ Students)" }
+      { name: "Er. Saurabh Singh", role: "11-12th Chemistry & 9-10th Specialist", exp: "B.Tech (2000+ Students)" }
     ]
   },
   {
@@ -109,7 +109,34 @@ export const batchList: BatchItem[] = [
     ],
     teachers: [
       { name: "Er. Aditya Pratap Singh", role: "11-12th Maths & Physics / 9-10th Boards", exp: "5+ Yrs Exp (1000+ Students)" },
-      { name: "Er. Shaurav Singh", role: "11-12th Chemistry & 9-10th Specialist", exp: "B.Tech (2000+ Students)" }
+      { name: "Er. Saurabh Singh", role: "11-12th Chemistry & 9-10th Specialist", exp: "B.Tech (2000+ Students)" }
+    ]
+  },
+  {
+    id: "class-11-12-science",
+    title: "Class 11th & 12th Science stream",
+    grade: "Class 11th & 12th Science stream",
+    stream: "science",
+    streamLabel: "Class 11-12th Science",
+    target: "Daily: Physics, Chemistry & Mathematics",
+    scheduleSummary: "Daily: Physics (4-5 PM), Chemistry (5-6 PM), Mathematics (6-7 PM)",
+    mode: "OFFLINE (HINGLISH)",
+    duration: "Academic Session 2026-27",
+    image_url: "", // User can insert Cloudinary URL here
+    features: [
+      "Physics, Chemistry & Mathematics Mastery",
+      "100% Conceptual & Numerical Board Mastery",
+      "CBSE Sample Papers & Competitive Entrance Foundation",
+      "Individual Care & Weekly Doubt Clearance"
+    ],
+    schedules: [
+      { subject: "Physics", timing: "4:00 PM - 5:00 PM", days: "Daily (Monday to Saturday)" },
+      { subject: "Chemistry", timing: "5:00 PM - 6:00 PM", days: "Daily (Monday to Saturday)" },
+      { subject: "Mathematics", timing: "6:00 PM - 7:00 PM", days: "Daily (Monday to Saturday)" }
+    ],
+    teachers: [
+      { name: "Er. Aditya Pratap Singh", role: "11-12th Maths & Physics Specialist", exp: "5+ Yrs Exp (1000+ Students)" },
+      { name: "Er. Saurabh Singh", role: "11-12th Chemistry Specialist", exp: "B.Tech (2000+ Students)" }
     ]
   },
   {
@@ -135,8 +162,7 @@ export const batchList: BatchItem[] = [
       { subject: "Accounts", timing: "6:00 PM - 7:00 PM", days: "Tuesday, Thursday, Saturday (TTS)" }
     ],
     teachers: [
-      { name: "Commerce Senior Faculty", role: "Accountancy Specialist", exp: "10+ Yrs Exp" },
-      { name: "Pankaj Mishra Sir", role: "Economics & Business Studies", exp: "12+ Yrs Exp" }
+      { name: "CS Sanjay Arya", role: "Qualified Company Secretary (Economics & Business Studies)", exp: "12+ Yrs Exp" }
     ]
   },
   {
@@ -161,7 +187,7 @@ export const batchList: BatchItem[] = [
       { subject: "TTS Session", timing: "5:00 PM - 6:00 PM", days: "Tuesday, Thursday, Saturday (TTS)" }
     ],
     teachers: [
-      { name: "Senior Humanities Faculty", role: "Arts Stream Lead", exp: "11+ Yrs Exp" }
+      { name: "Vimal Sharma", role: "Senior Humanities Lecturer", exp: "15+ Yrs Exp (5000+ Students)" }
     ]
   },
   {
@@ -187,8 +213,7 @@ export const batchList: BatchItem[] = [
       { subject: "Business studies", timing: "6:00 PM - 7:00 PM", days: "Tuesday, Thursday, Saturday (TTS)" }
     ],
     teachers: [
-      { name: "Senior Accountancy Master", role: "Board Paper Evaluator", exp: "15+ Yrs Exp" },
-      { name: "Pankaj Mishra Sir", role: "Economics Lead", exp: "12+ Yrs Exp" }
+      { name: "CS Sanjay Arya", role: "Qualified Company Secretary & Economics Lead", exp: "12+ Yrs Exp" }
     ]
   },
   {
@@ -213,7 +238,32 @@ export const batchList: BatchItem[] = [
       { subject: "TTS Session", timing: "5:00 PM", days: "Tuesday, Thursday, Saturday (TTS)" }
     ],
     teachers: [
-      { name: "Senior Humanities Faculty", role: "Arts Board Mentor", exp: "12+ Yrs Exp" }
+      { name: "Vimal Sharma", role: "Senior Humanities Lecturer", exp: "15+ Yrs Exp (5000+ Students)" }
+    ]
+  },
+  {
+    id: "ca-cs-classes",
+    title: "CA & CS Professional Classes",
+    grade: "CA & CS Aspirants",
+    stream: "cacs",
+    streamLabel: "CA & CS Classes",
+    target: "CA Foundation & CS Executive Prep",
+    scheduleSummary: "Specialized Professional Batches & Weekend Drills",
+    mode: "OFFLINE & HYBRID",
+    duration: "Exam Session 2026-27",
+    image_url: "", // User can insert Cloudinary URL here
+    features: [
+      "CA Foundation & CS Foundation / Executive Preparation",
+      "Led by CS Sanjay Arya (Qualified Company Secretary)",
+      "Corporate Laws, Business Economics & Advanced Accounting",
+      "Mock Tests, Case Study Solutions & Individual Mentorship"
+    ],
+    schedules: [
+      { subject: "Corporate Laws & Business Regulations", timing: "Special Batches", days: "Monday to Saturday" },
+      { subject: "Accounting & Business Economics", timing: "Special Batches", days: "Monday to Saturday" }
+    ],
+    teachers: [
+      { name: "CS Sanjay Arya", role: "Qualified Company Secretary & Lead Mentor", exp: "12+ Yrs Exp" }
     ]
   },
   {
@@ -237,7 +287,7 @@ export const batchList: BatchItem[] = [
       { subject: "Morning Batch Session", timing: "10:00 AM - 11:00 AM Daily", days: "Daily (Monday to Saturday)" }
     ],
     teachers: [
-      { name: "Pankaj Mishra Sir", role: "Senior Faculty & Director", exp: "12+ Yrs Exp" }
+      { name: "Foundation Educators", role: "Maths & Science Specialist", exp: "10+ Yrs Exp" }
     ]
   }
 ];
@@ -256,7 +306,7 @@ export default function BatchCoursesExplorer({ title = "Explore Our Academic Bat
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const streamParam = params.get("stream") || params.get("filter");
-      if (streamParam && ["foundations", "commerce", "arts", "morning"].includes(streamParam)) {
+      if (streamParam && ["foundations", "science", "commerce", "arts", "cacs", "morning"].includes(streamParam)) {
         setSelectedFilter(streamParam);
       }
     }
@@ -308,6 +358,16 @@ export default function BatchCoursesExplorer({ title = "Explore Our Academic Bat
             Class 5th - 10th
           </button>
           <button
+            onClick={() => setSelectedFilter("science")}
+            className={`px-4 py-2 rounded-xl transition duration-200 cursor-pointer ${
+              selectedFilter === "science"
+                ? "bg-[#0D2847] text-white shadow-md ring-2 ring-[#F5BE18]"
+                : "bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200"
+            }`}
+          >
+            Class 11th & 12th Science
+          </button>
+          <button
             onClick={() => setSelectedFilter("commerce")}
             className={`px-4 py-2 rounded-xl transition duration-200 cursor-pointer ${
               selectedFilter === "commerce"
@@ -326,6 +386,16 @@ export default function BatchCoursesExplorer({ title = "Explore Our Academic Bat
             }`}
           >
             Class 11th & 12th Arts
+          </button>
+          <button
+            onClick={() => setSelectedFilter("cacs")}
+            className={`px-4 py-2 rounded-xl transition duration-200 cursor-pointer ${
+              selectedFilter === "cacs"
+                ? "bg-[#0D2847] text-white shadow-md ring-2 ring-[#F5BE18]"
+                : "bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200"
+            }`}
+          >
+            CA / CS Classes
           </button>
           <button
             onClick={() => setSelectedFilter("morning")}
@@ -378,9 +448,7 @@ export default function BatchCoursesExplorer({ title = "Explore Our Academic Bat
                   /* Fallback PW-style Banner Graphics until Cloudinary URL is passed */
                   <div className="absolute inset-0 bg-gradient-to-br from-[#0D2847] via-[#12365e] to-[#071728] p-3.5 flex flex-col justify-between z-0">
                     <div className="flex justify-between items-start">
-                      <div className="h-5.5 aspect-[3/2] border border-[#F5BE18] rounded p-0.5 bg-[#0D2847] shrink-0 shadow-sm flex items-center justify-center">
-                        <img src="/kvi_logo.png" alt="KVI Logo" className="h-full w-full object-contain" />
-                      </div>
+                      <img src="/newlogo.png" alt="KVI Logo" className="h-6 w-auto object-contain shrink-0" />
                     </div>
 
                     <div className="my-auto pr-8">
@@ -523,33 +591,36 @@ export default function BatchCoursesExplorer({ title = "Explore Our Academic Bat
             <div className="flex border-b border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#071728] px-6">
               <button
                 onClick={() => setActiveTab("schedule")}
-                className={`py-3 px-5 font-black text-xs transition border-b-2 cursor-pointer ${
+                className={`py-3 px-5 font-black text-xs transition border-b-2 cursor-pointer flex items-center gap-2 ${
                   activeTab === "schedule"
                     ? "border-[#F5BE18] text-[#F5BE18]"
                     : "border-transparent text-gray-500 dark:text-gray-400 hover:text-white"
                 }`}
               >
-                📅 Class Schedules & Timings
+                <Calendar className="w-4 h-4 text-[#F5BE18]" />
+                <span>Class Schedules & Timings</span>
               </button>
               <button
                 onClick={() => setActiveTab("features")}
-                className={`py-3 px-5 font-black text-xs transition border-b-2 cursor-pointer ${
+                className={`py-3 px-5 font-black text-xs transition border-b-2 cursor-pointer flex items-center gap-2 ${
                   activeTab === "features"
                     ? "border-[#F5BE18] text-[#F5BE18]"
                     : "border-transparent text-gray-500 dark:text-gray-400 hover:text-white"
                 }`}
               >
-                ✨ Batch Features
+                <Sparkles className="w-4 h-4 text-[#F5BE18]" />
+                <span>Batch Features</span>
               </button>
               <button
                 onClick={() => setActiveTab("teachers")}
-                className={`py-3 px-5 font-black text-xs transition border-b-2 cursor-pointer ${
+                className={`py-3 px-5 font-black text-xs transition border-b-2 cursor-pointer flex items-center gap-2 ${
                   activeTab === "teachers"
                     ? "border-[#F5BE18] text-[#F5BE18]"
                     : "border-transparent text-gray-500 dark:text-gray-400 hover:text-white"
                 }`}
               >
-                👨‍🏫 Faculty Team
+                <GraduationCap className="w-4 h-4 text-[#F5BE18]" />
+                <span>Faculty Team</span>
               </button>
             </div>
 

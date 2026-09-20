@@ -29,7 +29,7 @@ export function TimelineDemo() {
             Senior Faculty & Qualified Professionals Onboarded
           </h4>
           <p className="mb-4 text-xs font-semibold text-neutral-300 md:text-sm leading-relaxed">
-            Strengthened our teaching team with CS Sanjay Arya (Company Secretary for Commerce), Er. Aditya Pratap Singh (5+ Yrs Exp for 11-12th Maths & Physics), Vimal Sharma (15+ Yrs Exp for Humanities), and Er. Shaurav Singh (B.Tech for 11-12th Chemistry & 9-10th Boards).
+            Strengthened our teaching team with CS Sanjay Arya (Company Secretary for Commerce), Er. Aditya Pratap Singh (5+ Yrs Exp for 11-12th Maths & Physics), Vimal Sharma (15+ Yrs Exp for Humanities), and Er. Saurabh Singh (B.Tech for 11-12th Chemistry & 9-10th Boards).
           </p>
           <div className="mb-6 flex flex-col gap-2 text-xs font-bold text-gray-200">
             <div>✅ 100% Board pattern mock tests & daily practice sheets</div>

@@ -26,19 +26,17 @@ interface Founder {
 
 const founder: Founder = {
   id: 1,
-  name: "Mr. Pankaj Mishra",
-  title: "Managing Director, PND Group",
-  image:
-    "https://res.cloudinary.com/ddtifclgr/image/upload/v1772051872/125A3288_yq7gfo.jpg",
-  bio:
-    "is the Managing Director of PND Group, comprising PND Global Logistics, PND Maritime Pvt Ltd., and PND Exim Limited. Known for eliminating third-party dependencies in logistics operations, he built a vertically integrated enterprise focused on operational control, efficiency, and strategic expansion.",
+  name: "CS Sanjay Arya",
+  title: "Qualified Company Secretary & Founder Mentor, KVI",
+  image: "/cs sanjay arya.png",
+  bio: "is a Qualified Company Secretary and the Founder Mentor at Knowledge Venture Institute (KVI), Hari Nagar, Jaitpur Badarpur. With 12+ years of dedicated teaching experience in Economics, Business Studies, and Professional CA/CS Courses, he has mentored over 3,000+ board aspirants and professional students to achieve 100% conceptual clarity and top board scores.",
   infoRows: [
-    { label: "Profession", value: "Logistics Entrepreneur" },
-    { label: "Title", value: "Managing Director, PND Group" },
-    { label: "Education", value: "Mechanical Engineering; Gold Medallist in Industrial Engineering & Management" },
-    { label: "Founded", value: "PND Global Logistics (2019)" },
+    { label: "Profession", value: "Qualified Company Secretary & Academic Educator" },
+    { label: "Title", value: "Founder & Director, Knowledge Venture Institute (KVI)" },
+    { label: "Education", value: "Qualified Company Secretary (CS), Commerce Expert" },
+    { label: "Institute", value: "Knowledge Venture Institute (Hari Nagar, Jaitpur Badarpur)" },
     { label: "Nationality", value: "Indian" },
-    { label: "Known For", value: "Eliminating third-party logistics dependencies" },
+    { label: "Known For", value: "100% Conceptual Clarity in Economics, Commerce & CA/CS Guidance" },
   ],
   tableOfContents: [
     "The Visionary",
@@ -52,27 +50,27 @@ const founder: Founder = {
     {
       heading: "The Visionary",
       content:
-        "Some entrepreneurs are born with clarity; others discover their calling through perseverance. Mr. Pankaj Mishra's journey reflects adaptability and determination. From an introverted schoolboy to a corporate professional, professor, defence officer, and ultimately a logistics entrepreneur, his evolution shaped his leadership mindset.",
+        "Driven by a passion for academic clarity and professional excellence, CS Sanjay Arya founded Knowledge Venture Institute (KVI) in South East Delhi. His mission is to empower every student from Class 6th to 12th Commerce, Humanities, Science, and CA/CS with strong foundational concepts.",
     },
     {
       heading: "The Journey",
       content:
-        "As Managing Director of PND Group, Mr. Pankaj leads an enterprise that redefined logistics operations by eliminating reliance on intermediaries. Academically, he graduated in Mechanical Engineering and earned a Gold Medal in Industrial Engineering and Management — building the analytical foundation behind his operational strategies.",
+        "Over the past 12+ years, CS Sanjay Arya has guided thousands of board exam students to secure 95%+ marks in CBSE & State Board examinations. His rigorous teaching methodology combines real-world business case studies with structured answer writing drills.",
     },
     {
       heading: "The Innovation",
       content:
-        "During his corporate tenure and teaching career, he prepared for competitive defence services examinations. However, his entrepreneurial instinct led him to identify a structural gap in logistics — excessive dependency on third-party operators. Together with his co-founder Mr. Amit, he envisioned a vertically integrated logistics model.",
+        "At KVI Hari Nagar, CS Sanjay Arya introduced small batch learning, personal doubt support, and specialized CA/CS professional guidance alongside Class 11th & 12th board prep.",
     },
     {
       heading: "The Success",
       content:
-        "In 2019, PND Global Logistics was founded with a disruptive approach: direct registration with major shipping lines instead of relying on intermediaries. This strategic shift provided unmatched operational control. Expansion followed through PND Maritime Pvt. Ltd., where the company began acquiring and operating its own containers — further strengthening independence and scalability.",
+        "Under his leadership, KVI has grown into the leading coaching institute in Hari Nagar, Jaitpur Extension, and Badarpur, producing toppers in Economics (99/100), Political Science, Accounts, and Science subjects.",
     },
     {
       heading: "Quote",
       content:
-        "\"Innovation isn't just about technology – it's about reimagining how business should be done.\" – Mr. Pankaj Mishra",
+        "\"Conceptual clarity is the foundation of true academic and professional success.\" – CS Sanjay Arya",
     },
     {
       heading: "Social Links",
@@ -80,7 +78,7 @@ const founder: Founder = {
     },
   ],
   social: {
-    Instagram: "https://www.instagram.com/pankaj.mishra.52",
+    Instagram: "https://www.instagram.com/knowledgeventureinstitute",
   },
 };
 

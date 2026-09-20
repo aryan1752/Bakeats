@@ -341,9 +341,7 @@ export default function LoginPage() {
               >
                 <ArrowLeft className="w-5 h-5" />
               </Link>
-              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-[#0D2847] border border-[#F5BE18] flex items-center justify-center shadow-md shrink-0 p-1 overflow-hidden">
-                <img src="/kvi_logo.png" alt="Knowledge Venture Logo" className="w-full h-full object-contain" />
-              </div>
+              <img src="/newlogo.png" alt="Knowledge Venture Logo" className="w-9 h-9 sm:w-11 sm:h-11 object-contain shrink-0" />
               <span className="text-lg sm:text-2xl font-black tracking-tight text-[#0D2847] dark:text-white truncate">
                 Knowledge<span className="text-[#F5BE18]">Venture</span>
               </span>

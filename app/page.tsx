@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { 
   ChevronRight, 
+  ChevronLeft,
   MapPin, 
   Phone, 
   BookOpen, 
@@ -65,7 +66,7 @@ const toppersRow1 = [
 const toppersRow2 = [
   { name: "KARAN", school: "GBSSS", subject: "HISTORY", score: "98", image: "/topper_karan.png" },
   { name: "KAVITA", school: "SKV", subject: "POL. SCI", score: "98", image: "/topper_kavita.png" },
-  { name: "SNEHA", school: "DPS", subject: "BIOLOGY", score: "97", image: "/topper_naina.png" },
+  { name: "SNEHA", school: "DPS", subject: "MATHEMATICS", score: "97", image: "/topper_naina.png" },
   { name: "HARSH", school: "RYAN", subject: "PHYSICS", score: "99", image: "/topper_aakash.png" },
   { name: "ANJALI", school: "KV", subject: "ENGLISH", score: "98", image: "/topper_kavita.png" },
   { name: "ROHAN", school: "DAV", subject: "ECONOMICS", score: "96", image: "/topper_karan.png" }
@@ -119,7 +120,7 @@ const facultyList = [
     photo: "/vimal.png"
   },
   {
-    name: "Er. Shaurav Singh",
+    name: "Er. Saurabh Singh",
     designation: "Class 11th & 12th Chemistry Specialist",
     subject: "Expert of Class 11-12th Chemistry & 9-10th Boards",
     exp: "B.Tech",
@@ -227,17 +228,45 @@ export default function Home() {
               animate={{ x: "0%" }}
               exit={{ x: "-100%" }}
               transition={{ type: "tween", ease: "easeInOut", duration: 0.5 }}
-              className="absolute inset-0 w-full h-full flex items-center justify-center bg-[#071728]"
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.2}
+              onDragEnd={(_, info) => {
+                if (info.offset.x < -50 || info.velocity.x < -300) {
+                  setActiveBanner((prev) => (prev + 1) % bannerImages.length);
+                } else if (info.offset.x > 50 || info.velocity.x > 300) {
+                  setActiveBanner((prev) => (prev === 0 ? bannerImages.length - 1 : prev - 1));
+                }
+              }}
+              className="absolute inset-0 w-full h-full flex items-center justify-center bg-[#071728] touch-pan-y cursor-grab active:cursor-grabbing"
             >
               <img
                 src={bannerImages[activeBanner]}
                 alt={`KVI Hero Slide ${activeBanner + 1}`}
-                className={`w-full h-full select-none ${
+                className={`w-full h-full select-none pointer-events-none ${
                   activeBanner >= 4 ? "object-contain bg-[#071728]" : "object-fill object-center"
                 }`}
               />
             </motion.div>
           </AnimatePresence>
+
+          {/* Left Navigation Arrow */}
+          <button
+            onClick={() => setActiveBanner((prev) => (prev === 0 ? bannerImages.length - 1 : prev - 1))}
+            className="absolute left-2 sm:left-5 top-1/2 -translate-y-1/2 z-30 h-9 w-9 sm:h-12 sm:w-12 rounded-full bg-black/40 hover:bg-[#00A5EC] text-white flex items-center justify-center transition-all duration-300 backdrop-blur-md border border-white/20 shadow-lg cursor-pointer focus:outline-none"
+            aria-label="Previous Slide"
+          >
+            <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+          </button>
+
+          {/* Right Navigation Arrow */}
+          <button
+            onClick={() => setActiveBanner((prev) => (prev + 1) % bannerImages.length)}
+            className="absolute right-2 sm:right-5 top-1/2 -translate-y-1/2 z-30 h-9 w-9 sm:h-12 sm:w-12 rounded-full bg-black/40 hover:bg-[#00A5EC] text-white flex items-center justify-center transition-all duration-300 backdrop-blur-md border border-white/20 shadow-lg cursor-pointer focus:outline-none"
+            aria-label="Next Slide"
+          >
+            <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+          </button>
 
           {/* Pill navigation dots overlaid on the bottom center of the banner */}
           <div className="absolute bottom-3 sm:bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
@@ -279,7 +308,7 @@ export default function Home() {
             {/* Interactive Typing Effect Sub-badge */}
             <div className="mt-4 flex justify-center items-center">
               <p className="text-[#0D2847] dark:text-amber-400 font-extrabold text-xs md:text-sm tracking-widest uppercase mt-2">
-                <TypingText text="#1 TUITION CENTER FOR CLASS 6-10TH FOUNDATIONS, 11-12TH COMMERCE & ARTS IN JAITPUR BADARPUR DELHI 110044" />
+                <TypingText text="#1 TUITION CENTER FOR CLASS 6-10TH FOUNDATIONS, 11-12TH SCIENCE, COMMERCE, ARTS & CA/CS CLASSES IN JAITPUR BADARPUR DELHI 110044" />
               </p>
             </div>
           </motion.div>
@@ -295,7 +324,7 @@ export default function Home() {
               className="lg:col-span-7 text-left flex flex-col justify-center"
             >
               <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-gray-700 dark:text-gray-200 leading-relaxed">
-                At <span className="text-[#E2AD07] dark:text-[#F5BE18] font-black">Knowledge Venture Institute (KVI)</span>, Hari Nagar, Jaitpur Badarpur, we deliver top board examination results with 100% conceptual clarity. As the leading coaching institute in South East Delhi for Class 6th-10th Foundations (Science & Maths), Class 11th-12th Commerce (Accounts, Economics, Business Studies) and Humanities (Arts),{" "}
+                At <span className="text-[#E2AD07] dark:text-[#F5BE18] font-black">Knowledge Venture Institute (KVI)</span>, Hari Nagar, Jaitpur Badarpur, we deliver top board examination results with 100% conceptual clarity. As the leading coaching institute in South East Delhi for Class 6th-10th Foundations (Science & Maths), Class 11th-12th Science (Physics, Chemistry, Maths), Class 11th-12th Commerce (Accounts, Economics, Business Studies), Humanities (Arts), and CA/CS Classes,{" "}
                 <span className="text-gray-700 dark:text-gray-200">
                   <TypingText text="our senior faculty equips every student to excel." />
                 </span>
@@ -317,13 +346,12 @@ export default function Home() {
                   duration: 5,
                   ease: "easeInOut"
                 }}
-                className="w-full flex justify-center relative group cursor-pointer"
+                className="w-full flex justify-center relative cursor-pointer"
               >
-                <div className="absolute inset-0 bg-[#F5BE18]/20 rounded-full filter blur-3xl group-hover:bg-[#F5BE18]/30 transition duration-500" />
                 <img 
-                  src="/kvi_logo.png" 
+                  src="/newlogo.png" 
                   alt="Knowledge Venture Institute Logo" 
-                  className="w-full max-w-[300px] sm:max-w-[360px] md:max-w-[420px] h-auto object-contain select-none filter drop-shadow-[0_15px_30px_rgba(245,190,24,0.3)] transition duration-500 group-hover:scale-105"
+                  className="w-full max-w-[300px] sm:max-w-[360px] md:max-w-[420px] h-auto object-contain select-none transition duration-500 hover:scale-105"
                 />
               </motion.div>
             </motion.div>
@@ -344,10 +372,10 @@ export default function Home() {
             Select your <span className="text-[#00A5EC]">goal</span> to explore our courses
           </h2>
           <p className="text-amber-400 text-xs md:text-sm font-extrabold uppercase tracking-widest mt-3">
-            CHOOSE A CUSTOMIZED STREAM FOR BOARD PREP SUCCESS
+            CHOOSE A CUSTOMIZED STREAM FOR BOARD & PROFESSIONAL PREP SUCCESS
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mt-12 max-w-7xl mx-auto">
             
             {/* Card 1: 6-10th Foundations */}
             <Link
@@ -362,7 +390,7 @@ export default function Home() {
                     className="w-full h-full object-cover object-center select-none"
                   />
                 </div>
-                <h3 className="font-black text-lg md:text-xl text-white group-hover:text-[#00A5EC] transition uppercase tracking-wide">
+                <h3 className="font-black text-base md:text-lg text-white group-hover:text-[#00A5EC] transition uppercase tracking-wide">
                   6-10TH FOUNDATIONS
                 </h3>
                 <p className="text-xs text-gray-400 mt-1.5 font-medium leading-relaxed">
@@ -375,7 +403,33 @@ export default function Home() {
               </span>
             </Link>
 
-            {/* Card 2: Commerce Stream */}
+            {/* Card 2: 11-12th Science Stream */}
+            <Link
+              href="/enrollment?stream=science"
+              className="group bg-[#0d2036] border-2 border-gray-800 rounded-3xl p-5 overflow-hidden shadow-xl hover:shadow-2xl hover:border-emerald-400 hover:ring-4 hover:ring-emerald-400/20 transition-all duration-300 flex flex-col items-center justify-between cursor-pointer text-center"
+            >
+              <div className="w-full flex flex-col items-center">
+                <div className="relative w-full aspect-square rounded-2xl overflow-hidden mb-4 border border-gray-800 group-hover:scale-102 transition duration-300 shadow-md">
+                  <img 
+                    src="/stream_science.jpg" 
+                    alt="11-12th Science Stream" 
+                    className="w-full h-full object-cover object-center select-none"
+                  />
+                </div>
+                <h3 className="font-black text-base md:text-lg text-white group-hover:text-emerald-400 transition uppercase tracking-wide">
+                  11-12TH SCIENCE
+                </h3>
+                <p className="text-xs text-gray-400 mt-1.5 font-medium leading-relaxed">
+                  Physics, Chemistry & Maths Board Prep
+                </p>
+              </div>
+              <span className="mt-5 w-full py-2.5 rounded-xl bg-emerald-600 text-white font-extrabold text-xs uppercase tracking-wider group-hover:bg-emerald-500 transition shadow-md flex items-center justify-center gap-1.5">
+                <span>Explore Batches</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </span>
+            </Link>
+
+            {/* Card 3: Commerce Stream */}
             <Link
               href="/enrollment?stream=commerce"
               className="group bg-[#0d2036] border-2 border-gray-800 rounded-3xl p-5 overflow-hidden shadow-xl hover:shadow-2xl hover:border-[#F5BE18] hover:ring-4 hover:ring-[#F5BE18]/20 transition-all duration-300 flex flex-col items-center justify-between cursor-pointer text-center"
@@ -388,7 +442,7 @@ export default function Home() {
                     className="w-full h-full object-cover object-center select-none"
                   />
                 </div>
-                <h3 className="font-black text-lg md:text-xl text-white group-hover:text-[#F5BE18] transition uppercase tracking-wide">
+                <h3 className="font-black text-base md:text-lg text-white group-hover:text-[#F5BE18] transition uppercase tracking-wide">
                   COMMERCE STREAM
                 </h3>
                 <p className="text-xs text-gray-400 mt-1.5 font-medium leading-relaxed">
@@ -401,7 +455,7 @@ export default function Home() {
               </span>
             </Link>
 
-            {/* Card 3: Humanities / Arts */}
+            {/* Card 4: Humanities / Arts */}
             <Link
               href="/enrollment?stream=arts"
               className="group bg-[#0d2036] border-2 border-gray-800 rounded-3xl p-5 overflow-hidden shadow-xl hover:shadow-2xl hover:border-purple-400 hover:ring-4 hover:ring-purple-400/20 transition-all duration-300 flex flex-col items-center justify-between cursor-pointer text-center"
@@ -414,7 +468,7 @@ export default function Home() {
                     className="w-full h-full object-cover object-center select-none"
                   />
                 </div>
-                <h3 className="font-black text-lg md:text-xl text-white group-hover:text-purple-400 transition uppercase tracking-wide">
+                <h3 className="font-black text-base md:text-lg text-white group-hover:text-purple-400 transition uppercase tracking-wide">
                   HUMANITIES / ARTS
                 </h3>
                 <p className="text-xs text-gray-400 mt-1.5 font-medium leading-relaxed">
@@ -422,6 +476,32 @@ export default function Home() {
                 </p>
               </div>
               <span className="mt-5 w-full py-2.5 rounded-xl bg-purple-600 text-white font-extrabold text-xs uppercase tracking-wider group-hover:bg-purple-500 transition shadow-md flex items-center justify-center gap-1.5">
+                <span>Explore Batches</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </span>
+            </Link>
+
+            {/* Card 5: CA & CS Professional Classes */}
+            <Link
+              href="/enrollment?stream=cacs"
+              className="group bg-[#0d2036] border-2 border-gray-800 rounded-3xl p-5 overflow-hidden shadow-xl hover:shadow-2xl hover:border-sky-400 hover:ring-4 hover:ring-sky-400/20 transition-all duration-300 flex flex-col items-center justify-between cursor-pointer text-center"
+            >
+              <div className="w-full flex flex-col items-center">
+                <div className="relative w-full aspect-square rounded-2xl overflow-hidden mb-4 border border-gray-800 group-hover:scale-102 transition duration-300 shadow-md">
+                  <img 
+                    src="/stream_cacs.jpg" 
+                    alt="CA & CS Classes" 
+                    className="w-full h-full object-cover object-center select-none"
+                  />
+                </div>
+                <h3 className="font-black text-base md:text-lg text-white group-hover:text-sky-400 transition uppercase tracking-wide">
+                  CA & CS CLASSES
+                </h3>
+                <p className="text-xs text-gray-400 mt-1.5 font-medium leading-relaxed">
+                  CA Foundation & CS Executive Professional Guidance
+                </p>
+              </div>
+              <span className="mt-5 w-full py-2.5 rounded-xl bg-sky-600 text-white font-extrabold text-xs uppercase tracking-wider group-hover:bg-sky-500 transition shadow-md flex items-center justify-center gap-1.5">
                 <span>Explore Batches</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </span>
@@ -630,88 +710,88 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 7. DEMO LECTURES & VIDEOS SHOWCASE ── */}
+      {/* ── 7. DEMO LECTURES & OFFICIAL YOUTUBE CHANNELS ── */}
       <section className="py-16 max-w-7xl mx-auto px-6 w-full text-center">
-        <h2 className="text-2xl md:text-3xl font-black text-[#0D2847] dark:text-white">Watch Demo Lecture Videos</h2>
-        <p className="text-gray-600 dark:text-gray-300 text-sm mt-2">Get a sneak peek into KVI's clear conceptual teaching methodology</p>
+        <h2 className="text-2xl md:text-3xl font-black text-[#0D2847] dark:text-white">Watch Official YouTube Channel Lectures</h2>
+        <p className="text-gray-600 dark:text-gray-300 text-sm mt-2">Explore conceptual lectures & professional board prep guidance on our official channels</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mt-10">
           
-          {/* Card 1: Money & Banking */}
+          {/* Card 1: CS Sanjay Arya Official Channel */}
           <a 
-            href="https://www.youtube.com/watch?v=CtMkfZMHUuM"
+            href="https://youtube.com/@sanjayaryacs?si=nlsrgYXQRBZHGq3X"
             target="_blank"
             rel="noopener noreferrer"
-            className="group bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm flex flex-col hover:shadow-md transition-shadow"
+            className="group bg-white dark:bg-[#0d2036] border border-gray-150 dark:border-gray-800 rounded-3xl overflow-hidden shadow-md flex flex-col hover:shadow-2xl hover:border-[#F5BE18] transition-all duration-300"
           >
             <div className="relative aspect-video bg-gray-900 overflow-hidden flex items-center justify-center">
               <img 
                 src="https://img.youtube.com/vi/CtMkfZMHUuM/hqdefault.jpg"
-                alt="Money & Banking Lecture"
+                alt="CS Sanjay Arya YouTube Channel"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 select-none"
               />
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-                <div className="h-12 w-12 rounded-full bg-[#0D2847] group-hover:bg-[#F5BE18] text-white group-hover:text-[#0D2847] flex items-center justify-center shadow-lg transition-colors duration-300">
-                  <Play className="h-5 w-5 fill-current ml-0.5" />
+              <div className="absolute inset-0 bg-black/25 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+                <div className="h-14 w-14 rounded-full bg-[#FF0000] text-white flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300">
+                  <Play className="h-6 w-6 fill-current ml-0.5 text-white" />
                 </div>
               </div>
+              <span className="absolute top-3 left-3 bg-[#FF0000] text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-md shadow">
+                YouTube Channel
+              </span>
             </div>
-            <div className="p-4 text-left">
-              <span className="text-xs font-bold text-[#F5BE18] uppercase">Class 12 Economics</span>
-              <h4 className="font-extrabold text-[#0D2847] dark:text-white text-sm mt-1">Money & Banking: CDR, VCR, CRR & SLR</h4>
-              <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">By CS Sanjay Arya (Company Secretary)</p>
+            <div className="p-6 text-left flex-1 flex flex-col justify-between">
+              <div>
+                <span className="text-xs font-black text-[#F5BE18] uppercase tracking-wider block">@sanjayaryacs</span>
+                <h4 className="font-black text-[#0D2847] dark:text-white text-base md:text-lg mt-1 leading-snug">
+                  CS Sanjay Arya – Economics & Business Studies
+                </h4>
+                <p className="text-xs text-gray-600 dark:text-gray-300 font-medium mt-2 leading-relaxed">
+                  Subscribe for Class 11th & 12th Economics, Business Studies, and Board Exam conceptual lectures by CS Sanjay Arya.
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-800/80 flex items-center justify-between text-xs font-bold text-[#00A5EC]">
+                <span>Visit YouTube Channel</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </div>
             </div>
           </a>
 
-          {/* Card 2: Management as a Profession */}
+          {/* Card 2: Company Law Classes */}
           <a 
-            href="https://www.youtube.com/watch?v=A1C-Q2sydxM"
+            href="https://youtube.com/@companylawclasses?si=os5mXQz9_mRflMvg"
             target="_blank"
             rel="noopener noreferrer"
-            className="group bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm flex flex-col hover:shadow-md transition-shadow"
+            className="group bg-white dark:bg-[#0d2036] border border-gray-150 dark:border-gray-800 rounded-3xl overflow-hidden shadow-md flex flex-col hover:shadow-2xl hover:border-sky-400 transition-all duration-300"
           >
             <div className="relative aspect-video bg-gray-900 overflow-hidden flex items-center justify-center">
               <img 
                 src="https://img.youtube.com/vi/A1C-Q2sydxM/hqdefault.jpg"
-                alt="Management as a Profession Lecture"
+                alt="Company Law Classes YouTube Channel"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 select-none"
               />
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-                <div className="h-12 w-12 rounded-full bg-[#0D2847] group-hover:bg-[#F5BE18] text-white group-hover:text-[#0D2847] flex items-center justify-center shadow-lg transition-colors duration-300">
-                  <Play className="h-5 w-5 fill-current ml-0.5" />
+              <div className="absolute inset-0 bg-black/25 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+                <div className="h-14 w-14 rounded-full bg-[#FF0000] text-white flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300">
+                  <Play className="h-6 w-6 fill-current ml-0.5 text-white" />
                 </div>
               </div>
+              <span className="absolute top-3 left-3 bg-[#FF0000] text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-md shadow">
+                YouTube Channel
+              </span>
             </div>
-            <div className="p-4 text-left">
-              <span className="text-xs font-bold text-[#F5BE18] uppercase">Class 12 Business Studies</span>
-              <h4 className="font-extrabold text-[#0D2847] dark:text-white text-sm mt-1">Management as a Profession & Professionalism</h4>
-              <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">By CS Sanjay Arya (Company Secretary)</p>
-            </div>
-          </a>
-
-          {/* Card 3: National Income */}
-          <a 
-            href="https://www.youtube.com/watch?v=bt8HaQctuAk"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm flex flex-col hover:shadow-md transition-shadow"
-          >
-            <div className="relative aspect-video bg-gray-900 overflow-hidden flex items-center justify-center">
-              <img 
-                src="https://img.youtube.com/vi/bt8HaQctuAk/hqdefault.jpg"
-                alt="National Income Lecture"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 select-none"
-              />
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-                <div className="h-12 w-12 rounded-full bg-[#0D2847] group-hover:bg-[#F5BE18] text-white group-hover:text-[#0D2847] flex items-center justify-center shadow-lg transition-colors duration-300">
-                  <Play className="h-5 w-5 fill-current ml-0.5" />
-                </div>
+            <div className="p-6 text-left flex-1 flex flex-col justify-between">
+              <div>
+                <span className="text-xs font-black text-sky-400 uppercase tracking-wider block">@companylawclasses</span>
+                <h4 className="font-black text-[#0D2847] dark:text-white text-base md:text-lg mt-1 leading-snug">
+                  Company Law Classes – CA & CS Professional Prep
+                </h4>
+                <p className="text-xs text-gray-600 dark:text-gray-300 font-medium mt-2 leading-relaxed">
+                  In-depth Corporate Laws, CA Foundation & CS Executive professional prep masterclasses.
+                </p>
               </div>
-            </div>
-            <div className="p-4 text-left">
-              <span className="text-xs font-bold text-[#F5BE18] uppercase">Class 12 Economics</span>
-              <h4 className="font-extrabold text-[#0D2847] dark:text-white text-sm mt-1">National Income: Normal Resident Concept</h4>
-              <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">By CS Sanjay Arya (Company Secretary)</p>
+              <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-800/80 flex items-center justify-between text-xs font-bold text-sky-400">
+                <span>Visit YouTube Channel</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </div>
             </div>
           </a>
 
@@ -769,7 +849,7 @@ export default function Home() {
               </div>
               <h3 className="font-black text-base text-white mb-2">Qualified Senior Faculty</h3>
               <p className="text-xs text-gray-300 leading-relaxed font-medium">
-                Classes conducted by CS Sanjay Arya (Qualified Company Secretary), Er. Aditya Pratap Singh, Vimal Sharma (15+ Yrs Exp) & Er. Shaurav Singh (B.Tech).
+                Classes conducted by CS Sanjay Arya (Qualified Company Secretary), Er. Aditya Pratap Singh, Vimal Sharma (15+ Yrs Exp) & Er. Saurabh Singh (B.Tech).
               </p>
             </div>
 

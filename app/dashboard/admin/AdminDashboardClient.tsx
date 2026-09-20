@@ -604,13 +604,11 @@ export default function AdminDashboardClient({
         <div>
           {/* Header Title */}
           <div className="pb-2.5 mb-2.5 border-b border-white/10 flex items-center gap-2.5">
-            <div className="h-9 w-9 shrink-0 flex items-center justify-center overflow-hidden">
               <img
-                src="/kvi_logo.png"
+                src="/newlogo.png"
                 alt="Knowledge Venture Institute Logo"
-                className="w-full h-full object-contain select-none drop-shadow-sm"
+                className="h-8 w-auto object-contain select-none"
               />
-            </div>
             <div>
               <h2 className="font-black text-xs text-white tracking-wide uppercase">TOOLS & FEATURES</h2>
               <span className="text-[9px] text-amber-300 font-bold block">Admin Control Panel</span>

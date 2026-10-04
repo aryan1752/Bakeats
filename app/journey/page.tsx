@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import JourneySection from "@/components/ui/JourneySection";
+import FounderSection from "@/components/ui/FounderSection";
 
 export const metadata: Metadata = {
   title: "Our Journey | Knowledge Venture Institute (KVI)",
@@ -38,6 +39,9 @@ export default function JourneyPage() {
 
       {/* Dedicated Journey Scroll Timeline Section */}
       <JourneySection />
+
+      {/* Founder Section at Bottom */}
+      <FounderSection />
     </main>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Phone, User, MapPin, ChevronDown, LogOut, ShieldCheck, GraduationCap, Bell, Home, BookOpen, Award } from "lucide-react";
+import { Phone, User, MapPin, ChevronDown, LogOut, ShieldCheck, GraduationCap, Bell, Home, BookOpen, Award, X, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
@@ -10,11 +10,12 @@ import { useNotifications } from "./NotificationContext";
 export default function BakeatsNavbar() {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
+  const [showBanner, setShowBanner] = useState(true);
   const [userSession, setUserSession] = useState<{ loggedIn: boolean; user: any } | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const desktopDropdownRef = useRef<HTMLDivElement>(null);
   const mobileDropdownRef = useRef<HTMLDivElement>(null);
-  
+
   const { hasUnread: rawHasUnread, unreadCount: rawUnreadCount, markAllAsSeen } = useNotifications();
 
   useEffect(() => {
@@ -91,24 +92,34 @@ export default function BakeatsNavbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-[60] bg-[#F5BE18] dark:bg-[#E2AD07] border-b border-amber-400 dark:border-amber-600 shadow-sm transition-colors duration-200">
       
-      {/* Top Mini Info Bar (Desktop only) */}
-      <div className="bg-[#0D2847] dark:bg-[#071728] text-[11px] text-gray-200 py-2 px-4 hidden md:flex justify-between items-center">
-        <div className="flex items-center gap-4">
-          <span className="flex items-center gap-1.5">
-            <Phone className="h-3.5 w-3.5 text-[#F5BE18]" />
-            <a href="tel:7011731649" className="hover:text-white">7011731649</a>
-          </span>
-          <span className="flex items-center gap-1.5">
-            <Phone className="h-3.5 w-3.5 text-[#F5BE18]" />
-            <a href="tel:8285575250" className="hover:text-white">8285575250</a>
-          </span>
+      {/* Desktop Top Announcement Banner */}
+      {showBanner && (
+        <div className="hidden md:flex bg-[#1865F2] text-white text-xs sm:text-sm py-2 px-3 sm:px-4 items-center justify-between border-b border-blue-400/30 shadow-inner relative z-10">
+          <div className="flex-1 flex items-center justify-center gap-2 text-center flex-wrap">
+            <span className="bg-amber-400 text-[#0D2847] font-black px-2 py-0.5 rounded text-[10px] sm:text-xs uppercase tracking-wider shrink-0 shadow-sm">
+              ANNOUNCEMENT
+            </span>
+            <span className="font-extrabold tracking-wide">
+              CSEET Feb 2027 — Classes will start from October
+            </span>
+            <span className="hidden sm:inline text-white/50">•</span>
+            <span className="flex items-center gap-1.5 font-bold">
+              <span className="text-blue-100">Contact:</span>
+              <a href="tel:7011731649" className="underline hover:text-amber-300 font-black">7011731649</a>
+              <span>,</span>
+              <a href="tel:8285575250" className="underline hover:text-amber-300 font-black">8285575250</a>
+            </span>
+          </div>
+          <button
+            onClick={() => setShowBanner(false)}
+            className="p-1 hover:bg-white/20 rounded-full transition-colors text-white/80 hover:text-white shrink-0 ml-2 cursor-pointer"
+            aria-label="Close announcement banner"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
-        <div className="flex items-center gap-1.5">
-          <MapPin className="h-3.5 w-3.5 text-[#F5BE18]" />
-          <span>I-49A, above Dabra Medical Center, Hari Nagar, Jaitpur Badarpur, New Delhi</span>
-        </div>
-      </div>
-
+      )}
+      
       {/* Main Navbar */}
       <div className="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between">
         
@@ -282,6 +293,31 @@ export default function BakeatsNavbar() {
         </div>
 
       </div>
+
+      {/* Mobile Announcement Banner (Ultra-thin Micro Strip) */}
+      {showBanner && (
+        <div className="md:hidden bg-[#1865F2] text-white py-[2px] px-2 flex items-center justify-between border-t border-blue-400/30 text-[9px] leading-none font-extrabold shadow-inner">
+          <div className="flex-1 flex items-center justify-center gap-1 whitespace-nowrap overflow-hidden text-ellipsis pr-1">
+            <span className="bg-amber-400 text-[#0D2847] font-black px-1 py-[1px] rounded text-[8px] uppercase tracking-wider shrink-0">
+              CSEET
+            </span>
+            <span>Feb 27 — Starts Oct •</span>
+            <span className="inline-flex items-center gap-1 font-bold">
+              <span className="text-blue-100">Call:</span>
+              <a href="tel:7011731649" className="underline font-black text-amber-300">7011731649</a>
+              <span>,</span>
+              <a href="tel:8285575250" className="underline font-black text-amber-300">8285575250</a>
+            </span>
+          </div>
+          <button
+            onClick={() => setShowBanner(false)}
+            className="p-0.5 hover:bg-white/20 rounded-full transition-colors text-white/90 shrink-0 cursor-pointer"
+            aria-label="Close announcement banner"
+          >
+            <X className="w-2.5 h-2.5" />
+          </button>
+        </div>
+      )}
 
     </header>
   );

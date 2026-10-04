@@ -159,7 +159,7 @@ export default function RootLayout({
           <BakeatsNavbar />
 
           {/* MAIN CONTENT */}
-          <main className="flex-1 w-full pt-16 md:pt-20 pb-16 md:pb-0">
+          <main className="flex-1 w-full pt-20 sm:pt-20 md:pt-24 pb-16 md:pb-0">
             {children}
           </main>
 

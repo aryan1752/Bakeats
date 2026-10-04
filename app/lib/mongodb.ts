@@ -28,9 +28,13 @@ export async function connectToDatabase() {
 
   try {
     cached.conn = await cached.promise;
-  } catch (e) {
+  } catch (e: any) {
     cached.promise = null;
-    console.error("Failed to connect to MongoDB:", e);
+    if (e.message?.includes("ECONNREFUSED") || e.name === "MongooseServerSelectionError") {
+      console.warn("⚠️ MongoDB service is offline (127.0.0.1:27017). Operating in fallback preview mode.");
+    } else {
+      console.error("Failed to connect to MongoDB:", e.message || e);
+    }
     throw e;
   }
 

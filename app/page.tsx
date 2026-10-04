@@ -729,31 +729,31 @@ export default function Home() {
           >
             <div className="relative aspect-video bg-gray-900 overflow-hidden flex items-center justify-center">
               <img 
-                src="https://img.youtube.com/vi/CtMkfZMHUuM/hqdefault.jpg"
-                alt="CS Sanjay Arya YouTube Channel"
+                src="/yt_macroeconomics.jpg"
+                alt="Class 12 Economics - Chapter 1: Some Basic Concepts of Macroeconomics (L-1) by CS Sanjay Arya"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 select-none"
               />
-              <div className="absolute inset-0 bg-black/25 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+              <div className="absolute inset-0 bg-black/15 group-hover:bg-black/30 transition-colors flex items-center justify-center">
                 <div className="h-14 w-14 rounded-full bg-[#FF0000] text-white flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300">
                   <Play className="h-6 w-6 fill-current ml-0.5 text-white" />
                 </div>
               </div>
               <span className="absolute top-3 left-3 bg-[#FF0000] text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-md shadow">
-                YouTube Channel
+                L-1 • CBSE 2026-27
               </span>
             </div>
             <div className="p-6 text-left flex-1 flex flex-col justify-between">
               <div>
-                <span className="text-xs font-black text-[#F5BE18] uppercase tracking-wider block">@sanjayaryacs</span>
+                <span className="text-xs font-black text-[#F5BE18] uppercase tracking-wider block">@sanjayaryacs • Class 12 Economics</span>
                 <h4 className="font-black text-[#0D2847] dark:text-white text-base md:text-lg mt-1 leading-snug">
-                  CS Sanjay Arya – Economics & Business Studies
+                  Class 12 Economics — Ch 1: Some Basic Concepts of Macroeconomics (L-1)
                 </h4>
                 <p className="text-xs text-gray-600 dark:text-gray-300 font-medium mt-2 leading-relaxed">
-                  Subscribe for Class 11th & 12th Economics, Business Studies, and Board Exam conceptual lectures by CS Sanjay Arya.
+                  Learn Macroeconomics Meaning, Scope & Importance, Micro vs Macro, and Key Concepts for CBSE 2026-27 with CS Sanjay Arya.
                 </p>
               </div>
               <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-800/80 flex items-center justify-between text-xs font-bold text-[#00A5EC]">
-                <span>Visit YouTube Channel</span>
+                <span>Watch Lecture on YouTube</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </div>
             </div>

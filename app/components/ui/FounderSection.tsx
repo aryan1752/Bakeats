@@ -51,13 +51,13 @@ export default function FounderSection() {
                     className="w-full h-full object-cover object-top transition duration-500 group-hover:scale-105"
                   />
                   
-                  {/* Floating Overlay Badge */}
-                  <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 p-3 sm:p-3.5 bg-[#071728]/90 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg flex items-center justify-between">
+                  {/* Floating Overlay Badge - Hidden by default, reveals on hover/touch with frosted glass */}
+                  <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 p-3 sm:p-3.5 bg-black/40 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl flex items-center justify-between opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 group-active:opacity-100 group-active:translate-y-0 transition-all duration-400 ease-out pointer-events-none group-hover:pointer-events-auto">
                     <div>
-                      <h4 className="font-black text-sm sm:text-base text-white">CS Sanjay Arya</h4>
+                      <h4 className="font-black text-sm sm:text-base text-white drop-shadow-sm">CS Sanjay Arya</h4>
                       <span className="text-[11px] sm:text-xs text-[#F5BE18] font-bold block">Founder & Lead Mentor</span>
                     </div>
-                    <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#F5BE18] text-[#0D2847] font-black flex items-center justify-center shadow-md">
+                    <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#F5BE18]/90 backdrop-blur-sm text-[#0D2847] font-black flex items-center justify-center shadow-md">
                       <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5 text-[#0D2847]" />
                     </div>
                   </div>

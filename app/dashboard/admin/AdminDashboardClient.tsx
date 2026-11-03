@@ -134,7 +134,11 @@ export default function AdminDashboardClient({
   });
 
   const handleUpdateEnrollmentStatus = async (id: string, status: string) => {
-    setEnrollmentStatusMap(prev => ({ ...prev, [id]: status }));
+    setEnrollmentStatusMap(prev => {
+      const updated = { ...prev, [id]: status };
+      try { localStorage.setItem("kvi_enrollment_status_cache", JSON.stringify(updated)); } catch (e) {}
+      return updated;
+    });
     try {
       await fetch("/api/enrollments", {
         method: "PATCH",
@@ -147,7 +151,11 @@ export default function AdminDashboardClient({
   };
 
   const handleUpdateScholarshipStatus = async (id: string, status: string) => {
-    setScholarshipStatusMap(prev => ({ ...prev, [id]: status }));
+    setScholarshipStatusMap(prev => {
+      const updated = { ...prev, [id]: status };
+      try { localStorage.setItem("kvi_scholarship_status_cache", JSON.stringify(updated)); } catch (e) {}
+      return updated;
+    });
     try {
       await fetch("/api/scholarships", {
         method: "PATCH",
@@ -248,6 +256,29 @@ export default function AdminDashboardClient({
     ]);
     setTimeout(() => setIsRefreshingNotif(false), 400);
   };
+
+  // Hydrate client state from localStorage on first mount
+  useEffect(() => {
+    try {
+      const today = new Date().toISOString().split("T")[0];
+      const cachedAtt = localStorage.getItem(`kvi_att_${today}`);
+      if (cachedAtt) {
+        setMarkedRecords(prev => ({ ...JSON.parse(cachedAtt), ...prev }));
+      }
+      const cachedFees = localStorage.getItem("kvi_fees_cache");
+      if (cachedFees) {
+        setFeeRecords(prev => ({ ...JSON.parse(cachedFees), ...prev }));
+      }
+      const cachedEnr = localStorage.getItem("kvi_enrollment_status_cache");
+      if (cachedEnr) {
+        setEnrollmentStatusMap(prev => ({ ...JSON.parse(cachedEnr), ...prev }));
+      }
+      const cachedSch = localStorage.getItem("kvi_scholarship_status_cache");
+      if (cachedSch) {
+        setScholarshipStatusMap(prev => ({ ...JSON.parse(cachedSch), ...prev }));
+      }
+    } catch (e) {}
+  }, []);
 
   useEffect(() => {
     fetchAdminBroadcasts();
@@ -457,31 +488,93 @@ export default function AdminDashboardClient({
     }
   };
 
-  // Mark attendance in database + local feedback
+  // Mark attendance in database + local feedback (instant auto-save on button click)
   const handleMarkStatus = async (studentId: string, status: "present" | "absent" | "late") => {
-    setMarkedRecords(prev => ({ ...prev, [studentId]: status }));
+    const todayDate = new Date().toISOString().split("T")[0];
+    const newMarked = { ...markedRecords, [studentId]: status };
+    setMarkedRecords(newMarked);
+
+    try {
+      localStorage.setItem(`kvi_att_${todayDate}`, JSON.stringify(newMarked));
+    } catch (e) {}
+
+    try {
+      await fetch("/api/attendance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          date: todayDate,
+          stream: activeTab,
+          records: { [studentId]: status }
+        })
+      });
+    } catch (err) {
+      console.warn("Failed to auto-save attendance status:", err);
+    }
   };
 
-  // Fee Handlers & Push Notification Submission
-  const handleMarkFeeStatus = (studentId: string, status: "paid" | "pending" | "overdue") => {
-    setFeeRecords(prev => ({
-      ...prev,
-      [studentId]: {
-        ...prev[studentId],
-        status
-      }
-    }));
+  // Fee Handlers & Instant Persistence on button click
+  const handleMarkFeeStatus = async (studentId: string, status: "paid" | "pending" | "overdue") => {
+    const updatedRec = {
+      ...(feeRecords[studentId] || {}),
+      status
+    };
+    const newFeeRecords = {
+      ...feeRecords,
+      [studentId]: updatedRec
+    };
+    setFeeRecords(newFeeRecords);
+
+    try {
+      localStorage.setItem("kvi_fees_cache", JSON.stringify(newFeeRecords));
+    } catch (e) {}
+
+    try {
+      await fetch("/api/fees", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          stream: activeTab,
+          records: {
+            [studentId]: updatedRec
+          }
+        })
+      });
+    } catch (err) {
+      console.warn("Failed to auto-save fee status:", err);
+    }
   };
 
-  const handleFeeAmountChange = (studentId: string, amount: string) => {
-    setFeeRecords(prev => ({
-      ...prev,
-      [studentId]: {
-        ...prev[studentId],
-        status: prev[studentId]?.status || "pending",
-        amount
-      }
-    }));
+  const handleFeeAmountChange = async (studentId: string, amount: string) => {
+    const updatedRec = {
+      ...(feeRecords[studentId] || {}),
+      status: feeRecords[studentId]?.status || "pending",
+      amount
+    };
+    const newFeeRecords = {
+      ...feeRecords,
+      [studentId]: updatedRec
+    };
+    setFeeRecords(newFeeRecords);
+
+    try {
+      localStorage.setItem("kvi_fees_cache", JSON.stringify(newFeeRecords));
+    } catch (e) {}
+
+    try {
+      await fetch("/api/fees", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          stream: activeTab,
+          records: {
+            [studentId]: updatedRec
+          }
+        })
+      });
+    } catch (err) {
+      console.warn("Failed to auto-save fee amount:", err);
+    }
   };
 
   const handleSubmitFees = async () => {

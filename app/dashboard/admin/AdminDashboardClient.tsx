@@ -55,24 +55,28 @@ interface AdminDashboardClientProps {
   contacts: any[];
   scholarships: any[];
   enrollments?: any[];
+  initialAttendance?: { [key: string]: string };
+  initialFees?: { [studentId: string]: { status: "paid" | "pending" | "overdue"; amount?: string } };
 }
 
 export default function AdminDashboardClient({ 
   students, 
   contacts, 
   scholarships,
-  enrollments = []
+  enrollments = [],
+  initialAttendance = {},
+  initialFees = {}
 }: AdminDashboardClientProps) {
   const [activeTab, setActiveTab] = useState<"foundations" | "science" | "commerce" | "arts">("foundations");
   const [activeFeature, setActiveFeature] = useState<"announcements" | "attendance" | "notes" | "fees" | "enquiries" | "scholarships">("announcements");
   const [uploadedPdfUrl, setUploadedPdfUrl] = useState("");
   const [selectedPdfFile, setSelectedPdfFile] = useState<File | null>(null);
   const [selectedPdfFileName, setSelectedPdfFileName] = useState("");
-  const [markedRecords, setMarkedRecords] = useState<{ [key: string]: string }>({});
+  const [markedRecords, setMarkedRecords] = useState<{ [key: string]: string }>(initialAttendance || {});
   const [expandedScholarship, setExpandedScholarship] = useState<number | null>(null);
 
   // Fee Management states
-  const [feeRecords, setFeeRecords] = useState<{ [studentId: string]: { status: "paid" | "pending" | "overdue"; amount?: string } }>({});
+  const [feeRecords, setFeeRecords] = useState<{ [studentId: string]: { status: "paid" | "pending" | "overdue"; amount?: string } }>(initialFees || {});
   const [feeMsg, setFeeMsg] = useState("");
   const [feeError, setFeeError] = useState("");
   const [isSubmittingFees, setIsSubmittingFees] = useState(false);
@@ -214,7 +218,7 @@ export default function AdminDashboardClient({
       const res = await fetch(`/api/attendance?date=${today}&stream=${activeTab}`);
       const data = await res.json();
       if (data && data.success && data.records) {
-        setMarkedRecords(data.records);
+        setMarkedRecords(prev => ({ ...prev, ...data.records }));
       }
     } catch (err) {
       console.warn("Failed to fetch attendance:", err);
@@ -226,7 +230,7 @@ export default function AdminDashboardClient({
       const res = await fetch(`/api/fees?stream=${activeTab}`);
       const data = await res.json();
       if (data && data.success && data.records) {
-        setFeeRecords(data.records);
+        setFeeRecords(prev => ({ ...prev, ...data.records }));
       }
     } catch (err) {
       console.warn("Failed to fetch fees:", err);

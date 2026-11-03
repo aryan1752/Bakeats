@@ -10,7 +10,16 @@ export async function GET() {
       return NextResponse.json({ loggedIn: false, user: null });
     }
 
-    const user = JSON.parse(sessionCookie.value);
+    let user = null;
+    try {
+      user = JSON.parse(decodeURIComponent(sessionCookie.value));
+    } catch {
+      try {
+        user = JSON.parse(sessionCookie.value);
+      } catch {
+        return NextResponse.json({ loggedIn: false, user: null });
+      }
+    }
     return NextResponse.json({ loggedIn: true, user });
   } catch (error) {
     return NextResponse.json({ loggedIn: false, user: null });

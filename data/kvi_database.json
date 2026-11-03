@@ -166,6 +166,10 @@
       "status": "paid",
       "amount": "5000",
       "updatedAt": "2026-11-03T07:07:04.600Z"
+    },
+    "student_1793716225920": {
+      "status": "overdue",
+      "updatedAt": "2026-11-03T14:42:03.766Z"
     }
   }
 }

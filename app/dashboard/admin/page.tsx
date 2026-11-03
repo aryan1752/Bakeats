@@ -22,11 +22,16 @@ export default async function AdminDashboard() {
 
   let session: any = null;
   try {
-    session = JSON.parse(sessionCookie);
-    if (session.role !== "admin") {
+    session = JSON.parse(decodeURIComponent(sessionCookie));
+  } catch (err) {
+    try {
+      session = JSON.parse(sessionCookie);
+    } catch (e2) {
       redirect("/login");
     }
-  } catch (err) {
+  }
+
+  if (!session || session.role !== "admin") {
     redirect("/login");
   }
 

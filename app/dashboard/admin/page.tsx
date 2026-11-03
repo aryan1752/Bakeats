@@ -6,7 +6,9 @@ import {
   getLocalStudents, 
   getLocalContacts, 
   getLocalScholarships, 
-  getLocalEnrollments 
+  getLocalEnrollments,
+  getLocalAttendance,
+  getLocalFees
 } from "@/lib/local-db";
 import AdminDashboardClient from "./AdminDashboardClient";
 
@@ -20,11 +22,16 @@ export default async function AdminDashboard() {
 
   let session: any = null;
   try {
-    session = JSON.parse(sessionCookie);
-    if (session.role !== "admin") {
+    session = JSON.parse(decodeURIComponent(sessionCookie));
+  } catch (err) {
+    try {
+      session = JSON.parse(sessionCookie);
+    } catch (e2) {
       redirect("/login");
     }
-  } catch (err) {
+  }
+
+  if (!session || session.role !== "admin") {
     redirect("/login");
   }
 
@@ -33,6 +40,8 @@ export default async function AdminDashboard() {
   let dbContacts: any[] = getLocalContacts();
   let dbScholarships: any[] = getLocalScholarships();
   let dbEnrollments: any[] = getLocalEnrollments();
+  let dbAttendance = getLocalAttendance();
+  let dbFees = getLocalFees();
 
   // If MongoDB is reachable, merge latest records
   try {
@@ -148,6 +157,8 @@ export default async function AdminDashboard() {
         contacts={dbContacts} 
         scholarships={dbScholarships}
         enrollments={dbEnrollments}
+        initialAttendance={dbAttendance}
+        initialFees={dbFees}
       />
     </div>
   );

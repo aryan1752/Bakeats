@@ -66,6 +66,8 @@ export default function AdminDashboardClient({
   const [activeTab, setActiveTab] = useState<"foundations" | "science" | "commerce" | "arts">("foundations");
   const [activeFeature, setActiveFeature] = useState<"announcements" | "attendance" | "notes" | "fees" | "enquiries" | "scholarships">("announcements");
   const [uploadedPdfUrl, setUploadedPdfUrl] = useState("");
+  const [selectedPdfFile, setSelectedPdfFile] = useState<File | null>(null);
+  const [selectedPdfFileName, setSelectedPdfFileName] = useState("");
   const [markedRecords, setMarkedRecords] = useState<{ [key: string]: string }>({});
   const [expandedScholarship, setExpandedScholarship] = useState<number | null>(null);
 
@@ -104,9 +106,28 @@ export default function AdminDashboardClient({
   const [isSubmittingNotif, setIsSubmittingNotif] = useState(false);
   const [isRefreshingNotif, setIsRefreshingNotif] = useState(false);
 
-  // Status Maps for Enrollments & Scholarships
-  const [enrollmentStatusMap, setEnrollmentStatusMap] = useState<{ [id: string]: string }>({});
-  const [scholarshipStatusMap, setScholarshipStatusMap] = useState<{ [id: string]: string }>({});
+  // Status Maps for Enrollments & Scholarships initialized from props
+  const [enrollmentStatusMap, setEnrollmentStatusMap] = useState<{ [id: string]: string }>(() => {
+    const map: { [id: string]: string } = {};
+    if (Array.isArray(enrollments)) {
+      enrollments.forEach(e => {
+        const id = e._id || e.id;
+        if (id && e.status) map[id] = e.status;
+      });
+    }
+    return map;
+  });
+
+  const [scholarshipStatusMap, setScholarshipStatusMap] = useState<{ [id: string]: string }>(() => {
+    const map: { [id: string]: string } = {};
+    if (Array.isArray(scholarships)) {
+      scholarships.forEach(s => {
+        const id = s._id || s.id;
+        if (id && s.status) map[id] = s.status;
+      });
+    }
+    return map;
+  });
 
   const handleUpdateEnrollmentStatus = async (id: string, status: string) => {
     setEnrollmentStatusMap(prev => ({ ...prev, [id]: status }));
@@ -173,33 +194,13 @@ export default function AdminDashboardClient({
   };
 
   const fetchAdminStudents = async () => {
-    // ⚡ Try loading from localStorage cache first for 0ms render on refresh
-    try {
-      const cached = localStorage.getItem("kvi_students_cache");
-      if (cached) {
-        const parsed = JSON.parse(cached);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setStudentsList(parsed);
-        }
-      }
-    } catch (e) {}
-
     try {
       const res = await fetch("/api/students");
       const data = await res.json();
       if (data && data.success && Array.isArray(data.students)) {
         if (data.students.length > 0) {
           setStudentsList(data.students);
-          localStorage.setItem("kvi_students_cache", JSON.stringify(data.students));
-        } else {
-          // If server returned [], check if we have local cache
-          const cached = localStorage.getItem("kvi_students_cache");
-          if (cached) {
-            const parsed = JSON.parse(cached);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-              setStudentsList(parsed);
-            }
-          }
+          try { localStorage.setItem("kvi_students_cache", JSON.stringify(data.students)); } catch (e) {}
         }
       }
     } catch (err) {
@@ -207,11 +208,40 @@ export default function AdminDashboardClient({
     }
   };
 
+  const fetchAttendance = async () => {
+    try {
+      const today = new Date().toISOString().split("T")[0];
+      const res = await fetch(`/api/attendance?date=${today}&stream=${activeTab}`);
+      const data = await res.json();
+      if (data && data.success && data.records) {
+        setMarkedRecords(data.records);
+      }
+    } catch (err) {
+      console.warn("Failed to fetch attendance:", err);
+    }
+  };
+
+  const fetchFees = async () => {
+    try {
+      const res = await fetch(`/api/fees?stream=${activeTab}`);
+      const data = await res.json();
+      if (data && data.success && data.records) {
+        setFeeRecords(data.records);
+      }
+    } catch (err) {
+      console.warn("Failed to fetch fees:", err);
+    }
+  };
+
   const handleManualRefresh = async () => {
     setIsRefreshingNotif(true);
-    await fetchAdminBroadcasts();
-    await fetchAdminMaterials();
-    await fetchAdminStudents();
+    await Promise.all([
+      fetchAdminBroadcasts(),
+      fetchAdminMaterials(),
+      fetchAdminStudents(),
+      fetchAttendance(),
+      fetchFees()
+    ]);
     setTimeout(() => setIsRefreshingNotif(false), 400);
   };
 
@@ -219,7 +249,9 @@ export default function AdminDashboardClient({
     fetchAdminBroadcasts();
     fetchAdminMaterials();
     fetchAdminStudents();
-  }, []);
+    fetchAttendance();
+    fetchFees();
+  }, [activeTab]);
 
   const handleBroadcastSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -373,6 +405,18 @@ export default function AdminDashboardClient({
       const todayDate = new Date().toISOString().split("T")[0];
       const streamLabel = activeTab === "foundations" ? "Class 9-10th" : activeTab === "science" ? "Class 11-12th Science" : activeTab === "commerce" ? "Class 11-12th Commerce" : "Class 11-12th Arts";
 
+      // 1. Save attendance to persistent API
+      await fetch("/api/attendance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          date: todayDate,
+          stream: activeTab,
+          records: markedRecords
+        })
+      });
+
+      // 2. Broadcast absent notifications if any
       const absentStudents = filteredStudents.filter(student => {
         const studentId = student._id || student.id || "";
         return markedRecords[studentId] === "absent";
@@ -398,8 +442,7 @@ export default function AdminDashboardClient({
       }
 
       await fetchAdminBroadcasts();
-      setMarkedRecords({});
-      setAttendanceMsg("Attendance Roll Submitted Successfully!");
+      setAttendanceMsg("Attendance Roll Saved & Submitted Successfully!");
       setTimeout(() => {
         setAttendanceMsg("");
       }, 4000);
@@ -452,6 +495,17 @@ export default function AdminDashboardClient({
       const todayDate = new Date().toISOString().split("T")[0];
       const streamLabel = activeTab === "foundations" ? "Class 9-10th" : activeTab === "science" ? "Class 11-12th Science" : activeTab === "commerce" ? "Class 11-12th Commerce" : "Class 11-12th Arts";
 
+      // 1. Save fees to persistent API
+      await fetch("/api/fees", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          stream: activeTab,
+          records: feeRecords
+        })
+      });
+
+      // 2. Broadcast dues alert if any students have pending/overdue fees
       const dueStudents = filteredStudents.filter(student => {
         const studentId = student._id || student.id || "";
         const rec = feeRecords[studentId];
@@ -478,7 +532,6 @@ export default function AdminDashboardClient({
       }
 
       await fetchAdminBroadcasts();
-      setFeeRecords({});
       setFeeMsg("Fee Status Logged & Dues Notification Pushed Successfully!");
       setTimeout(() => {
         setFeeMsg("");
@@ -516,21 +569,33 @@ export default function AdminDashboardClient({
     if (!formData.get("stream")) {
       formData.append("stream", activeTab);
     }
-    if (uploadedPdfUrl) {
+    
+    if (selectedPdfFile) {
+      formData.set("file", selectedPdfFile);
+    } else if (uploadedPdfUrl) {
       formData.set("file_url", uploadedPdfUrl);
+    } else {
+      setMaterialError("Please select a PDF file from your computer.");
+      return;
     }
 
     setIsSubmittingMaterial(true);
     try {
-      const res = await addMaterial(null, formData);
-      if (res.success) {
-        setMaterialMsg(res.message || "Material uploaded!");
+      const res = await fetch("/api/materials", {
+        method: "POST",
+        body: formData
+      });
+      const data = await res.json();
+      if (data && data.success) {
+        setMaterialMsg(data.message || "Material uploaded successfully!");
+        setSelectedPdfFile(null);
+        setSelectedPdfFileName("");
         setUploadedPdfUrl("");
         form.reset();
         await fetchAdminMaterials();
         setTimeout(() => setMaterialMsg(""), 3500);
       } else {
-        setMaterialError(res.error || "Upload failed.");
+        setMaterialError(data?.error || "Upload failed.");
       }
     } catch (err: any) {
       setMaterialError("Upload failed: " + err.message);
@@ -1381,7 +1446,7 @@ export default function AdminDashboardClient({
                     <div className="flex flex-col gap-1.5">
                       <label className="text-[11px] font-extrabold text-black dark:text-white uppercase block">PDF File Attachment</label>
                       
-                      {/* Native Local File Fallback for PDF */}
+                      {/* Native Local File for PDF Upload */}
                       <input
                         id="native-pdf-file-input"
                         type="file"
@@ -1390,13 +1455,9 @@ export default function AdminDashboardClient({
                         onChange={(e) => {
                           const file = e.target.files?.[0];
                           if (file) {
-                            const reader = new FileReader();
-                            reader.onload = (evt) => {
-                              if (evt.target?.result) {
-                                setUploadedPdfUrl(evt.target.result as string);
-                              }
-                            };
-                            reader.readAsDataURL(file);
+                            setSelectedPdfFile(file);
+                            setSelectedPdfFileName(file.name);
+                            setUploadedPdfUrl("");
                           }
                         }}
                       />
@@ -1407,29 +1468,34 @@ export default function AdminDashboardClient({
                         className="w-full bg-[#0D2847] hover:bg-[#071728] text-white font-bold py-3.5 px-4 rounded-xl border border-white/20 transition cursor-pointer flex items-center justify-center gap-2 text-xs shadow-md"
                       >
                         <Upload className="w-4 h-4 text-[#F5BE18]" />
-                        <span>{uploadedPdfUrl ? "✓ PDF Document Selected (Click to Change)" : "📁 Select PDF Document From Computer"}</span>
+                        <span>{selectedPdfFileName || uploadedPdfUrl ? `✓ ${selectedPdfFileName || "PDF Document Selected"} (Click to change)` : "📁 Select PDF Document From Computer"}</span>
                       </button>
 
-                      {uploadedPdfUrl && (
+                      {(selectedPdfFileName || uploadedPdfUrl) && (
                         <div className="p-2.5 bg-green-500/20 text-green-300 rounded-xl text-xs font-semibold flex items-center justify-between border border-green-500/30">
                           <div className="flex items-center gap-2 truncate min-w-0 flex-1">
                             <span className="text-sm shrink-0">📄</span>
                             <span className="truncate">
-                              {uploadedPdfUrl.startsWith("data:") 
-                                ? "✓ PDF Document Attached & Ready to Save" 
+                              {selectedPdfFileName 
+                                ? `✓ ${selectedPdfFileName} (${selectedPdfFile?.size ? (selectedPdfFile.size / (1024 * 1024)).toFixed(2) + " MB" : ""})` 
                                 : `✓ Attached: ${uploadedPdfUrl}`}
                             </span>
                           </div>
                           <button
                             type="button"
-                            onClick={() => setUploadedPdfUrl("")}
+                            onClick={() => {
+                              setSelectedPdfFile(null);
+                              setSelectedPdfFileName("");
+                              setUploadedPdfUrl("");
+                              const inputEl = document.getElementById("native-pdf-file-input") as HTMLInputElement;
+                              if (inputEl) inputEl.value = "";
+                            }}
                             className="text-xs text-red-400 hover:text-red-300 font-bold px-2 py-0.5 rounded hover:bg-red-500/20 cursor-pointer shrink-0 ml-2"
                           >
                             Remove
                           </button>
                         </div>
                       )}
-                      <input type="hidden" name="file_url" value={uploadedPdfUrl || "#"} />
                     </div>
                   </div>
 

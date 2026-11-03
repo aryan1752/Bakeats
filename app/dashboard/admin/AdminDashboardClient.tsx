@@ -225,7 +225,7 @@ export default function AdminDashboardClient({
       const today = new Date().toISOString().split("T")[0];
       const res = await fetch(`/api/attendance?date=${today}&stream=${activeTab}`);
       const data = await res.json();
-      if (data && data.success && data.records) {
+      if (data && data.success && data.records && Object.keys(data.records).length > 0) {
         setMarkedRecords(prev => ({ ...prev, ...data.records }));
       }
     } catch (err) {
@@ -237,7 +237,7 @@ export default function AdminDashboardClient({
     try {
       const res = await fetch(`/api/fees?stream=${activeTab}`);
       const data = await res.json();
-      if (data && data.success && data.records) {
+      if (data && data.success && data.records && Object.keys(data.records).length > 0) {
         setFeeRecords(prev => ({ ...prev, ...data.records }));
       }
     } catch (err) {
@@ -263,19 +263,19 @@ export default function AdminDashboardClient({
       const today = new Date().toISOString().split("T")[0];
       const cachedAtt = localStorage.getItem(`kvi_att_${today}`);
       if (cachedAtt) {
-        setMarkedRecords(prev => ({ ...JSON.parse(cachedAtt), ...prev }));
+        setMarkedRecords(prev => ({ ...prev, ...JSON.parse(cachedAtt) }));
       }
       const cachedFees = localStorage.getItem("kvi_fees_cache");
       if (cachedFees) {
-        setFeeRecords(prev => ({ ...JSON.parse(cachedFees), ...prev }));
+        setFeeRecords(prev => ({ ...prev, ...JSON.parse(cachedFees) }));
       }
       const cachedEnr = localStorage.getItem("kvi_enrollment_status_cache");
       if (cachedEnr) {
-        setEnrollmentStatusMap(prev => ({ ...JSON.parse(cachedEnr), ...prev }));
+        setEnrollmentStatusMap(prev => ({ ...prev, ...JSON.parse(cachedEnr) }));
       }
       const cachedSch = localStorage.getItem("kvi_scholarship_status_cache");
       if (cachedSch) {
-        setScholarshipStatusMap(prev => ({ ...JSON.parse(cachedSch), ...prev }));
+        setScholarshipStatusMap(prev => ({ ...prev, ...JSON.parse(cachedSch) }));
       }
     } catch (e) {}
   }, []);

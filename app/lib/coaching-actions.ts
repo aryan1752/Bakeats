@@ -17,6 +17,18 @@ import {
 } from "./schemas";
 import { cookies as nextCookies } from "next/headers";
 import { sendEmailOTP } from "./email";
+import { 
+  addLocalContact, 
+  addLocalEnrollment, 
+  addLocalScholarship,
+  addLocalMaterial,
+  getLocalMaterials,
+  deleteLocalMaterial,
+  addLocalNotification,
+  getLocalNotifications,
+  deleteLocalNotification,
+  saveLocalAttendance
+} from "./local-db";
 
 // Mock users fallback for offline testing
 const mockUsers: Array<{
@@ -48,14 +60,16 @@ export async function submitContact(prevState: any, formData: FormData) {
     return { success: false, error: "Please fill out all fields." };
   }
 
+  // Always save in persistent local database
+  addLocalContact({ name: name.trim(), email: email.trim(), message: message.trim() });
+
   try {
     await connectToDatabase();
     await Contact.create({ name: name.trim(), email: email.trim(), message: message.trim() });
     return { success: true, message: "Thank you! We have received your query." };
   } catch (err: any) {
-    console.warn("MongoDB Contact write failed (offline fallback active):", err.message);
-    // Success fallback for previewing
-    return { success: true, message: "Thank you! We have received your query (submitted in offline mode)." };
+    console.warn("MongoDB Contact write fallback to local DB:", err.message);
+    return { success: true, message: "Thank you! We have received your query." };
   }
 }
 
@@ -71,6 +85,16 @@ export async function submitEnrollment(prevState: any, formData: FormData) {
     return { success: false, error: "Please fill out Student Name, Contact Number, and Preferred Class/Stream." };
   }
 
+  // Always save in persistent local database
+  addLocalEnrollment({
+    student_name,
+    phone,
+    email,
+    stream,
+    school_or_city,
+    status: "pending"
+  });
+
   try {
     await connectToDatabase();
     await Enrollment.create({
@@ -82,7 +106,7 @@ export async function submitEnrollment(prevState: any, formData: FormData) {
     });
     return { success: true, message: `Thank you ${student_name}! Your enrollment request for ${stream} has been registered.` };
   } catch (err: any) {
-    console.warn("MongoDB Enrollment write failed (offline fallback active):", err.message);
+    console.warn("MongoDB Enrollment write fallback to local DB:", err.message);
     return { success: true, message: `Thank you ${student_name}! Your enrollment request for ${stream} has been registered.` };
   }
 }
@@ -105,6 +129,20 @@ export async function submitScholarship(prevState: any, formData: FormData) {
     return { success: false, error: "Please fill out all required fields." };
   }
 
+  // Always save in persistent local database
+  addLocalScholarship({
+    student_name: student_name.trim(),
+    email: email.trim(),
+    phone: phone.trim(),
+    grade,
+    score,
+    age,
+    academic_achievements: academic_achievements?.trim(),
+    why_join: why_join?.trim(),
+    preferred_stream,
+    status: "pending"
+  });
+
   try {
     await connectToDatabase();
     await Scholarship.create({
@@ -120,8 +158,8 @@ export async function submitScholarship(prevState: any, formData: FormData) {
     });
     return { success: true, message: "Registration successful! Our team will contact you for test details." };
   } catch (err: any) {
-    console.warn("MongoDB Scholarship write failed (offline fallback active):", err.message);
-    return { success: true, message: "Registration successful! (Offline demo registered successfully)." };
+    console.warn("MongoDB Scholarship write fallback to local DB:", err.message);
+    return { success: true, message: "Registration successful! Our team will contact you for test details." };
   }
 }
 
@@ -690,13 +728,11 @@ export async function addMaterial(prevState: any, formData: FormData) {
     stream,
     subject,
     file_url,
-    uploaded_at: new Date()
+    uploaded_at: new Date().toISOString()
   };
 
-  if (!(global as any).mockMaterialsList) {
-    (global as any).mockMaterialsList = [];
-  }
-  (global as any).mockMaterialsList.unshift(newMaterialObj);
+  // Always save in persistent local database
+  addLocalMaterial(newMaterialObj);
 
   try {
     await connectToDatabase();
@@ -709,28 +745,24 @@ export async function addMaterial(prevState: any, formData: FormData) {
     });
     return { success: true, message: `Material "${title}" uploaded successfully to ${stream} stream!` };
   } catch (err: any) {
-    console.warn("MongoDB Material upload failed (using global fallback mode):", err.message);
-    return { success: true, message: `Material "${title}" registered successfully (preview mode)!` };
+    console.warn("MongoDB Material upload fallback to local DB:", err.message);
+    return { success: true, message: `Material "${title}" registered successfully!` };
   }
 }
 
 export async function getMaterialsAction(stream?: string) {
+  const localList = getLocalMaterials(stream);
   let dbMaterials: any[] = [];
   try {
     await connectToDatabase();
     const query = stream && stream !== "all" ? { $or: [{ stream }, { stream: "all" }] } : {};
     dbMaterials = await Material.find(query).sort({ _id: -1 }).lean();
   } catch (err: any) {
-    console.warn("Failed to fetch materials from MongoDB:", err.message);
+    // Offline fallback
   }
 
-  const globalList = (global as any).mockMaterialsList || [];
-  const filteredGlobal = stream && stream !== "all" 
-    ? globalList.filter((m: any) => m.stream === stream || m.stream === "all" || !m.stream)
-    : globalList;
-
-  // Combine DB materials and global in-memory materials, removing duplicates
-  const combined = [...dbMaterials, ...filteredGlobal];
+  // Combine DB materials and local persistent materials, removing duplicates
+  const combined = [...localList, ...dbMaterials];
   const uniqueMap = new Map();
   for (const item of combined) {
     const key = item._id ? String(item._id) : item.title + item.uploaded_at;
@@ -743,19 +775,14 @@ export async function getMaterialsAction(stream?: string) {
 }
 
 export async function deleteMaterialAction(id: string) {
-  if ((global as any).mockMaterialsList) {
-    (global as any).mockMaterialsList = (global as any).mockMaterialsList.filter(
-      (m: any) => String(m._id) !== String(id) && String(m.id) !== String(id)
-    );
-  }
+  deleteLocalMaterial(id);
   try {
     await connectToDatabase();
     await Material.findByIdAndDelete(id);
-    return { success: true, message: "Material deleted successfully" };
   } catch (err: any) {
-    console.warn("MongoDB delete fallback:", err.message);
-    return { success: true, message: "Material deleted successfully" };
+    // Graceful offline fallback
   }
+  return { success: true, message: "Material deleted successfully" };
 }
 
 // Admin: Submit Test Performance
@@ -796,6 +823,8 @@ export async function markAttendance(prevState: any, formData: FormData) {
     return { success: false, error: "Please provide all attendance details." };
   }
 
+  saveLocalAttendance(date, { [student_id]: status });
+
   try {
     await connectToDatabase();
     await Attendance.findOneAndUpdate(
@@ -803,15 +832,12 @@ export async function markAttendance(prevState: any, formData: FormData) {
       { student_id, date, status },
       { upsert: true, new: true }
     );
-    return { success: true, message: "Attendance status logged successfully in MongoDB!" };
+    return { success: true, message: "Attendance status logged successfully!" };
   } catch (err: any) {
-    console.warn("MongoDB Attendance log failed (fallback active):", err.message);
-    return { success: true, message: "Attendance status logged successfully (preview mode)!" };
+    console.warn("MongoDB Attendance log fallback to local DB:", err.message);
+    return { success: true, message: "Attendance status logged successfully!" };
   }
 }
-
-// Fallback in-memory notification store for offline testing
-let mockNotifications: any[] = [];
 
 // Admin: Broadcast Notification to Students
 export async function createBroadcastNotification(payload: {
@@ -844,11 +870,11 @@ export async function createBroadcastNotification(payload: {
     priority,
     image_url,
     date,
-    created_at: new Date()
+    created_at: new Date().toISOString()
   };
 
-  // ⚡ Instant memory update for 0ms delay
-  mockNotifications.unshift(instantNotif);
+  // Always save in persistent local database
+  addLocalNotification(instantNotif);
 
   // Background DB sync without blocking UI response
   connectToDatabase()
@@ -872,6 +898,7 @@ export async function broadcastNotification(prevState: any, formData: FormData) 
 
 // Fetch Broadcast Notifications with ultra-fast fallback
 export async function getNotificationsAction(stream?: string) {
+  const localNotifs = getLocalNotifications(stream);
   let dbNotifs: any[] = [];
   try {
     const conn = await Promise.race([
@@ -886,10 +913,10 @@ export async function getNotificationsAction(stream?: string) {
       dbNotifs = await Notification.find(filter).sort({ created_at: -1 }).limit(30).lean();
     }
   } catch (err) {
-    // Return mockNotifications instantly on timeout/error
+    // Offline fallback
   }
 
-  const combined = [...mockNotifications, ...dbNotifs];
+  const combined = [...localNotifs, ...dbNotifs];
   const seen = new Set();
   const list: any[] = [];
   for (const n of combined) {
@@ -905,13 +932,13 @@ export async function getNotificationsAction(stream?: string) {
 
 // Delete Notification
 export async function deleteNotificationAction(id: string) {
+  deleteLocalNotification(id);
   try {
     await connectToDatabase();
     await Notification.findByIdAndDelete(id);
   } catch (err) {
-    // fallback filter
+    // fallback
   }
-  mockNotifications = mockNotifications.filter(n => String(n._id) !== String(id));
   return { success: true };
 }
 

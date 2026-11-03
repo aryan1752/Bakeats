@@ -2,56 +2,13 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { connectToDatabase } from "@/lib/mongodb";
 import { User, Contact, Scholarship, Enrollment } from "@/lib/schemas";
+import { 
+  getLocalStudents, 
+  getLocalContacts, 
+  getLocalScholarships, 
+  getLocalEnrollments 
+} from "@/lib/local-db";
 import AdminDashboardClient from "./AdminDashboardClient";
-import { LogOut } from "lucide-react";
-
-// Offline Mock Fallbacks
-const mockStudentsFallback: any[] = [];
-
-const mockContactsFallback = [
-  {
-    name: "Rajesh Sharma",
-    email: "rajesh@gmail.com",
-    message: "Kindly share the morning batch fee schedule for class 9 foundational course.",
-    created_at: new Date()
-  }
-];
-
-const mockScholarshipsFallback = [
-  {
-    student_name: "Priya Singh",
-    email: "priya@gmail.com",
-    phone: "9876543210",
-    grade: "Class 10",
-    score: 92,
-    status: "approved",
-    age: 15,
-    academic_achievements: "School topper in 9th grade Science olympiad.",
-    why_join: "Want strong conceptual base for 10th boards.",
-    preferred_stream: "foundations"
-  }
-];
-
-const mockEnrollmentsFallback = [
-  {
-    student_name: "Aakash Malhotra",
-    phone: "9811223344",
-    email: "aakash@gmail.com",
-    stream: "Class 11-12th Science",
-    school_or_city: "DPS Mathura Road / Delhi",
-    status: "pending",
-    created_at: new Date()
-  },
-  {
-    student_name: "Sneha Kapoor",
-    phone: "9877665544",
-    email: "sneha@gmail.com",
-    stream: "Class 9-10th Foundations",
-    school_or_city: "KV Andrews Ganj / Delhi",
-    status: "contacted",
-    created_at: new Date()
-  }
-];
 
 export default async function AdminDashboard() {
   const cookieStore = await cookies();
@@ -71,67 +28,116 @@ export default async function AdminDashboard() {
     redirect("/login");
   }
 
-  let dbStudents: any[] = [];
-  let dbContacts: any[] = [];
-  let dbScholarships: any[] = [];
-  let dbEnrollments: any[] = [];
+  // Load from persistent local database as primary reliable baseline
+  let dbStudents: any[] = getLocalStudents();
+  let dbContacts: any[] = getLocalContacts();
+  let dbScholarships: any[] = getLocalScholarships();
+  let dbEnrollments: any[] = getLocalEnrollments();
 
+  // If MongoDB is reachable, merge latest records
   try {
     await connectToDatabase();
     
-    // Fetch students
+    // Fetch students from DB
     const users = await User.find({ role: "student" }).lean();
-    dbStudents = users.map((u: any) => ({
-      _id: u._id.toString(),
-      name: u.name,
-      email: u.email || "",
-      phone: u.phone || "",
-      stream: u.stream || "foundations",
-      parentPhone: u.parentPhone || ""
-    }));
+    if (Array.isArray(users) && users.length > 0) {
+      const seen = new Set();
+      const merged: any[] = [];
+      for (const u of [...users, ...dbStudents]) {
+        const id = u._id ? u._id.toString() : u.id;
+        if (!seen.has(id)) {
+          seen.add(id);
+          merged.push({
+            _id: id,
+            id: id,
+            name: u.name,
+            email: u.email || "",
+            phone: u.phone || "",
+            stream: u.stream || "foundations",
+            grade: u.grade || "",
+            address: u.address || "",
+            parentPhone: u.parentPhone || ""
+          });
+        }
+      }
+      dbStudents = merged;
+    }
 
-    // Fetch Contacts
-    const contactsList = await Contact.find({}).sort({ created_at: -1 }).limit(15).lean();
-    dbContacts = contactsList.map((c: any) => ({
-      name: c.name,
-      email: c.email,
-      message: c.message,
-      created_at: c.created_at
-    }));
+    // Fetch Contacts from DB
+    const contactsList = await Contact.find({}).sort({ created_at: -1 }).limit(20).lean();
+    if (Array.isArray(contactsList) && contactsList.length > 0) {
+      const seen = new Set();
+      const merged: any[] = [];
+      for (const c of [...contactsList, ...dbContacts]) {
+        const id = c._id ? c._id.toString() : c.email + c.created_at;
+        if (!seen.has(id)) {
+          seen.add(id);
+          merged.push({
+            _id: id,
+            name: c.name,
+            email: c.email,
+            message: c.message,
+            created_at: c.created_at
+          });
+        }
+      }
+      dbContacts = merged;
+    }
 
-    // Fetch Scholarships (Form 2 Reports)
-    const scholarshipsList = await Scholarship.find({}).sort({ created_at: -1 }).limit(20).lean();
-    dbScholarships = scholarshipsList.map((s: any) => ({
-      student_name: s.student_name,
-      email: s.email,
-      phone: s.phone,
-      grade: s.grade,
-      score: s.score,
-      status: s.status,
-      age: s.age || null,
-      academic_achievements: s.academic_achievements || null,
-      why_join: s.why_join || null,
-      preferred_stream: s.preferred_stream || null
-    }));
+    // Fetch Scholarships from DB
+    const scholarshipsList = await Scholarship.find({}).sort({ created_at: -1 }).limit(25).lean();
+    if (Array.isArray(scholarshipsList) && scholarshipsList.length > 0) {
+      const seen = new Set();
+      const merged: any[] = [];
+      for (const s of [...scholarshipsList, ...dbScholarships]) {
+        const id = s._id ? s._id.toString() : s.email + s.phone;
+        if (!seen.has(id)) {
+          seen.add(id);
+          merged.push({
+            _id: id,
+            student_name: s.student_name,
+            email: s.email,
+            phone: s.phone,
+            grade: s.grade,
+            score: s.score,
+            status: s.status,
+            age: s.age || null,
+            academic_achievements: s.academic_achievements || null,
+            why_join: s.why_join || null,
+            preferred_stream: s.preferred_stream || null,
+            created_at: s.created_at
+          });
+        }
+      }
+      dbScholarships = merged;
+    }
 
-    // Fetch Direct Enrollments (Form 1 Reports)
-    const enrollmentsList = await Enrollment.find({}).sort({ created_at: -1 }).limit(20).lean();
-    dbEnrollments = enrollmentsList.map((e: any) => ({
-      student_name: e.student_name,
-      phone: e.phone,
-      email: e.email,
-      stream: e.stream,
-      school_or_city: e.school_or_city,
-      status: e.status,
-      created_at: e.created_at
-    }));
+    // Fetch Direct Enrollments from DB
+    const enrollmentsList = await Enrollment.find({}).sort({ created_at: -1 }).limit(25).lean();
+    if (Array.isArray(enrollmentsList) && enrollmentsList.length > 0) {
+      const seen = new Set();
+      const merged: any[] = [];
+      for (const e of [...enrollmentsList, ...dbEnrollments]) {
+        const id = e._id ? e._id.toString() : e.phone + e.stream;
+        if (!seen.has(id)) {
+          seen.add(id);
+          merged.push({
+            _id: id,
+            student_name: e.student_name,
+            phone: e.phone,
+            email: e.email,
+            stream: e.stream,
+            school_or_city: e.school_or_city,
+            status: e.status,
+            created_at: e.created_at
+          });
+        }
+      }
+      dbEnrollments = merged;
+    }
 
   } catch (err: any) {
-    console.warn("MongoDB connection failed in Admin Page, falling back to mock lists:", err.message);
-    dbStudents = mockStudentsFallback;
-    dbContacts = mockContactsFallback;
-    dbScholarships = mockScholarshipsFallback;
-    dbEnrollments = mockEnrollmentsFallback;
+    console.warn("MongoDB connection offline in Admin Page, using persistent local DB:", err.message);
   }
 
   return (

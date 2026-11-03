@@ -15,30 +15,6 @@
       "password": "password123"
     },
     {
-      "_id": "student_init_3",
-      "id": "student_init_3",
-      "name": "Piyush Sharma",
-      "email": "piyush.sharma@gmail.com",
-      "phone": "9812345678",
-      "parentPhone": "9812345678",
-      "address": "Jaitpur Part-2, Delhi",
-      "grade": "Class 12th",
-      "stream": "science",
-      "role": "student"
-    },
-    {
-      "_id": "student_init_4",
-      "id": "student_init_4",
-      "name": "Sneha Rajput",
-      "email": "sneha.rajput@gmail.com",
-      "phone": "9898765432",
-      "parentPhone": "9898765432",
-      "address": "Molarband, Badarpur, Delhi",
-      "grade": "Class 11th",
-      "stream": "science",
-      "role": "student"
-    },
-    {
       "_id": "student_init_5",
       "id": "student_init_5",
       "name": "Abhishek Kumar",
@@ -154,7 +130,20 @@
       "uploaded_at": "2026-11-01T10:00:00.000Z"
     }
   ],
-  "notifications": [],
+  "notifications": [
+    {
+      "_id": "notif_1793717336725",
+      "title": "🚨 Daily Attendance Alert - Class 11-12th Arts",
+      "message": "Dear Parents, the following student(s) are absent today: Kavita Joshi.",
+      "sender": "Faculty / Attendance Dept",
+      "stream": "arts",
+      "priority": "urgent",
+      "image_url": "",
+      "date": "2026-11-03",
+      "created_at": "2026-11-03T14:48:56.725Z",
+      "id": "notif_1793717336725"
+    }
+  ],
   "attendance": {
     "2026-11-03": {
       "student_init_1": "present",
